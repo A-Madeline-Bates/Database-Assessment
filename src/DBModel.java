@@ -7,6 +7,7 @@ public class DBModel {
     final List<List<String>> tableData = new ArrayList<List<String>>();
     final ArrayList<String> columnNames = new ArrayList<>();
     private int row = 0;
+    private String filename;
 
     public DBModel(){
     }
@@ -26,7 +27,7 @@ public class DBModel {
 
     //Row number is determined by the number of times setDataArray() has been called
     public int getRowNumber(){
-        return row;
+        return row - 1;
     }
 
     public void setDataArray(String command){
@@ -36,16 +37,23 @@ public class DBModel {
         row++;
     }
 
+    //TEST THIS?
+    //setDataArray() is called row by row, and we are exploiting this to initialise
+    //each row as we go
+    private void initialiseRow(int columnNo){
+        List<String> rowData = new ArrayList<>();
+        tableData.add(rowData);
+    }
+
     public List<List<String>> getDataArray() {
         return tableData;
     }
 
-    private void initialiseRow(int columnNo){
-        List<String> rowData = new ArrayList<>();
-        for (int j = 0; j < columnNo; j++){
-            rowData.add(null);
-        }
-        tableData.add(rowData);
+    public void setFilename(String filename){
+        this.filename = filename;
     }
 
+    public String getFilename(){
+        return filename;
+    }
 }

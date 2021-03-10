@@ -73,13 +73,13 @@ public class DBTest {
         assert(testModel.getColumnNumber() == 19);
         testModel.setColumnNames("1 2 3 4 5 6");
         assert(testModel.getColumnNumber() == 25);
-        //There should already be 7 rows set as a hang over from testGetSetData()
-        assert(testModel.getRowNumber() == 7);
+        //There should already be 6 rows set as a hang over from testGetSetData()
+        assert(testModel.getRowNumber() == 6);
         testModel.setDataArray("100");
-        assert(testModel.getRowNumber() == 8);
+        assert(testModel.getRowNumber() == 7);
         testModel.setDataArray("F");
-        assert(testModel.getRowNumber() == 9);
+        assert(testModel.getRowNumber() == 8);
         testModel.setDataArray("test test test");
-        assert(testModel.getRowNumber() == 10);
+        assert(testModel.getRowNumber() == 9);
     }
 }
