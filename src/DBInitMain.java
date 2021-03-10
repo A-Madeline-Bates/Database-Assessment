@@ -1,17 +1,19 @@
 import java.io.*;
 
-public class ReadData {
+public class DBInitMain {
 
     public static void main(String[] args)
     {
-        new ReadData();
+        new DBInitMain();
     }
 
-    private ReadData(){
+    private DBInitMain(){
         //this is calling our model
         DBModel model = new DBModel();
         //this is calling an empty constructor
         DBController controller = new DBController(model);
+        //creating a test instance
+        DBTest test = new DBTest();
         readFile(controller);
     }
 
@@ -23,12 +25,11 @@ public class ReadData {
             BufferedReader buffReader = new BufferedReader(reader);
             //the first line need to be treated differently because it holds column information
             //rather than data
-            controller.setColNameArray(buffReader.readLine());
+            controller.handleFirstCommand(buffReader.readLine());
             String currentLine;
             while((currentLine = buffReader.readLine()) != null){
                 controller.handleIncomingCommand(currentLine);
             }
-            controller.printTable();
             buffReader.close();
         }
         //Look into adding more exceptions + making this more secure
