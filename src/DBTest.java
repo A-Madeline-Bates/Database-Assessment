@@ -8,7 +8,8 @@ public class DBTest {
         //this is calling an empty constructor
         DBController testController = new DBController(testModel);
         testGetSetData(testModel);
-        testColumnFunc(testModel);
+        testColumnArr(testModel);
+        testGetRowCol(testModel);
     }
 
     //Testing the getter and setter for data
@@ -38,7 +39,6 @@ public class DBTest {
         testModel.setDataArray("hello    to you  too");
         testTable = testModel.getDataArray();
         assert (testTable.get(6).size() == 4);
-
         assert(testTable.get(0).get(0).equals("hello"));
         assert(testTable.get(1).get(1).equals("there"));
         assert(testTable.get(3).get(0).equals("100"));
@@ -46,7 +46,7 @@ public class DBTest {
     }
 
     //Testing our column functions
-    private void testColumnFunc(DBModel testModel) {
+    private void testColumnArr(DBModel testModel) {
         List<String> colArr;
         testModel.setColumnNames("hello thank you for visiting");
         colArr = testModel.getColumnNames();
@@ -60,11 +60,26 @@ public class DBTest {
         testModel.setColumnNames(" ");
         colArr = testModel.getColumnNames();
         assert (colArr.size() == 11);
+        assert(colArr.get(0).equals("hello"));
+        assert(colArr.get(10).equals("03"));
+    }
 
+    private void testGetRowCol(DBModel testModel){
+        //There should already be 11 columns set as a hang over from testColumnArr()
         assert(testModel.getColumnNumber() == 11);
         testModel.setColumnNames("there are 4 things");
         assert(testModel.getColumnNumber() == 15);
         testModel.setColumnNames("* * * *");
         assert(testModel.getColumnNumber() == 19);
+        testModel.setColumnNames("1 2 3 4 5 6");
+        assert(testModel.getColumnNumber() == 25);
+        //There should already be 7 rows set as a hang over from testGetSetData()
+        assert(testModel.getRowNumber() == 7);
+        testModel.setDataArray("100");
+        assert(testModel.getRowNumber() == 8);
+        testModel.setDataArray("F");
+        assert(testModel.getRowNumber() == 9);
+        testModel.setDataArray("test test test");
+        assert(testModel.getRowNumber() == 10);
     }
 }
