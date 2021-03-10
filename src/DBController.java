@@ -2,9 +2,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DBController {
+    DBModel model;
     final ArrayList<String> tableData = new ArrayList<>();
 
-    DBController() {
+    DBController(DBModel model) {
+        this.model = model;
         //it might be useful to build a more detailed constructor at some point
     }
 

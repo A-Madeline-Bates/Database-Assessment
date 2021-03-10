@@ -8,8 +8,10 @@ public class ReadData {
     }
 
     private ReadData(){
+        //this is calling our model
+        DBModel model = new DBModel();
         //this is calling an empty constructor
-        DBController controller = new DBController();
+        DBController controller = new DBController(model);
         readFile(controller);
     }
 
