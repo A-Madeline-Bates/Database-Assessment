@@ -19,13 +19,17 @@ public class ReadData {
             File fileToOpen = new File(tabFile);
             FileReader reader = new FileReader(fileToOpen);
             BufferedReader buffReader = new BufferedReader(reader);
+            //the first line need to be treated differently because it holds column information
+            //rather than data
+            controller.setColNameArray(buffReader.readLine());
             String currentLine;
             while((currentLine = buffReader.readLine()) != null){
-                controller.handleIncomingCommand();
-                //System.out.println(currentLine);
+                controller.handleIncomingCommand(currentLine);
             }
+            controller.printTable();
             buffReader.close();
         }
+        //Look into adding more exceptions + making this more secure
         catch(FileNotFoundException e){
             System.out.println("File not found");
         }
