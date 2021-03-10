@@ -1,8 +1,17 @@
 import java.io.*;
 
-public class Main {
+public class ReadData {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
+        new ReadData();
+    }
+
+    private ReadData(){
+        readFile();
+    }
+
+    private void readFile(){
         try {
             String tabFile = "tabFiles" + File.separator + "contact-details.tab";
             File fileToOpen = new File(tabFile);
