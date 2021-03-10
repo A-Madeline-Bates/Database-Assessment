@@ -24,16 +24,16 @@ public class DBInitMain {
         try {
             String tabFile = "tabFiles" + File.separator + "contact-details.tab";
             File fileToOpen = new File(tabFile);
-            FileReader reader = new FileReader(fileToOpen);
-            BufferedReader buffReader = new BufferedReader(reader);
+            FileReader prereader = new FileReader(fileToOpen);
+            BufferedReader reader = new BufferedReader(prereader);
             //the first line need to be treated differently because it holds column information
             //rather than data
-            controller.handleFirstCommand(buffReader.readLine());
+            controller.handleFirstCommand(reader.readLine());
             String currentLine;
-            while((currentLine = buffReader.readLine()) != null){
+            while((currentLine = reader.readLine()) != null){
                 controller.handleIncomingCommand(currentLine);
             }
-            buffReader.close();
+            reader.close();
         }
         //Look into adding more exceptions + making this more secure
         catch(FileNotFoundException e){
