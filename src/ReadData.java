@@ -8,10 +8,12 @@ public class ReadData {
     }
 
     private ReadData(){
-        readFile();
+        //this is calling an empty constructor
+        DBController controller = new DBController();
+        readFile(controller);
     }
 
-    private void readFile(){
+    private void readFile(DBController controller){
         try {
             String tabFile = "tabFiles" + File.separator + "contact-details.tab";
             File fileToOpen = new File(tabFile);
@@ -19,7 +21,8 @@ public class ReadData {
             BufferedReader buffReader = new BufferedReader(reader);
             String currentLine;
             while((currentLine = buffReader.readLine()) != null){
-                System.out.println(currentLine);
+                controller.handleIncomingCommand();
+                //System.out.println(currentLine);
             }
             buffReader.close();
         }
