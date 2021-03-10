@@ -4,12 +4,18 @@ import java.util.Arrays;
 public class DBModel {
     //consider altering to work as a 'factory'?
     final ArrayList<String> tableData = new ArrayList<>();
+    final ArrayList<String> columnNames = new ArrayList<>();
 
     public void setColumnNames(String command) {
-        ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(command.split("\\s+")));
-        for (int i = 0; i < 3; i++) {
-            System.out.println(columnValues.get(i) + "*");
-        }
+//        ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(command.split("\\s+")));
+//        for (int i = 0; i < 3; i++) {
+//            System.out.println(columnValues.get(i) + "*");
+//        }
+        columnNames.addAll(Arrays.asList(command.split("\\s+")));
+    }
+
+    public ArrayList<String> getColumnNames() {
+        return columnNames;
     }
 
     public void setDataArray(String command){
