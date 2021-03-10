@@ -1,16 +1,17 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DBModel {
     //consider altering to work as a 'factory'?
-    final ArrayList<String> tableData = new ArrayList<>();
+    final List<List<String>> tableData = new ArrayList<List<String>>();
     final ArrayList<String> columnNames = new ArrayList<>();
+    private int row = 0;
+
+    public DBModel(){
+    }
 
     public void setColumnNames(String command) {
-//        ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(command.split("\\s+")));
-//        for (int i = 0; i < 3; i++) {
-//            System.out.println(columnValues.get(i) + "*");
-//        }
         columnNames.addAll(Arrays.asList(command.split("\\s+")));
     }
 
@@ -18,17 +19,33 @@ public class DBModel {
         return columnNames;
     }
 
-    public void setDataArray(String command){
-        tableData.addAll(Arrays.asList(command.split("\\s+")));
+    //By finding the number of column headers, we can see how many columns we have
+    public int getColumnNumber(){
+        return columnNames.size();
     }
 
-    public ArrayList<String> getDataArray() {
+    //Row number is determined by the number of times setDataArray() has been called
+    public int getRowNumber(){
+        return row;
+    }
+
+    public void setDataArray(String command){
+        int columnNo = getColumnNumber();
+        initialiseRow(columnNo);
+        tableData.get(row).addAll(Arrays.asList(command.split("\\s+")));
+        row++;
+    }
+
+    public List<List<String>> getDataArray() {
         return tableData;
     }
 
-//    public void printTable() {
-//        for (int i = 0; i < 11; i++) {
-//            System.out.println(tableData.get(i) + "*");
-//        }
-//    }
+    private void initialiseRow(int columnNo){
+        List<String> rowData = new ArrayList<>();
+        for (int j = 0; j < columnNo; j++){
+            rowData.add(null);
+        }
+        tableData.add(rowData);
+    }
+
 }

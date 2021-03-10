@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class DBController {
     DBModel model;
 
@@ -13,15 +10,18 @@ public class DBController {
         //this command is just dealing with table input. Future iterations will need to
         // understand which database we're looking at
         model.setDataArray(command);
-        //tableData.addAll(Arrays.asList(command.split("\\s+")));
         //add data to 2d arraylist of strings to hold other data
-        //add id column (ignore user's, if exists)
-        //set tablename and DB name (which will be files and folders)
         //write this back into a file
     }
+
+    //Any file which is committed to memory should have an ID column, as we should have
+    //created it. So it's not something we need to worry about when doing a straight-
+    //forward file read like we are doing here.
+    //When initialising a table we must add ID column automatically
+    //Any file in our database would therefore contain an ID column
+    //The same thing applies to 'creating' file names
 
     public void handleFirstCommand(String command) {
         model.setColumnNames(command);
     }
-
 }
