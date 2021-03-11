@@ -17,7 +17,8 @@ public class DBInitMain {
         readFile(controller);
         //THIS SHOULD NOT BE HERE- TEMPORARY
         model.setFilename("new-contact-details.tab");
-        DBStore view = new DBStore(model, controller);
+        //**********************************
+        DBStore view = new DBStore(model);
     }
 
     private void readFile(DBController controller){
