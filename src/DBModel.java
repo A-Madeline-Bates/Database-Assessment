@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,9 +9,7 @@ public class DBModel {
     final ArrayList<String> columnNames = new ArrayList<>();
     private int row = 0;
     private String filename;
-
-    public DBModel(){
-    }
+    private String databaseName;
 
     public void setColumnNames(String command) {
         columnNames.addAll(Arrays.asList(command.split("\\t")));
@@ -31,18 +30,12 @@ public class DBModel {
     }
 
     public void setDataArray(String command){
-        int columnNo = getColumnNumber();
-        initialiseRow(columnNo);
-        tableData.get(row).addAll(Arrays.asList(command.split("\\t")));
-        row++;
-    }
-
-    //TEST THIS?
-    //setDataArray() is called row by row, and we are exploiting this to initialise
-    //each row as we go
-    private void initialiseRow(int columnNo){
+        //setDataArray() is called row by row, and we are exploiting
+        // this to initialise each row as we go
         List<String> rowData = new ArrayList<>();
         tableData.add(rowData);
+        tableData.get(row).addAll(Arrays.asList(command.split("\\t")));
+        row++;
     }
 
     public List<List<String>> getDataArray() {
@@ -55,5 +48,13 @@ public class DBModel {
 
     public String getFilename(){
         return filename;
+    }
+
+    public void setDatabaseName(String databaseName){
+        this.databaseName = databaseName;
+    }
+
+    public String getDatabaseName(){
+        return databaseName;
     }
 }

@@ -32,14 +32,22 @@ class DBServer
 
     private void processNextCommand(BufferedReader socketReader, BufferedWriter socketWriter) throws IOException, NullPointerException
     {
-        String incomingCommand = socketReader.readLine();
-
         //incomingCommand contains the message we're going to use.
+        String incomingCommand = socketReader.readLine();
         //socketWriter.write writes to the client
         // i.e socketWriter.write("[OK] Thanks for your message: " + incomingCommand);
-        new DBInitMain();
-
-        //This is used for EOT
+        DBModel model = new DBModel();
+        DBController controller = new DBController(model);
+        //creating a test instance
+        new DBTest();
+        //DBLoad load = new DBLoad();
+        //DBLoad.readFile(controller);
+        //THIS SHOULD NOT BE HERE- TEMPORARY
+        //model.setFilename("new-testfile1.tab");
+        //**********************************
+        new DBPrint(model);
+        new DBStore(model);
+        //This is used for EOF
         socketWriter.write("\n" + ((char)4) + "\n");
         socketWriter.flush();
     }

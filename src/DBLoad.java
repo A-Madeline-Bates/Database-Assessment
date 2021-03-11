@@ -1,29 +1,18 @@
 import java.io.*;
 
-public class DBInitMain {
-
-//    public static void main(String[] args)
-//    {
-//        new DBInitMain();
-//    }
-
-    public DBInitMain(){
-        //this is calling our model
-        DBModel model = new DBModel();
-        //this is calling an empty constructor
-        DBController controller = new DBController(model);
-        //creating a test instance
-        DBTest test = new DBTest();
-        readFile(controller);
-        //THIS SHOULD NOT BE HERE- TEMPORARY
-        model.setFilename("new-testfile3.tab");
-        //**********************************
-        DBStore view = new DBStore(model);
+public class DBLoad {
+    DBController controller;
+    String databaseName;
+    String tablename;
+    public DBLoad(DBController controller, String databaseName, String tablename){
+        this.controller = controller;
+        this.databaseName = databaseName;
+        this.tablename = tablename;
     }
 
-    private void readFile(DBController controller){
+    private void readFile(){
         try {
-            String tabFile = "tabFiles" + File.separator + "testfile3.tab";
+            String tabFile = "tabFiles" + File.separator + "testfile1.tab";
             File fileToOpen = new File(tabFile);
             FileReader prereader = new FileReader(fileToOpen);
             BufferedReader reader = new BufferedReader(prereader);
