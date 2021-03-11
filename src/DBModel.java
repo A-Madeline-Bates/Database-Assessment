@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +30,7 @@ public class DBModel {
 
     public void setDataArray(String command){
         //setDataArray() is called row by row, and we are exploiting
-        // this to initialise each row as we go
+        //this to initialise each row as we go
         List<String> rowData = new ArrayList<>();
         tableData.add(rowData);
         tableData.get(row).addAll(Arrays.asList(command.split("\\t")));

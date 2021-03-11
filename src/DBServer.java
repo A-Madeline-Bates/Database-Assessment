@@ -34,19 +34,13 @@ class DBServer
     {
         //incomingCommand contains the message we're going to use.
         String incomingCommand = socketReader.readLine();
-        //socketWriter.write writes to the client
-        // i.e socketWriter.write("[OK] Thanks for your message: " + incomingCommand);
-        DBModel model = new DBModel();
-        DBController controller = new DBController(model);
         //creating a test instance
         new DBTest();
-        //DBLoad load = new DBLoad();
-        //DBLoad.readFile(controller);
-        //THIS SHOULD NOT BE HERE- TEMPORARY
-        //model.setFilename("new-testfile1.tab");
-        //**********************************
-        new DBPrint(model);
-        new DBStore(model);
+        DBModel model = new DBModel();
+        DBController controller = new DBController(model);
+        controller.handleIncomingCommand(incomingCommand);
+        //socketWriter.write writes to the client
+        socketWriter.write(controller.getUserMessage());
         //This is used for EOF
         socketWriter.write("\n" + ((char)4) + "\n");
         socketWriter.flush();
@@ -56,5 +50,4 @@ class DBServer
     {
         DBServer server = new DBServer(8888);
     }
-
 }

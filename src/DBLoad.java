@@ -1,27 +1,29 @@
 import java.io.*;
 
 public class DBLoad {
-    DBController controller;
+    DBModel model;
     String databaseName;
-    String tablename;
-    public DBLoad(DBController controller, String databaseName, String tablename){
-        this.controller = controller;
+    String tableName;
+
+    public DBLoad(DBModel model, String databaseName, String tableName){
+        this.model = model;
         this.databaseName = databaseName;
-        this.tablename = tablename;
+        this.tableName = tableName;
+        readFile();
     }
 
     private void readFile(){
         try {
-            String tabFile = "tabFiles" + File.separator + "testfile1.tab";
+            String tabFile = databaseName + File.separator + tableName;
             File fileToOpen = new File(tabFile);
             FileReader prereader = new FileReader(fileToOpen);
             BufferedReader reader = new BufferedReader(prereader);
             //the first line need to be treated differently because it holds column information
             //rather than data
-            controller.handleFirstCommand(reader.readLine());
+            model.setColumnNames(reader.readLine());
             String currentLine;
             while((currentLine = reader.readLine()) != null){
-                controller.handleIncomingCommand(currentLine);
+                model.setDataArray(currentLine);
             }
             reader.close();
         }

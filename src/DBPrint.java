@@ -3,6 +3,7 @@ import java.io.IOException;
 
 public class DBPrint {
 	DBModel model;
+	//This class is going to be deleted or refactored
 
 	public DBPrint(DBModel model) {
 		this.model = model;

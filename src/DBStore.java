@@ -3,23 +3,24 @@ import java.io.*;
 public class DBStore {
     DBModel model;
 
-    public DBStore(DBModel model){
+    public DBStore(DBModel model, String databaseName, String tableName){
         this.model = model;
-        String filePath = getFilePath();
+        //it might be more sensible to find these from the model than to load them in? (databaseName/ tableName)
+        String filePath = getFilePath(databaseName, tableName);
         File currentFile = new File(filePath);
         try{
             createFile(currentFile);
             writeToFile(currentFile);
         }
         //develop + catch a much broader set of exceptions!
-        //this needs to represent the concerns of createFile and fileWriter
+        //this needs to represent the concerns of both createFile and fileWriter
         catch(IOException o) {
             System.out.println("IOException oh no");
         }
     }
 
-    private String getFilePath(){
-        return "productionFiles" + File.separator + model.getFilename();
+    private String getFilePath(String databaseName, String tableName){
+        return databaseName + File.separator + tableName;
     }
 
     private void createFile(File currentFile) throws IOException{
