@@ -16,14 +16,14 @@ public class DBInitMain {
         DBTest test = new DBTest();
         readFile(controller);
         //THIS SHOULD NOT BE HERE- TEMPORARY
-        model.setFilename("new-testfile1.tab");
+        model.setFilename("new-testfile2.tab");
         //**********************************
         DBStore view = new DBStore(model);
     }
 
     private void readFile(DBController controller){
         try {
-            String tabFile = "tabFiles" + File.separator + "testfile1.tab";
+            String tabFile = "tabFiles" + File.separator + "testfile2.tab";
             File fileToOpen = new File(tabFile);
             FileReader prereader = new FileReader(fileToOpen);
             BufferedReader reader = new BufferedReader(prereader);
