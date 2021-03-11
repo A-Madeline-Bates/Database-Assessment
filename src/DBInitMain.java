@@ -2,12 +2,12 @@ import java.io.*;
 
 public class DBInitMain {
 
-    public static void main(String[] args)
-    {
-        new DBInitMain();
-    }
+//    public static void main(String[] args)
+//    {
+//        new DBInitMain();
+//    }
 
-    private DBInitMain(){
+    public DBInitMain(){
         //this is calling our model
         DBModel model = new DBModel();
         //this is calling an empty constructor
@@ -16,14 +16,14 @@ public class DBInitMain {
         DBTest test = new DBTest();
         readFile(controller);
         //THIS SHOULD NOT BE HERE- TEMPORARY
-        model.setFilename("new-testfile2.tab");
+        model.setFilename("new-testfile3.tab");
         //**********************************
         DBStore view = new DBStore(model);
     }
 
     private void readFile(DBController controller){
         try {
-            String tabFile = "tabFiles" + File.separator + "testfile2.tab";
+            String tabFile = "tabFiles" + File.separator + "testfile3.tab";
             File fileToOpen = new File(tabFile);
             FileReader prereader = new FileReader(fileToOpen);
             BufferedReader reader = new BufferedReader(prereader);

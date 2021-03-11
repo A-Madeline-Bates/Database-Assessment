@@ -33,8 +33,13 @@ class DBServer
     private void processNextCommand(BufferedReader socketReader, BufferedWriter socketWriter) throws IOException, NullPointerException
     {
         String incomingCommand = socketReader.readLine();
-        System.out.println("Received message: " + incomingCommand);
-        socketWriter.write("[OK] Thanks for your message: " + incomingCommand);
+
+        //incomingCommand contains the message we're going to use.
+        //socketWriter.write writes to the client
+        // i.e socketWriter.write("[OK] Thanks for your message: " + incomingCommand);
+        new DBInitMain();
+
+        //This is used for EOT
         socketWriter.write("\n" + ((char)4) + "\n");
         socketWriter.flush();
     }
