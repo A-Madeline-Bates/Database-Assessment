@@ -13,7 +13,8 @@ public class DBController {
     }
 
     public String getUserMessage(){
-        return "hi there";
+        return "hello there";
+        //return printMessage.stringifyTable();
     }
 
     //Any file which is committed to memory should have an ID column, as we should have
