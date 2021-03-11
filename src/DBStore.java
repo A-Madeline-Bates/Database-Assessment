@@ -49,7 +49,7 @@ public class DBStore {
     }
 
     private void writeDataArray(BufferedWriter writer) throws IOException{
-        for (int i = 0; i < model.getRowNumber(); i++) {
+        for (int i = 0; i < (model.getRowNumber() + 1); i++) {
             for (int j = 0; j < model.getColumnNumber(); j++) {
                 writer.write(model.getDataArray().get(i).get(j) + "\t\t");
             }

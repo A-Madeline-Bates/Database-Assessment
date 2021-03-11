@@ -13,7 +13,7 @@ public class DBModel {
     }
 
     public void setColumnNames(String command) {
-        columnNames.addAll(Arrays.asList(command.split("\\s+")));
+        columnNames.addAll(Arrays.asList(command.split("\\t")));
     }
 
     public ArrayList<String> getColumnNames() {
@@ -33,7 +33,7 @@ public class DBModel {
     public void setDataArray(String command){
         int columnNo = getColumnNumber();
         initialiseRow(columnNo);
-        tableData.get(row).addAll(Arrays.asList(command.split("\\s+")));
+        tableData.get(row).addAll(Arrays.asList(command.split("\\t")));
         row++;
     }
 
