@@ -9,6 +9,8 @@ public class DBController {
 
     public void handleIncomingCommand(String command) {
         System.out.println(command);
+        //break this command into individual words so it can be parsed
+
         //this has been handed the instructions from DBClient
         //The idea is that this class will call model methods, DBStore and DBLoad as appropriate-
         //although this might change
@@ -69,4 +71,9 @@ public class DBController {
 //    build a structure which populates model with exactly what we want to see in the table
 //    then build a print method which is able to print it all out
 //    perhaps separate treatment of instructions which alter the model and which print the table
+
+//    maybe printing should be put back in a 'view' context (although obviously things are not
+//    always printed) - something is always printed with 'yes' or 'error'
+
+//    implement an instruction factory or tree?
 }
