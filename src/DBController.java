@@ -8,6 +8,8 @@ public class DBController {
     public void handleIncomingCommand(String command) {
         System.out.println(command);
         //this has been handed the instructions from DBClient
+        //The idea is that this class will call model methods, DBStore and DBLoad as appropriate-
+        //although this might change
     }
 
     public String getUserMessage(){
