@@ -9,6 +9,10 @@ public class DBController {
 
     public void handleIncomingCommand(String command) {
         System.out.println(command);
+        //split the command
+        //create a 'command' factory and call different instruction classes depending on the command
+        //command factory -> command interface -> call new instances of commands rather than initing them all
+        //store is called after every instruction
         //break this command into individual words so it can be parsed
 
         //this has been handed the instructions from DBClient

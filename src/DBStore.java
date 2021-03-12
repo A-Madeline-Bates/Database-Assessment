@@ -6,7 +6,6 @@ public class DBStore {
 
     public DBStore(DBModelData modelData, DBModelPath modelPath){
         //THIS MIGHT BE TOO CLOSELY COUPLED WITH MODELDATA
-        //EXCEPTIONS: IOEXCEPTION - DATABASE NOT FOUND - MAYBE FILENOTFOUND FOR FILE WRITER?
         //SHOULD WE BYPASS CREATING FILE IF FILE ALREADY EXISTS?
         this.modelData = modelData;
         this.modelPath  = modelPath;
@@ -16,8 +15,8 @@ public class DBStore {
             createFile(currentFile);
             writeToFile(currentFile);
         }
-        catch(IOException o) {
-            System.out.println("IOException oh no");
+        catch(IOException exception) {
+            System.out.println("IOException trying to store file " + modelPath.getFilename());
         }
     }
 

@@ -1,7 +1,6 @@
 import java.io.*;
 
 public class DBLoad {
-    //EXCEPTIONS: DATABASE NOT FOUND - FILENOTFOUND - IOEXCEPTION
     DBModelData modelData;
     String databaseName;
     String tableName;
@@ -29,11 +28,8 @@ public class DBLoad {
             }
             reader.close();
         }
-        catch(FileNotFoundException e){
-            System.out.println("File not found");
-        }
         catch(IOException ex){
-            System.out.println("IO Ex");
+            System.out.println("IOException trying to store file " + tableName);
         }
     }
 }
