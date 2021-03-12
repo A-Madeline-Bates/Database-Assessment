@@ -5,19 +5,19 @@ public class DBTest {
     public DBTest() {
         //this is calling our model
         new DBModel();
-        DBModelFileData testDataModel = new DBModelFileData();
-        DBModelFilePath testPathModel = new DBModelFilePath();
+        DBModelData testDataModel = new DBModelData();
+        DBModelPath testPathModel = new DBModelPath();
         //this is calling an empty constructor
         DBController testController = new DBController(testDataModel, testPathModel);
         testGetSetData(testDataModel);
         testColumnArr(testDataModel);
         testGetRowCol(testDataModel);
-        DBModelFileData testDataModel2 = new DBModelFileData();
-        testLoadAndStore(testDataModel2);
+        DBModelData testDataModel2 = new DBModelData();
+        testLoadAndStore(testDataModel2, testPathModel);
     }
 
     //Testing the getter and setter for data
-    private void testGetSetData(DBModelFileData testDataModel) {
+    private void testGetSetData(DBModelData testDataModel) {
         List<List<String>> testTable;
         testDataModel.setRowsData("hello\ti\tam\thappy\tto\tmeet\tyou");
         testTable = testDataModel.getRowsData();
@@ -50,7 +50,7 @@ public class DBTest {
     }
 
     //Testing our column functions
-    private void testColumnArr(DBModelFileData testDataModel) {
+    private void testColumnArr(DBModelData testDataModel) {
         List<String> colArr;
         testDataModel.setColumnData("hello\tthank\tyou\tfor\tvisiting");
         colArr = testDataModel.getColumnData();
@@ -72,7 +72,7 @@ public class DBTest {
         assert(colArr.get(10).equals("03"));
     }
 
-    private void testGetRowCol(DBModelFileData testDataModel){
+    private void testGetRowCol(DBModelData testDataModel){
         //There should already be 12 columns set as a hang over from testColumnArr()
         assert(testDataModel.getColumnNumber() == 12);
         testDataModel.setColumnData("there\tare\t4\tthings");
@@ -91,14 +91,14 @@ public class DBTest {
         assert(testDataModel.getRowNumber() == 10);
     }
 
-    private void testLoadAndStore(DBModelFileData testDataModel){
+    private void testLoadAndStore(DBModelData testDataModel, DBModelPath testDataPath){
         new DBLoad (testDataModel, "testFiles", "test2.txt");
         assert(testDataModel.getRowNumber() == 5);
         assert(testDataModel.getColumnNumber() == 3);
-        new DBStore (testDataModel, "testFiles", "test2output.txt");
-//        new DBLoad (testDataModel, "testFiles", "test2.txt");
-//        assert(testDataModel.getRowNumber() == 5);
-//        assert(testDataModel.getColumnNumber() == 3);
-//        new DBStore (testDataModel, "testFiles", "test2output.txt");
+        testDataPath.setFilename("test2.txt");
+        testDataPath.setDatabaseName("testFiles");
+        assert(testDataPath.getFilename().equals("test2.txt"));
+        assert(testDataPath.getDatabaseName().equals("testFiles"));
+        new DBStore (testDataModel, testDataPath);
     }
 }

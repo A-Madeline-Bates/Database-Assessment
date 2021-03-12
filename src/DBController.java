@@ -1,8 +1,8 @@
 public class DBController {
-    DBModelFileData modelData;
-    DBModelFilePath modelPath;
+    DBModelData modelData;
+    DBModelPath modelPath;
 
-    DBController(DBModelFileData modelData, DBModelFilePath modelPath) {
+    DBController(DBModelData modelData, DBModelPath modelPath) {
         this.modelData = modelData;
         this.modelPath = modelPath;
     }

@@ -1,4 +1,4 @@
-public class DBModelFilePath extends DBModel {
+public class DBModelPath extends DBModel {
 
 	public String getFilename(){
 		return filename;

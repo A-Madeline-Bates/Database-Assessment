@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class DBModelFileData extends DBModel {
+public class DBModelData extends DBModel {
 	//Should need a method to return column coordinate by name
 
 	public void setColumnData(String command){

@@ -1,16 +1,16 @@
 import java.io.*;
 
 public class DBStore {
-    DBModelFileData modelData;
+    DBModelData modelData;
+    DBModelPath modelPath;
 
-    public DBStore(DBModelFileData modelData, String databaseName, String tableName){
-        //THIS MIGHT BE TOO CLOSELY COUPLED WITH MODEL
-        //RECEIVES MODEL DATA FROM BOTH CONTROLLER AND MODEL- WHICH IS BAD?
-        //it might be more sensible to find databaseName/ tableName from the model than to load them in?
+    public DBStore(DBModelData modelData, DBModelPath modelPath){
+        //THIS MIGHT BE TOO CLOSELY COUPLED WITH MODELDATA
         //EXCEPTIONS: IOEXCEPTION - DATABASE NOT FOUND - MAYBE FILENOTFOUND FOR FILE WRITER?
         //SHOULD WE BYPASS CREATING FILE IF FILE ALREADY EXISTS?
         this.modelData = modelData;
-        String filePath = getFilePath(databaseName, tableName);
+        this.modelPath  = modelPath;
+        String filePath = getFilePath(modelPath);
         File currentFile = new File(filePath);
         try{
             createFile(currentFile);
@@ -21,8 +21,8 @@ public class DBStore {
         }
     }
 
-    private String getFilePath(String databaseName, String tableName){
-        return "databaseFiles" + File.separator + databaseName + File.separator + tableName;
+    private String getFilePath(DBModelPath modelPath){
+        return "databaseFiles" + File.separator + modelPath.getDatabaseName() + File.separator + modelPath.getFilename();
     }
 
     private void createFile(File currentFile) throws IOException{

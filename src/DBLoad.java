@@ -2,11 +2,11 @@ import java.io.*;
 
 public class DBLoad {
     //EXCEPTIONS: DATABASE NOT FOUND - FILENOTFOUND - IOEXCEPTION
-    DBModelFileData modelData;
+    DBModelData modelData;
     String databaseName;
     String tableName;
 
-    public DBLoad(DBModelFileData modelData, String databaseName, String tableName){
+    public DBLoad(DBModelData modelData, String databaseName, String tableName){
         this.modelData = modelData;
         this.databaseName = databaseName;
         this.tableName = tableName;
