@@ -1,8 +1,10 @@
 public class DBController {
-    DBModel model;
+    DBModelFileData modelData;
+    DBModelFilePath modelPath;
 
-    DBController(DBModel model) {
-        this.model = model;
+    DBController(DBModelFileData modelData, DBModelFilePath modelPath) {
+        this.modelData = modelData;
+        this.modelPath = modelPath;
     }
 
     public void handleIncomingCommand(String command) {

@@ -2,12 +2,12 @@ import java.io.*;
 
 public class DBLoad {
     //EXCEPTIONS: DATABASE NOT FOUND - FILENOTFOUND - IOEXCEPTION
-    DBModel model;
+    DBModelFileData modelData;
     String databaseName;
     String tableName;
 
-    public DBLoad(DBModel model, String databaseName, String tableName){
-        this.model = model;
+    public DBLoad(DBModelFileData modelData, String databaseName, String tableName){
+        this.modelData = modelData;
         this.databaseName = databaseName;
         this.tableName = tableName;
         readFile();
@@ -22,10 +22,10 @@ public class DBLoad {
             //the first line need to be treated differently because it holds column information
             //rather than data
             String firstLine = reader.readLine();
-            model.setAllColNames(firstLine);
+            modelData.setColumnData(firstLine);
             String currentLine;
             while((currentLine = reader.readLine()) != null){
-                model.setDataArray(currentLine);
+                modelData.setRowsData(currentLine);
             }
             reader.close();
         }

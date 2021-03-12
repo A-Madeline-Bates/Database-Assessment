@@ -35,8 +35,9 @@ class DBServer
         String incomingCommand = socketReader.readLine();
         //creating a test instance
         new DBTest();
-        DBModel model = new DBModel();
-        DBController controller = new DBController(model);
+        DBModelFileData modelData = new DBModelFileData();
+        DBModelFilePath modelPath = new DBModelFilePath();
+        DBController controller = new DBController(modelData, modelPath);
         controller.handleIncomingCommand(incomingCommand);
         //socketWriter.write writes to the client
         socketWriter.write(controller.getUserMessage());
