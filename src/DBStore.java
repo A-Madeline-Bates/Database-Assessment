@@ -4,16 +4,18 @@ public class DBStore {
     DBModel model;
 
     public DBStore(DBModel model, String databaseName, String tableName){
+        //THIS MIGHT BE TOO CLOSELY COUPLED WITH MODEL
+        //RECEIVES MODEL DATA FROM BOTH CONTROLLER AND MODEL- WHICH IS BAD?
+        //it might be more sensible to find databaseName/ tableName from the model than to load them in?
+        //EXCEPTIONS: IOEXCEPTION - DATABASE NOT FOUND - MAYBE FILENOTFOUND FOR FILE WRITER?
+        //SHOULD WE BYPASS CREATING FILE IF FILE ALREADY EXISTS?
         this.model = model;
-        //it might be more sensible to find these from the model than to load them in? (databaseName/ tableName)
         String filePath = getFilePath(databaseName, tableName);
         File currentFile = new File(filePath);
         try{
             createFile(currentFile);
             writeToFile(currentFile);
         }
-        //develop + catch a much broader set of exceptions!
-        //this needs to represent the concerns of both createFile and fileWriter
         catch(IOException o) {
             System.out.println("IOException oh no");
         }
@@ -45,7 +47,7 @@ public class DBStore {
 
     private void writeColumnNames(BufferedWriter writer) throws IOException{
         for (int k = 0; k < model.getColumnNumber(); k++) {
-            writer.write(model.getColumnNames().get(k) + "\t\t");
+            writer.write(model.getAllColNames().get(k) + "\t\t");
         }
     }
 

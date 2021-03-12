@@ -18,7 +18,7 @@ public class DBPrint {
 
 	private void stringifyColumnNames(ArrayList<String> PrintString){
 		for (int k = 0; k < model.getColumnNumber(); k++) {
-			PrintString.add(model.getColumnNames().get(k) + "\t\t\t");
+			PrintString.add(model.getAllColNames().get(k) + "\t\t\t");
 		}
 	}
 

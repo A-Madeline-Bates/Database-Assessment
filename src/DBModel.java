@@ -3,18 +3,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DBModel {
-    //consider altering to work as a 'factory'?
     final List<List<String>> tableData = new ArrayList<List<String>>();
     final ArrayList<String> columnNames = new ArrayList<>();
     private int row = 0;
     private String filename;
     private String databaseName;
 
-    public void setColumnNames(String command) {
+    public void setAllColNames(String command) {
         columnNames.addAll(Arrays.asList(command.split("\\t")));
+//        for(int i=0; i<20; i++){
+//            System.out.println(columnNames.get(i));
+//        }
     }
 
-    public ArrayList<String> getColumnNames() {
+    public ArrayList<String> getAllColNames() {
         return columnNames;
     }
 
@@ -25,7 +27,7 @@ public class DBModel {
 
     //Row number is determined by the number of times setDataArray() has been called
     public int getRowNumber(){
-        return row - 1;
+        return row;
     }
 
     public void setDataArray(String command){

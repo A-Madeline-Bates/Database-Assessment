@@ -1,7 +1,6 @@
 import java.util.List;
 
 public class DBTest {
-
     public DBTest() {
         //this is calling our model
         DBModel testModel = new DBModel();
@@ -10,6 +9,8 @@ public class DBTest {
         testGetSetData(testModel);
         testColumnArr(testModel);
         testGetRowCol(testModel);
+        DBModel testModel2 = new DBModel();
+        testLoadandStore(testModel2);
     }
 
     //Testing the getter and setter for data
@@ -48,21 +49,21 @@ public class DBTest {
     //Testing our column functions
     private void testColumnArr(DBModel testModel) {
         List<String> colArr;
-        testModel.setColumnNames("hello\tthank\tyou\tfor\tvisiting");
-        colArr = testModel.getColumnNames();
+        testModel.setAllColNames("hello\tthank\tyou\tfor\tvisiting");
+        colArr = testModel.getAllColNames();
         assert (colArr.size() == 5);
-        testModel.setColumnNames("*\t*\t*");
-        colArr = testModel.getColumnNames();
+        testModel.setAllColNames("*\t*\t*");
+        colArr = testModel.getAllColNames();
         assert (colArr.size() == 8);
-        testModel.setColumnNames("1\t01\t03");
-        colArr = testModel.getColumnNames();
+        testModel.setAllColNames("1\t01\t03");
+        colArr = testModel.getAllColNames();
         assert (colArr.size() == 11);
-        testModel.setColumnNames("\t");
-        colArr = testModel.getColumnNames();
+        testModel.setAllColNames("\t");
+        colArr = testModel.getAllColNames();
         assert (colArr.size() == 11);
         //this is a space, which should be recognised as a character
-        testModel.setColumnNames(" ");
-        colArr = testModel.getColumnNames();
+        testModel.setAllColNames(" ");
+        colArr = testModel.getAllColNames();
         assert (colArr.size() == 12);
         assert(colArr.get(0).equals("hello"));
         assert(colArr.get(10).equals("03"));
@@ -71,19 +72,29 @@ public class DBTest {
     private void testGetRowCol(DBModel testModel){
         //There should already be 12 columns set as a hang over from testColumnArr()
         assert(testModel.getColumnNumber() == 12);
-        testModel.setColumnNames("there\tare\t4\tthings");
+        testModel.setAllColNames("there\tare\t4\tthings");
         assert(testModel.getColumnNumber() == 16);
-        testModel.setColumnNames("*\t*\t*\t*");
+        testModel.setAllColNames("*\t*\t*\t*");
         assert(testModel.getColumnNumber() == 20);
-        testModel.setColumnNames("1\t2\t3\t4\t5\t6");
+        testModel.setAllColNames("1\t2\t3\t4\t5\t6");
         assert(testModel.getColumnNumber() == 26);
-        //There should already be 6 rows set as a hang over from testGetSetData()
-        assert(testModel.getRowNumber() == 6);
-        testModel.setDataArray("100");
+        //There should already be 7 rows set as a hang over from testGetSetData()
         assert(testModel.getRowNumber() == 7);
-        testModel.setDataArray("F");
+        testModel.setDataArray("100");
         assert(testModel.getRowNumber() == 8);
-        testModel.setDataArray("test\ttest\ttest");
+        testModel.setDataArray("F");
         assert(testModel.getRowNumber() == 9);
+        testModel.setDataArray("test\ttest\ttest");
+        assert(testModel.getRowNumber() == 10);
+    }
+
+    private void testLoadandStore(DBModel testModel){
+        new DBLoad (testModel, "tabFiles", "test1.txt");
+        assert(testModel.getRowNumber() == 3);
+        assert(testModel.getColumnNumber() == 4);
+
+//        new DBLoad (testModel, "tabFiles", "test2.txt");
+//        assert(testModel.getRowNumber() == 5);
+//        assert(testModel.getColumnNumber() == 3);
     }
 }

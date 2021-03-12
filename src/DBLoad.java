@@ -1,6 +1,7 @@
 import java.io.*;
 
 public class DBLoad {
+    //EXCEPTIONS: DATABASE NOT FOUND - FILENOTFOUND - IOEXCEPTION
     DBModel model;
     String databaseName;
     String tableName;
@@ -20,14 +21,14 @@ public class DBLoad {
             BufferedReader reader = new BufferedReader(prereader);
             //the first line need to be treated differently because it holds column information
             //rather than data
-            model.setColumnNames(reader.readLine());
+            String firstLine = reader.readLine();
+            model.setAllColNames(firstLine);
             String currentLine;
             while((currentLine = reader.readLine()) != null){
                 model.setDataArray(currentLine);
             }
             reader.close();
         }
-        //Look into adding more exceptions + making this more secure
         catch(FileNotFoundException e){
             System.out.println("File not found");
         }

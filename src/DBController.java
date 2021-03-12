@@ -76,4 +76,6 @@ public class DBController {
 //    always printed) - something is always printed with 'yes' or 'error'
 
 //    implement an instruction factory or tree?
+
+//    print and store could be singleton classes??
 }
