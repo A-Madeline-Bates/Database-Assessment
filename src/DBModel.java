@@ -11,14 +11,13 @@ public class DBModel {
 
     public void setAllColNames(String command) {
         columnNames.addAll(Arrays.asList(command.split("\\t")));
-//        for(int i=0; i<20; i++){
-//            System.out.println(columnNames.get(i));
-//        }
     }
 
     public ArrayList<String> getAllColNames() {
         return columnNames;
     }
+
+    //Should need a method to return column coordinate by name
 
     //By finding the number of column headers, we can see how many columns we have
     public int getColumnNumber(){

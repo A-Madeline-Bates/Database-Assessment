@@ -22,12 +22,12 @@ public class DBStore {
     }
 
     private String getFilePath(String databaseName, String tableName){
-        return databaseName + File.separator + tableName;
+        return "databaseFiles" + File.separator + databaseName + File.separator + tableName;
     }
 
     private void createFile(File currentFile) throws IOException{
         if(currentFile.exists()){
-            System.out.println("we've been here before");
+            System.out.println("file overwrite");
             //it's not problem is the file already exists, but is worth noting for what we're doing
             //later
         }

@@ -15,7 +15,7 @@ public class DBLoad {
 
     private void readFile(){
         try {
-            String tabFile = databaseName + File.separator + tableName;
+            String tabFile = "databaseFiles" + File.separator + databaseName + File.separator + tableName;
             File fileToOpen = new File(tabFile);
             FileReader prereader = new FileReader(fileToOpen);
             BufferedReader reader = new BufferedReader(prereader);

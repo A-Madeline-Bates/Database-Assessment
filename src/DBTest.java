@@ -10,7 +10,7 @@ public class DBTest {
         testColumnArr(testModel);
         testGetRowCol(testModel);
         DBModel testModel2 = new DBModel();
-        testLoadandStore(testModel2);
+        testLoadAndStore(testModel2);
     }
 
     //Testing the getter and setter for data
@@ -88,8 +88,8 @@ public class DBTest {
         assert(testModel.getRowNumber() == 10);
     }
 
-    private void testLoadandStore(DBModel testModel){
-        new DBLoad (testModel, "tabFiles", "test1.txt");
+    private void testLoadAndStore(DBModel testModel){
+        new DBLoad (testModel, "testFiles", "test1.txt");
         assert(testModel.getRowNumber() == 3);
         assert(testModel.getColumnNumber() == 4);
 
