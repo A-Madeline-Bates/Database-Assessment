@@ -92,9 +92,10 @@ public class DBTest {
         new DBLoad (testModel, "testFiles", "test1.txt");
         assert(testModel.getRowNumber() == 3);
         assert(testModel.getColumnNumber() == 4);
-
-//        new DBLoad (testModel, "tabFiles", "test2.txt");
+        new DBStore (testModel, "testFiles", "test1output.txt");
+//        new DBLoad (testModel, "testFiles", "test2.txt");
 //        assert(testModel.getRowNumber() == 5);
 //        assert(testModel.getColumnNumber() == 3);
+//        new DBStore (testModel, "testFiles", "test2output.txt");
     }
 }

@@ -78,4 +78,6 @@ public class DBController {
 //    implement an instruction factory or tree?
 
 //    print and store could be singleton classes??
+
+//    we need a new instance of the model for each new file we're looking at'
 }
