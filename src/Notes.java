@@ -1,29 +1,29 @@
-public class DBController {
-    DBModelData modelData;
-    DBModelPath modelPath;
+//public class DBController {
+//    DBModelData modelData;
+//    DBModelPath modelPath;
 
-    DBController(DBModelData modelData, DBModelPath modelPath) {
-        this.modelData = modelData;
-        this.modelPath = modelPath;
-    }
+//    DBController(DBModelData modelData, DBModelPath modelPath) {
+//        this.modelData = modelData;
+//        this.modelPath = modelPath;
+//    }
 
-    public void handleIncomingCommand(String command) {
-        System.out.println(command);
-        //split the command
-        //create a 'command' factory and call different instruction classes depending on the command
-        //command factory -> command interface -> call new instances of commands rather than initing them all
-        //store is called after every instruction
-        //break this command into individual words so it can be parsed
+//    public void handleIncomingCommand(String command) {
+//        System.out.println(command);
+//        //split the command
+//        //create a 'command' factory and call different instruction classes depending on the command
+//        //command factory -> command interface -> call new instances of commands rather than initing them all
+//        //store is called after every instruction
+//        //break this command into individual words so it can be parsed
+//
+//        //this has been handed the instructions from DBClient
+//        //The idea is that this class will call model methods, DBStore and DBLoad as appropriate-
+//        //although this might change
+//    }
 
-        //this has been handed the instructions from DBClient
-        //The idea is that this class will call model methods, DBStore and DBLoad as appropriate-
-        //although this might change
-    }
-
-    public String getUserMessage(){
-        return "hello there";
-        //return printMessage.stringifyTable();
-    }
+//    public String getUserMessage() {
+//        return "hello there";
+//        //return printMessage.stringifyTable();
+//    }
 
     //Any file which is committed to memory should have an ID column, as we should have
     //created it. So it's not something we need to worry about when doing a straight-
@@ -83,4 +83,4 @@ public class DBController {
 
 //    implement an instruction factory or tree?
 //    we need a new instance of the model for each new file we're looking at
-}
+
