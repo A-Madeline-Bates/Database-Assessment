@@ -5,6 +5,7 @@ public class DBModelData extends DBModel {
 
 	public void setColumnData(String command){
 		columnNames.addAll(Arrays.asList(command.split("\\t")));
+		columnNames.removeAll(Arrays.asList("", null));
 	}
 
 	public ArrayList<String> getColumnData(){
@@ -22,6 +23,8 @@ public class DBModelData extends DBModel {
 		List<String> rowData = new ArrayList<>();
 		tableData.add(rowData);
 		tableData.get(row).addAll(Arrays.asList(command.split("\\t")));
+		//there might be vulnerability here if there is an empty line included in the file?
+		tableData.get(row).removeAll(Arrays.asList("", null));
 		row++;
 	}
 	public List<List<String>> getRowsData() {

@@ -28,7 +28,7 @@ public class DBLoad {
             }
             reader.close();
         }
-        catch(IOException ex){
+        catch(IOException exception){
             System.out.println("IOException trying to store file " + tableName);
         }
     }

@@ -14,6 +14,7 @@ public class DBTest {
         testGetRowCol(testDataModel);
         DBModelData testDataModel2 = new DBModelData();
         testLoadAndStore(testDataModel2, testPathModel);
+        testTokeniser();
     }
 
     //Testing the getter and setter for data
@@ -29,7 +30,7 @@ public class DBTest {
         //this might cause a problem/need changing
         testDataModel.setRowsData("");
         testTable = testDataModel.getRowsData();
-        assert (testTable.get(2).size() == 1);
+        assert (testTable.get(2).size() == 0);
         testDataModel.setRowsData("100");
         testTable = testDataModel.getRowsData();
         assert (testTable.get(3).size() == 1);
@@ -100,5 +101,22 @@ public class DBTest {
         assert(testDataPath.getFilename().equals("test2.txt"));
         assert(testDataPath.getDatabaseName().equals("testFiles"));
         new DBStore (testDataModel, testDataPath);
+    }
+
+    private void testTokeniser(){
+        DBTokeniser testT1 = new DBTokeniser("hello world");
+        assert(testT1.nextToken().equals("hello"));
+        assert(testT1.nextToken().equals("world"));
+        assert(testT1.nextToken() == null);
+        DBTokeniser testT2 = new DBTokeniser("1 2 3");
+        assert(testT2.nextToken().equals("1"));
+        assert(testT2.nextToken().equals("2"));
+        assert(testT2.nextToken().equals("3"));
+        assert(testT2.nextToken() == null);
+        DBTokeniser testT3 = new DBTokeniser("1     2. 4");
+        assert(testT3.nextToken().equals("1"));
+        assert(testT3.nextToken().equals("2."));
+        assert(testT3.nextToken().equals("4"));
+        assert(testT3.nextToken() == null);
     }
 }

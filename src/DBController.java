@@ -72,6 +72,8 @@ public class DBController {
 //    where there's a shared value in the shared column
 //    PRINT TABLE
 
+
+    
 //    build a structure which populates model with exactly what we want to see in the table
 //    then build a print method which is able to print it all out
 //    perhaps separate treatment of instructions which alter the model and which print the table
@@ -80,8 +82,5 @@ public class DBController {
 //    always printed) - something is always printed with 'yes' or 'error'
 
 //    implement an instruction factory or tree?
-
-//    print and store could be singleton classes??
-
-//    we need a new instance of the model for each new file we're looking at'
+//    we need a new instance of the model for each new file we're looking at
 }
