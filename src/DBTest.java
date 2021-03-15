@@ -7,8 +7,6 @@ public class DBTest {
         new DBModel();
         DBModelData testDataModel = new DBModelData();
         DBModelPath testPathModel = new DBModelPath();
-        //this is calling an empty constructor
-        DBController testController = new DBController(testDataModel, testPathModel);
         testGetSetData(testDataModel);
         testColumnArr(testDataModel);
         testGetRowCol(testDataModel);

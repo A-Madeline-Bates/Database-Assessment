@@ -37,13 +37,13 @@ class DBServer
         new DBTest();
         DBModelData modelData = new DBModelData();
         DBModelPath modelPath = new DBModelPath();
-        DBController controller = new DBController(modelData, modelPath);
         new DBTokeniser(incomingCommand);
         DBParser parser = new DBParser();
+
         //parser.executeCMD(DBServer ?)
-        controller.handleIncomingCommand(incomingCommand);
         //socketWriter.write writes to the client
-        socketWriter.write(controller.getUserMessage());
+        //socketWriter.write(controller.getUserMessage());
+
         //This is used for EOF
         socketWriter.write("\n" + ((char)4) + "\n");
         socketWriter.flush();

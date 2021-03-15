@@ -7,7 +7,7 @@ public class DBTokeniser {
 
 	public DBTokeniser(String incomingCommand){
 		//This splits the string and turns it into tokens with no white space
-		// It will also catch illegal characters
+		// It will also catch illegal characters?
 		TokenList.addAll(Arrays.asList(incomingCommand.split("\\s+")));
 	}
 
