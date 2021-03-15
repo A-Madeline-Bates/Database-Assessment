@@ -13,5 +13,6 @@ public class DBParser {
 		//case "DROP": return new CMDDrop();
 		//case "JOIN": return new CMDJoin();
 		//default:
+		return new CMDCreate();
 	}
 }

@@ -35,6 +35,7 @@ class DBServer
         String incomingCommand = socketReader.readLine();
         //creating a test instance
         new DBTest();
+        //instantiate outside processNextCommand?
         DBModelData modelData = new DBModelData();
         DBModelPath modelPath = new DBModelPath();
         new DBTokeniser(incomingCommand);
