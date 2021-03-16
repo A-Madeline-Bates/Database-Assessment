@@ -8,6 +8,6 @@ public class TokenDoesNotExistErr extends ParseExceptions {
 	}
 
 	public String toString(){
-		return "Missing command. You need to specify a " + domain;
+		return "Missing command. You need to specify a " + domain + ".";
 	}
 }

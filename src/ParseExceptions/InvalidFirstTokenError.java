@@ -8,6 +8,6 @@ public class InvalidFirstTokenError extends ParseExceptions{
 
 	public String toString(){
 		return "Invalid first command. Valid first commands are USE, CREATE, INSERT, SELECT\n" +
-				"UPDATE, ALTER, DELETE, DROP, JOIN. Command used was " + token;
+				"UPDATE, ALTER, DELETE, DROP, JOIN. Command used was " + token + ".";
 	}
 }

@@ -11,6 +11,6 @@ public class AlphanumErr extends ParseExceptions{
 	public String toString(){
 		return "Invalid command given. You were trying to specify a " + domain +
 				",\nbut commands of that type can only hold alphanumeric characters.\n" +
-				"Command used was " + token;
+				"Command used was " + token + ".";
 	}
 }
