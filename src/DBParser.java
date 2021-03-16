@@ -1,6 +1,7 @@
 import ParseExceptions.*;
 
 public class DBParser {
+	String exceptionMessage;
 
 	//This will act as a factory for instances of CMDType
 	public CMDType parse(DBTokeniser tokeniser) {
@@ -8,7 +9,10 @@ public class DBParser {
 			return chooseCMD(tokeniser);
 		}
 		catch(ParseExceptions exception){
-			System.out.println("Command exception: " + exception);
+			//We don't want this printed- we want it to be sent to socketWriter but we'll
+			//print it for now
+			this.exceptionMessage = "Command exception: " + exception;
+			System.out.println(exceptionMessage);
 		}
 		return new CMDCreate();
 	}

@@ -13,6 +13,8 @@ public class DBTest {
         DBModelData testDataModel2 = new DBModelData();
         testLoadAndStore(testDataModel2, testPathModel);
         testTokeniser();
+        DBParser testParser = new DBParser();
+        testParse(testParser);
     }
 
     //Testing the getter and setter for data
@@ -98,7 +100,7 @@ public class DBTest {
         testDataPath.setDatabaseName("testFiles");
         assert(testDataPath.getFilename().equals("test2.txt"));
         assert(testDataPath.getDatabaseName().equals("testFiles"));
-        new DBStore (testDataModel, testDataPath);
+//        new DBStore (testDataModel, testDataPath);
     }
 
     private void testTokeniser(){
@@ -116,5 +118,10 @@ public class DBTest {
         assert(testT3.nextToken().equals("2."));
         assert(testT3.nextToken().equals("4"));
         assert(testT3.nextToken() == null);
+    }
+
+    private void testParse(DBParser testParser){
+//        DBTokeniser testT1 = new DBTokeniser("Use");
+//        testParser.parse(testT1);
     }
 }
