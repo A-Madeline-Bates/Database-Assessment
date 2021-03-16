@@ -43,16 +43,21 @@ class DBServer
         DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
         //this instantiates the command class we are using based on incomingCommand
         CMDType commandClass = parser.parse(tokeniser);
-        //this takes a copy of server so that we can execute our command
-        //in order to execute a command we must appropriately manipulate our data,
-        //store the result, and then print the appropriate message
-        //perhaps we should get command.query to return a whole set of data (like DBModel)
-        //so that a response can be set here
-        commandClass.query(this);
-        //
 
-        //socketWriter.write writes to the client
-        //socketWriter.write(controller.getUserMessage());
+//        //this takes a copy of server so that we can execute our command
+//        //in order to execute a command we must appropriately manipulate our data,
+//        //store the result, and then print the appropriate message
+//        //perhaps we should get command.query to return a whole set of data (like DBModel)
+//        //so that a response can be set here
+//        commandClass.query(this);
+//
+//        //set an error and response Class in model which can be set in DBParse and reread here with
+//        //if(DBModelError.isError=true) then print "[ERROR] + DBModelError.getError"
+//        //else print "[OK] + DBModelResponse.getResponse()";
+//
+//        //DBStore(DBModelData, DBModelPath);
+//        //DBRespond(socketWriter, DBModelData, DBModelPath, DBModelResponse, DBModelError);
+//        //(Definitely work out if can just pass DBModel as one)
 
         //This is used for EOF
         socketWriter.write("\n" + ((char)4) + "\n");
