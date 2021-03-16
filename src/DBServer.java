@@ -3,8 +3,14 @@ import java.net.*;
 
 class DBServer
 {
+    DBModel model;
+    DBModelData modelData;
+    DBModelPath modelPath;
+    DBParser parser;
+
     public DBServer(int portNumber)
     {
+        buildDatabase();
         try {
             ServerSocket serverSocket = new ServerSocket(portNumber);
             System.out.println("Server Listening");
@@ -33,14 +39,8 @@ class DBServer
     {
         //incomingCommand contains the message we're going to use.
         String incomingCommand = socketReader.readLine();
-        //creating a test instance
-        new DBTest();
-        //instantiate outside processNextCommand?
-        DBModelData modelData = new DBModelData();
-        DBModelPath modelPath = new DBModelPath();
-        new DBTokeniser(incomingCommand);
-        DBParser parser = new DBParser();
 
+        new DBTokeniser(incomingCommand);
         //parser.executeCMD(DBServer ?)
         //socketWriter.write writes to the client
         //socketWriter.write(controller.getUserMessage());
@@ -48,6 +48,16 @@ class DBServer
         //This is used for EOF
         socketWriter.write("\n" + ((char)4) + "\n");
         socketWriter.flush();
+    }
+
+    private void buildDatabase(){
+        //creating a test instance
+        new DBTest();
+        //creating classes that we don't want to re-instantiate with every new incoming command
+        this.model = new DBModel();
+        this.modelData = new DBModelData();
+        this.modelPath = new DBModelPath();
+        this.parser = new DBParser();
     }
 
     public static void main(String args[])
