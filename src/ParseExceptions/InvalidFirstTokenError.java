@@ -1,7 +1,6 @@
 package ParseExceptions;
 
 public class InvalidFirstTokenError extends ParseExceptions{
-	final String token;
 
 	public InvalidFirstTokenError(String token){
 		this.token = token;

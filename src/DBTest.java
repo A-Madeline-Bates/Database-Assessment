@@ -13,7 +13,7 @@ public class DBTest {
         DBModelData testDataModel2 = new DBModelData();
         testLoadAndStore(testDataModel2, testPathModel);
         testTokeniser();
-        DBParser testParser = new DBParser();
+        DBCommandFactory testParser = new DBCommandFactory();
         testParse(testParser);
     }
 
@@ -120,7 +120,7 @@ public class DBTest {
         assert(testT3.nextToken() == null);
     }
 
-    private void testParse(DBParser testParser){
+    private void testParse(DBCommandFactory testParser){
 //        DBTokeniser testT1 = new DBTokeniser("Use");
 //        testParser.parse(testT1);
     }

@@ -1,3 +1,5 @@
+import ParseExceptions.*;
+
 import java.io.*;
 import java.net.*;
 
@@ -6,7 +8,8 @@ class DBServer
     DBModel model;
     DBModelData modelData;
     DBModelPath modelPath;
-    DBParser parser;
+    DBCommandFactory cmdFactory;
+    String exceptionMessage;
 
     public DBServer(int portNumber)
     {
@@ -41,8 +44,7 @@ class DBServer
         String incomingCommand = socketReader.readLine();
 
         DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
-        //this instantiates the command class we are using based on incomingCommand
-        CMDType commandClass = parser.parse(tokeniser);
+        processParse(tokeniser);
 
 //        //this takes a copy of server so that we can execute our command
 //        //in order to execute a command we must appropriately manipulate our data,
@@ -71,7 +73,24 @@ class DBServer
         this.model = new DBModel();
         this.modelData = new DBModelData();
         this.modelPath = new DBModelPath();
-        this.parser = new DBParser();
+        this.cmdFactory = new DBCommandFactory();
+    }
+
+    private void processParse(DBTokeniser tokeniser){
+        try {
+            //this instantiates the command class we are using based on incomingCommand
+            CMDType commandClass = cmdFactory.createCMD(tokeniser);
+            //this gives the model to our class
+            commandClass.setModel(modelData, modelPath);
+            commandClass.setInstructionSet(tokeniser);
+            commandClass.transformModel();
+        }
+		catch(ParseExceptions exception){
+            //We don't want this printed- we want it to be sent to socketWriter but we'll
+            //print it for now
+            this.exceptionMessage = "Command exception: " + exception;
+            System.out.println(exceptionMessage);
+        }
     }
 
     public static void main(String args[])
