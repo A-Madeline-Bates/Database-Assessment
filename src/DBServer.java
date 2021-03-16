@@ -40,9 +40,17 @@ class DBServer
         //incomingCommand contains the message we're going to use.
         String incomingCommand = socketReader.readLine();
 
-//        DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
-//        parser.parse(tokeniser);
-        //parser.executeCMD(DBServer ?)
+        DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
+        //this instantiates the command class we are using based on incomingCommand
+        CMDType commandClass = parser.parse(tokeniser);
+        //this takes a copy of server so that we can execute our command
+        //in order to execute a command we must appropriately manipulate our data,
+        //store the result, and then print the appropriate message
+        //perhaps we should get command.query to return a whole set of data (like DBModel)
+        //so that a response can be set here
+        commandClass.query(this);
+        //
+
         //socketWriter.write writes to the client
         //socketWriter.write(controller.getUserMessage());
 
