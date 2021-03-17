@@ -1,3 +1,7 @@
+package DBMain;
+import DBMain.CommandFiles.*;
+import DBMain.ModelFiles.*;
+
 import java.util.List;
 
 public class DBTest {

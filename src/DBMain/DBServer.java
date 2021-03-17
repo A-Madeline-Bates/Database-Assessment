@@ -1,9 +1,12 @@
-import ParseExceptions.*;
+package DBMain;
+import DBMain.ModelFiles.*;
+import DBMain.ParseExceptions.*;
+import DBMain.CommandFiles.*;
 
 import java.io.*;
 import java.net.*;
 
-class DBServer
+public class DBServer
 {
     DBModel model;
     DBModelData modelData;

@@ -1,4 +1,4 @@
-package ParseExceptions;
+package DBMain.ParseExceptions;
 
 public class DBDoesNotExistErr extends ParseExceptions{
 	DomainType domain;

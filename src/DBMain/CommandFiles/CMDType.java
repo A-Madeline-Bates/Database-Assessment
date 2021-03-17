@@ -1,18 +1,22 @@
-import ParseExceptions.*;
+package DBMain.CommandFiles;
+import DBMain.*;
+import DBMain.ModelFiles.*;
+import DBMain.ParseExceptions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
 
-abstract class CMDType {
+public abstract class CMDType {
 	protected DBModelData dataModel;
 	protected DBModelPath pathModel;
 	protected DBTokeniser tokeniser;
 
-	//abstract class which defines all CMD classes
-	abstract String query(DBServer server);
+	//SPLIT THIS INTO DIFFERENT CHILD CLASSES WHEN WE KNOW WHAT COMMANDS WILL NEED WHAT THINGS
 
-	protected void setModel(DBModelData dataModel, DBModelPath pathModel){
+	public abstract String query(DBServer server);
+
+	public void setModel(DBModelData dataModel, DBModelPath pathModel){
 		this.dataModel = dataModel;
 		this.pathModel = pathModel;
 	}
@@ -22,9 +26,9 @@ abstract class CMDType {
 		this.pathModel = new DBModelPath();
 	}
 
-	abstract void transformModel() throws ParseExceptions;
+	public abstract void transformModel() throws ParseExceptions;
 
-	protected void setInstructionSet(DBTokeniser tokeniser){
+	public void setInstructionSet(DBTokeniser tokeniser){
 		this.tokeniser = tokeniser;
 	}
 

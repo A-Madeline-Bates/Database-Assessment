@@ -1,4 +1,7 @@
-import ParseExceptions.*;
+package DBMain.CommandFiles;
+import DBMain.*;
+import DBMain.ModelFiles.*;
+import DBMain.ParseExceptions.*;
 
 public class CMDUse extends CMDType {
 

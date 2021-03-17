@@ -1,4 +1,4 @@
-package ParseExceptions;
+package DBMain.ParseExceptions;
 
 public class InvalidFirstTokenError extends ParseExceptions{
 

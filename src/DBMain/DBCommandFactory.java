@@ -1,4 +1,7 @@
-import ParseExceptions.*;
+package DBMain;
+import DBMain.ModelFiles.*;
+import DBMain.CommandFiles.*;
+import DBMain.ParseExceptions.*;
 
 public class DBCommandFactory {
 	//This will act as a factory for instances of CMDType

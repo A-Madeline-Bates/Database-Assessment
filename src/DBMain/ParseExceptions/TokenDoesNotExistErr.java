@@ -1,4 +1,4 @@
-package ParseExceptions;
+package DBMain.ParseExceptions;
 
 public class TokenDoesNotExistErr extends ParseExceptions {
 	DomainType domain;

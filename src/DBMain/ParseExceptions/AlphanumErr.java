@@ -1,4 +1,4 @@
-package ParseExceptions;
+package DBMain.ParseExceptions;
 
 public class AlphanumErr extends ParseExceptions{
 	DomainType domain;
