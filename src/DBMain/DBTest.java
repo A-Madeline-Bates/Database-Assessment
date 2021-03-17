@@ -1,6 +1,7 @@
 package DBMain;
 import DBMain.CommandFiles.*;
 import DBMain.ModelFiles.*;
+import DBMain.ParseExceptions.ParseExceptions;
 
 import java.util.List;
 
@@ -19,6 +20,10 @@ public class DBTest {
         testTokeniser();
         DBCommandFactory testParser = new DBCommandFactory();
         testParse(testParser);
+
+        CMDType command = new CMDUse();
+        //This calls the separate test file within DBMain.CommandFiles
+        new TestCMD(command);
     }
 
     //Testing the getter and setter for data

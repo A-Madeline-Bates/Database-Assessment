@@ -16,6 +16,10 @@ public abstract class CMDType {
 
 	public abstract String query(DBServer server);
 
+	/******************************************************
+	 *************** MODEL ALTERING METHODS ***************
+	 *****************************************************/
+
 	public void setModel(DBModelData dataModel, DBModelPath pathModel){
 		this.dataModel = dataModel;
 		this.pathModel = pathModel;
@@ -28,9 +32,17 @@ public abstract class CMDType {
 
 	public abstract void transformModel() throws ParseExceptions;
 
+	/******************************************************
+	 ****************** SET TOKENISER ********************
+	 *****************************************************/
+
 	public void setInstructionSet(DBTokeniser tokeniser){
 		this.tokeniser = tokeniser;
 	}
+
+	/******************************************************
+	 ******************** DB NAME TEST ********************
+	 *****************************************************/
 
 	protected boolean isDBNameValid(String dbName) throws ParseExceptions{
 		if (tokenExists(dbName, DomainType.DATABASENAME)){
@@ -42,6 +54,10 @@ public abstract class CMDType {
 		}
 		return false;
 	}
+
+	/******************************************************
+	 ******************** STRING TESTS ********************
+	 *****************************************************/
 
 	private boolean tokenExists(String testString, DomainType domain) throws ParseExceptions{
 		if(testString != null){
@@ -60,6 +76,10 @@ public abstract class CMDType {
 			throw new AlphanumErr(testString, domain);
 		}
 	}
+
+	/******************************************************
+	 ******************** PATH TESTS ********************
+	 *****************************************************/
 
 	private boolean databaseExists(String dbName) throws ParseExceptions{
 		String location = "databaseFiles" + File.separator + dbName;
