@@ -1,3 +1,3 @@
 package DBMain.ParseExceptions;
 
-public enum DomainType {FILENAME, DATABASENAME, TABLENAME, UNKNOWN}
+public enum DomainType {DATABASENAME, TABLENAME, ATTRIBUTENAME, UNKNOWN}

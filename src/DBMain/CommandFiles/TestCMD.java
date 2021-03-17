@@ -10,10 +10,12 @@ public class TestCMD {
 
 	public TestCMD(CMDType command) {
 		this.command = command;
-		testTokenExists();
+		testIsItFinalCommand();
 	}
 
-	private void testTokenExists() {
+	private void testIsItFinalCommand() {
+		assert(command.isThisCommandEnd(null));
+		assert(!command.isThisCommandEnd("hello"));
 //		assert(command.isDBNameValid("hello"));
 	}
 }

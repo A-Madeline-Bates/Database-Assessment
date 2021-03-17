@@ -9,6 +9,11 @@ public class DBModelData extends DBModel {
 		columnNames.removeAll(Arrays.asList("", null));
 	}
 
+	public void setColumnDataByArrlist(ArrayList newColNames){
+		//Make this safer!!!!
+		columnNames.addAll(newColNames);
+	}
+
 	public ArrayList<String> getColumnData(){
 		return columnNames;
 	}

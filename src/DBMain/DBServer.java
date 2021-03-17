@@ -48,6 +48,7 @@ public class DBServer
 
         DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
         processParse(tokeniser);
+        new DBStore(modelData, modelPath);
 
 //        //this takes a copy of server so that we can execute our command
 //        //in order to execute a command we must appropriately manipulate our data,
@@ -87,6 +88,8 @@ public class DBServer
             commandClass.setModel(modelData, modelPath);
             commandClass.setInstructionSet(tokeniser);
             commandClass.transformModel();
+            modelData = commandClass.getModelData();
+            modelPath = commandClass.getModelPath();
         }
 		catch(ParseExceptions exception){
             //We don't want this printed- we want it to be sent to socketWriter but we'll

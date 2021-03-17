@@ -1,5 +1,4 @@
 package DBMain;
-import DBMain.ModelFiles.*;
 import DBMain.CommandFiles.*;
 import DBMain.ParseExceptions.*;
 
@@ -28,7 +27,7 @@ public class DBCommandFactory {
 //			case "JOIN":
 //				return new CMDJoin();
 			default:
-				throw new InvalidFirstTokenError(nextToken);
+				throw new InvalidFirstCommandError(nextToken);
 		}
 	}
 }

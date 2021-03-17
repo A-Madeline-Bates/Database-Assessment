@@ -1,9 +1,9 @@
 package DBMain.ParseExceptions;
 
-public class TokenDoesNotExistErr extends ParseExceptions {
+public class CommandMissingErr extends ParseExceptions {
 	DomainType domain;
 
-	public TokenDoesNotExistErr(DomainType domain){
+	public CommandMissingErr(DomainType domain){
 		this.domain = domain;
 	}
 

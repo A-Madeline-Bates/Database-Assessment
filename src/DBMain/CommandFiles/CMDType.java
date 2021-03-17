@@ -25,6 +25,14 @@ public abstract class CMDType {
 		this.pathModel = pathModel;
 	}
 
+	public DBModelData getModelData(){
+		return dataModel;
+	}
+
+	public DBModelPath getModelPath(){
+		return pathModel;
+	}
+
 	protected void clearModel(){
 		this.dataModel = new DBModelData();
 		this.pathModel = new DBModelPath();
@@ -58,8 +66,8 @@ public abstract class CMDType {
 	 *****************************************************/
 
 	protected boolean isNameValid(String dbName, DomainType domain) throws ParseExceptions{
-		if (doesTokenExist(dbName, DomainType.DATABASENAME)){
-			if (isItAlphNumeric(dbName, DomainType.DATABASENAME)){
+		if (doesTokenExist(dbName, domain)){
+			if (isItAlphNumeric(dbName, domain)){
 				return true;
 			}
 		}
@@ -71,11 +79,11 @@ public abstract class CMDType {
 			return true;
 		}
 		else{
-			throw new TokenDoesNotExistErr(domain);
+			throw new CommandMissingErr(domain);
 		}
 	}
 
-	private boolean isItAlphNumeric (String testString, DomainType domain) throws ParseExceptions{
+	protected boolean isItAlphNumeric (String testString, DomainType domain) throws ParseExceptions{
 		if(testString.matches("[a-zA-Z0-9]+")){
 			return true;
 		}
@@ -84,8 +92,15 @@ public abstract class CMDType {
 		}
 	}
 
-	protected boolean isItFinalCommand(String extraCommand) throws ParseExceptions{
+	protected boolean isThisCommandEnd(String extraCommand){
 		if(extraCommand == null){
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean isThisCommandEndTHROW(String extraCommand) throws ParseExceptions{
+		if(isThisCommandEnd(extraCommand)){
 			return true;
 		}
 		throw new ExtraCommandErr(extraCommand);
@@ -103,6 +118,15 @@ public abstract class CMDType {
 		}
 		else {
 			throw new DBDoesNotExistErr(dbName);
+		}
+	}
+
+	protected boolean areWeInADatabase() throws ParseExceptions {
+		if(pathModel.getDatabaseName() != null){
+			return true;
+		}
+		else{
+			throw new OutsideDatabaseErr();
 		}
 	}
 }
