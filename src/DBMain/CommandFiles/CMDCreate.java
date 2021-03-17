@@ -2,6 +2,7 @@ package DBMain.CommandFiles;
 import DBMain.*;
 import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.*;
+import java.io.*;
 
 public class CMDCreate extends CMDType {
 	public String query(DBServer server){
@@ -9,32 +10,54 @@ public class CMDCreate extends CMDType {
 	}
 
 	public void transformModel() throws ParseExceptions {
-		String nextToken = tokeniser.nextToken();
-		if(nextToken.toUpperCase() == "DATABASE"){
-			//nextToken is updated to contain the word following DATABASE
-			nextToken = tokeniser.nextToken();
-			createDatabase(nextToken.toUpperCase(), DomainType.DATABASENAME);
-		}
-		else if(nextToken.toUpperCase() == "TABLE"){
-			//nextToken is updated to contain the word following TABLE
-			nextToken = tokeniser.nextToken();
-			//this is split into more stages to accomodate recursively searching for attributes
-			if(isNameValid(nextToken.toUpperCase(), DomainType.TABLENAME)){
-				//code here to check attribute list stuff
-				//and then createTable()
+		String firstInstruction = tokeniser.nextToken();
+		if(doesTokenExist(firstInstruction, DomainType.UNKNOWN)) {
+			if (firstInstruction.toUpperCase().equals("DATABASE")) {
+				processDatabase();
 			}
-		}
-		else{
-			//If token was null it would call this err and display null, which isn't quite right
-			throw new InvalidTokenError(nextToken, "CREATE", "DATABASE", "TABLE");
+			else if (firstInstruction.toUpperCase().equals("TABLE")) {
+				processTable();
+			} else {
+				throw new InvalidTokenError(firstInstruction, "CREATE", "DATABASE", "TABLE");
+			}
 		}
 	}
 
-	private void createDatabase(String dbName, DomainType domain) throws ParseExceptions{
-		if(isNameValid(dbName, domain)) {
-			//if(isFinalSymbol{
-				//insert code to create new directory in our folder.
-			//}
+	private void processDatabase() throws ParseExceptions{
+		String secondInstruction = tokeniser.nextToken();
+		if (areDBCommandsValid(secondInstruction)) {
+			createDatabase(secondInstruction.toUpperCase());
+			//let go of the file that was loaded before this file was called. There is currently no file loaded.
+			clearModel();
 		}
+	}
+
+	private boolean areDBCommandsValid(String secondInstruction) throws ParseExceptions{
+		if(isNameValid(secondInstruction, DomainType.DATABASENAME)) {
+			String extraCommand = tokeniser.nextToken();
+			if(isItFinalCommand(extraCommand)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void createDatabase(String dbName) throws ParseExceptions{
+		String directoryPath = "databaseFiles" + File.separator + dbName;
+		File newFolder = new File(directoryPath);
+		if(!newFolder.mkdirs()){
+			throw new DBNotBuiltErr(dbName);
+		}
+	}
+
+	private void processTable() throws ParseExceptions{
+		String secondInstruction = tokeniser.nextToken();
+
+//			firstInstruction = tokeniser.nextToken();
+//			//this is split into more stages to accommodate recursively searching for attributes
+//			if(isNameValid(firstInstruction.toUpperCase(), DomainType.TABLENAME)){
+//				//code here to check attribute list stuff
+//				//and then createTable()
+//			}
 	}
 }

@@ -8,8 +8,11 @@ public class CMDUse extends CMDType {
 	public void transformModel() throws ParseExceptions {
 		String dbName = tokeniser.nextToken();
 		if(isDBValid(dbName)){
-			clearModel();
-			pathModel.setDatabaseName(dbName);
+			String extraCommand = tokeniser.nextToken();
+			if(isItFinalCommand(extraCommand)) {
+				clearModel();
+				pathModel.setDatabaseName(dbName);
+			}
 		}
 	}
 

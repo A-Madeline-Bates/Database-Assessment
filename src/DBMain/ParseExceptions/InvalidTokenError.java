@@ -1,7 +1,6 @@
 package DBMain.ParseExceptions;
 
 public class InvalidTokenError extends ParseExceptions{
-	String token;
 	String previousCommand;
 	String optionOne;
 	String optionTwo;
@@ -14,7 +13,7 @@ public class InvalidTokenError extends ParseExceptions{
 	}
 
 	public String toString(){
-		return "Invalid command. Expected values following a " + previousCommand + "command are " + optionOne +
-				"or " + optionTwo + ". Command used was " + token + ".";
+		return "Invalid command. Expected values following a " + previousCommand + " command are " + optionOne +
+				" or " + optionTwo + ". Command used was " + token + ".";
 	}
 }

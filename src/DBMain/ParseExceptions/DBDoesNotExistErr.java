@@ -1,8 +1,6 @@
 package DBMain.ParseExceptions;
 
 public class DBDoesNotExistErr extends ParseExceptions{
-	DomainType domain;
-
 	public DBDoesNotExistErr(String token) {
 		this.token = token;
 	}

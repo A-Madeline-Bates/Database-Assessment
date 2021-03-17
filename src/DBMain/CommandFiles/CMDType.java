@@ -41,12 +41,12 @@ public abstract class CMDType {
 	}
 
 	/******************************************************
-	 ******************** DB NAME TEST ********************
+	 *************** DIRECTORY SEARCH TEST ****************
 	 *****************************************************/
 
 	protected boolean isDBValid(String dbName) throws ParseExceptions{
 		if (isNameValid(dbName, DomainType.DATABASENAME)){
-			if(databaseExists(dbName)){
+			if(doesDatabaseExist(dbName)){
 				return true;
 			}
 		}
@@ -58,15 +58,15 @@ public abstract class CMDType {
 	 *****************************************************/
 
 	protected boolean isNameValid(String dbName, DomainType domain) throws ParseExceptions{
-		if (tokenExists(dbName, DomainType.DATABASENAME)){
-			if (isAlphNumeric(dbName, DomainType.DATABASENAME)){
+		if (doesTokenExist(dbName, DomainType.DATABASENAME)){
+			if (isItAlphNumeric(dbName, DomainType.DATABASENAME)){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean tokenExists(String testString, DomainType domain) throws ParseExceptions{
+	protected boolean doesTokenExist(String testString, DomainType domain) throws ParseExceptions{
 		if(testString != null){
 			return true;
 		}
@@ -75,7 +75,7 @@ public abstract class CMDType {
 		}
 	}
 
-	private boolean isAlphNumeric (String testString, DomainType domain) throws ParseExceptions{
+	private boolean isItAlphNumeric (String testString, DomainType domain) throws ParseExceptions{
 		if(testString.matches("[a-zA-Z0-9]+")){
 			return true;
 		}
@@ -84,11 +84,18 @@ public abstract class CMDType {
 		}
 	}
 
+	protected boolean isItFinalCommand(String extraCommand) throws ParseExceptions{
+		if(extraCommand == null){
+			return true;
+		}
+		throw new ExtraCommandErr(extraCommand);
+	}
+
 	/******************************************************
 	 ******************** PATH TESTS ********************
 	 *****************************************************/
 
-	private boolean databaseExists(String dbName) throws ParseExceptions{
+	private boolean doesDatabaseExist(String dbName) throws ParseExceptions{
 		String location = "databaseFiles" + File.separator + dbName;
 		Path path = Paths.get(location);
 		if(Files.exists(path) && Files.isDirectory(path)){
