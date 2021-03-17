@@ -44,12 +44,10 @@ public abstract class CMDType {
 	 ******************** DB NAME TEST ********************
 	 *****************************************************/
 
-	protected boolean isDBNameValid(String dbName) throws ParseExceptions{
-		if (tokenExists(dbName, DomainType.DATABASENAME)){
-			if (isAlphNumeric(dbName, DomainType.DATABASENAME)){
-				if(databaseExists(dbName)){
-					return true;
-				}
+	protected boolean isDBValid(String dbName) throws ParseExceptions{
+		if (isNameValid(dbName, DomainType.DATABASENAME)){
+			if(databaseExists(dbName)){
+				return true;
 			}
 		}
 		return false;
@@ -58,6 +56,15 @@ public abstract class CMDType {
 	/******************************************************
 	 ******************** STRING TESTS ********************
 	 *****************************************************/
+
+	protected boolean isNameValid(String dbName, DomainType domain) throws ParseExceptions{
+		if (tokenExists(dbName, DomainType.DATABASENAME)){
+			if (isAlphNumeric(dbName, DomainType.DATABASENAME)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	private boolean tokenExists(String testString, DomainType domain) throws ParseExceptions{
 		if(testString != null){
