@@ -12,34 +12,24 @@ public class CMDCreate extends CMDType {
 	}
 
 	public void transformModel() throws ParseExceptions {
-		String firstInstruction = tokeniser.nextToken();
-		if(doesTokenExistTHROW(firstInstruction, DomainType.UNKNOWN)) {
-			if (firstInstruction.toUpperCase().equals("DATABASE")) {
-				processDatabase();
-			}
-			else if (firstInstruction.toUpperCase().equals("TABLE")) {
-				processTable();
-			} else {
-				throw new InvalidCommand(firstInstruction, "CREATE", "DATABASE", "TABLE");
-			}
+		String firstInstruction = getNewTokenSafe(DomainType.UNKNOWN);
+		if (firstInstruction.toUpperCase().equals("DATABASE")) {
+			processDatabase();
+		}
+		else if (firstInstruction.toUpperCase().equals("TABLE")) {
+			processTable();
+		} else {
+			throw new InvalidCommand(firstInstruction, "CREATE", "DATABASE", "TABLE");
 		}
 	}
 
 	private void processDatabase() throws ParseExceptions{
-		String secondInstruction = tokeniser.nextToken();
-		if (areDBCommandsValid(secondInstruction)) {
-			createDatabase(secondInstruction.toUpperCase());
-		}
-	}
-
-	private boolean areDBCommandsValid(String secondInstruction) throws ParseExceptions{
-		if(isNameValid(secondInstruction, DomainType.DATABASENAME)) {
-			String extraCommand = tokeniser.nextToken();
-			if(isThisCommandEndTHROW(extraCommand)){
-				return true;
+		String secondInstruction = getNewTokenSafe(DomainType.DATABASENAME);
+		if(isNameAlphNumTHROW(secondInstruction, DomainType.DATABASENAME)) {
+			if(isThisCommandLineEnd()) {
+				createDatabase(secondInstruction.toUpperCase());
 			}
 		}
-		return false;
 	}
 
 	private void createDatabase(String dbName) throws ParseExceptions{
@@ -57,13 +47,16 @@ public class CMDCreate extends CMDType {
 	}
 
 	private void processTable() throws ParseExceptions {
-		String secondInstruction = tokeniser.nextToken();
+		String secondInstruction = getNewTokenSafe(DomainType.TABLENAME);
 		if(areWeInADatabase()) {
-			if (isNameValid(secondInstruction, DomainType.TABLENAME)) {
-				//maybe split this into a different method?
-				String thirdInstruction = tokeniser.nextToken();
-				if(isThisCommandEnd(thirdInstruction)){
-					createTable(secondInstruction);
+			if (isNameAlphNumTHROW(secondInstruction, DomainType.TABLENAME)) {
+				String thirdInstruction = getNewTokenSafe(DomainType.UNKNOWN);
+				if(isThisSemicolon(thirdInstruction)) {
+					//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
+					String extraInstruction = tokeniser.nextToken();
+					if (isThisCommandEndTHROW(extraInstruction)) {
+						createTable(secondInstruction);
+					}
 				}
 				else if(thirdInstruction.equals("(")){
 					collectAttributes(secondInstruction);
@@ -96,22 +89,22 @@ public class CMDCreate extends CMDType {
 	}
 
 	private void collectAttributes(String tableName) throws ParseExceptions{
-		String nextInstruction = tokeniser.nextToken();
-		if(doesTokenExistTHROW(nextInstruction, DomainType.ATTRIBUTENAME)) {
-			//if it's a ')', leave recursive loop and create table
-			if (nextInstruction.equals(")")) {
+		String nextInstruction = getNewTokenSafe(DomainType.ATTRIBUTENAME);
+		//if it's a ')', leave recursive loop and create table
+		if (nextInstruction.equals(")")) {
+			if(isThisCommandLineEnd()) {
 				createTable(tableName);
 			}
-			//if it fits the conditions for an attribute name, save it to our list and call collectAttributes again
-			else if (isItAlphNumTHROW(nextInstruction, DomainType.ATTRIBUTENAME)){
-				attributeNames.add(nextInstruction);
-				collectAttributes(tableName);
-			}
-			//if it's not an attribute or a ')', throw an error
-			else{
-				throw new InvalidCommand(nextInstruction, "CREATE [table name] (",
-						"[attributename])", null);
-			}
+		}
+		//if it fits the conditions for an attribute name, save it to our list and call collectAttributes again
+		else if (isNameAlphNumeric(nextInstruction)){
+			attributeNames.add(nextInstruction);
+			collectAttributes(tableName);
+		}
+		//if it's not an attribute or a ')', throw an error
+		else{
+			throw new InvalidCommand(nextInstruction, "CREATE [table name] (",
+					"[attributename])", null);
 		}
 	}
 }

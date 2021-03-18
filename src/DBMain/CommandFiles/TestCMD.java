@@ -11,7 +11,7 @@ public class TestCMD {
 		this.command = command;
 		testIsItFinalCommand();
 		testIsItAlphNumeric();
-		testDoesTokenExist();
+		testIsItSemiColon();
 	}
 
 	private void testIsItFinalCommand() {
@@ -21,18 +21,18 @@ public class TestCMD {
 	}
 
 	private void testIsItAlphNumeric(){
-		assert(command.isItAlphNumeric("abc"));
-		assert(command.isItAlphNumeric("ABc"));
-		assert(command.isItAlphNumeric("ABC"));
-		assert(command.isItAlphNumeric("123"));
-		assert(!command.isItAlphNumeric("!"));
-		assert(!command.isItAlphNumeric(" "));
-		assert(!command.isItAlphNumeric("_"));
+		assert(command.isNameAlphNumeric("abc"));
+		assert(command.isNameAlphNumeric("ABc"));
+		assert(command.isNameAlphNumeric("ABC"));
+		assert(command.isNameAlphNumeric("123"));
+		assert(!command.isNameAlphNumeric("!"));
+		assert(!command.isNameAlphNumeric(" "));
+		assert(!command.isNameAlphNumeric("_"));
 	}
 
-	private void testDoesTokenExist(){
-		assert(command.doesTokenExist("hello"));
-		assert(command.doesTokenExist("hello world"));
-		assert(!command.doesTokenExist(null));
+	private void testIsItSemiColon(){
+		assert(command.isThisSemicolon(";"));
+		assert(!command.isThisSemicolon(":"));
+		assert(!command.isThisSemicolon("this"));
 	}
 }

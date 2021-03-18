@@ -7,12 +7,11 @@ import java.util.Locale;
 public class CMDUse extends CMDType {
 
 	public void transformModel() throws ParseExceptions {
-		String dbName = tokeniser.nextToken();
-		if(isDBValid(dbName)){
-			String extraCommand = tokeniser.nextToken();
-			if(isThisCommandEndTHROW(extraCommand)) {
+		String firstCommand = getNewTokenSafe(DomainType.DATABASENAME);
+		if(isDBValid(firstCommand)){
+			if(isThisCommandLineEnd()) {
 				clearModel();
-				pathModel.setDatabaseName(dbName.toUpperCase());
+				pathModel.setDatabaseName(firstCommand.toUpperCase());
 			}
 		}
 	}

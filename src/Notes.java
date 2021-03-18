@@ -61,6 +61,8 @@
          //created it.
 //  - SPLIT cmdtype INTO DIFFERENT CHILD CLASSES WHEN WE KNOW WHAT COMMANDS WILL NEED WHAT THINGS
 //  - investigate automated testing?
+//  - maybe think about/ worry about empty cells?
+//  - CREATE doesn't automatically set USE- change that.
 
 
 

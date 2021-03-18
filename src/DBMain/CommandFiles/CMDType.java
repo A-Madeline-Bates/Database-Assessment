@@ -46,12 +46,22 @@ public abstract class CMDType {
 		this.tokeniser = tokeniser;
 	}
 
+	protected String getNewTokenSafe(DomainType domain) throws ParseExceptions{
+		String nextToken = tokeniser.nextToken();
+		if(nextToken != null){
+			return nextToken;
+		}
+		else{
+			throw new CommandMissing(domain);
+		}
+	}
+
 	/******************************************************
 	 *************** DIRECTORY SEARCH TEST ****************
 	 *****************************************************/
 
 	protected boolean isDBValid(String dbName) throws ParseExceptions{
-		if (isNameValid(dbName, DomainType.DATABASENAME)){
+		if (isNameAlphNumTHROW(dbName, DomainType.DATABASENAME)){
 			if(doesDatabaseExist(dbName)){
 				return true;
 			}
@@ -63,32 +73,23 @@ public abstract class CMDType {
 	 ******************** STRING TESTS ********************
 	 *****************************************************/
 
-	protected boolean isNameValid(String dbName, DomainType domain) throws ParseExceptions{
-		if(doesTokenExistTHROW(dbName, domain)){
-			if (isItAlphNumTHROW(dbName, domain)){
-				return true;
-			}
-		}
-		return false;
-	}
+//	protected boolean doesTokenExist(String testString){
+//		if(testString != null){
+//			return true;
+//		}
+//		else{
+//			return false;
+//		}
+//	}
+//
+//	protected boolean doesTokenExistTHROW(String testString, DomainType domain) throws ParseExceptions{
+//		if(doesTokenExist(testString)){
+//			return true;
+//		}
+//		throw new CommandMissing(domain);
+//	}
 
-	protected boolean doesTokenExist(String testString){
-		if(testString != null){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
-	protected boolean doesTokenExistTHROW(String testString, DomainType domain) throws ParseExceptions{
-		if(doesTokenExist(testString)){
-			return true;
-		}
-		throw new CommandMissing(domain);
-	}
-
-	protected boolean isItAlphNumeric (String testString){
+	protected boolean isNameAlphNumeric (String testString){
 		if(testString.matches("[a-zA-Z0-9]+")){
 			return true;
 		}
@@ -97,11 +98,23 @@ public abstract class CMDType {
 		}
 	}
 
-	protected boolean isItAlphNumTHROW (String testString, DomainType domain) throws ParseExceptions{
-		if(isItAlphNumeric(testString)){
+	protected boolean isNameAlphNumTHROW (String testString, DomainType domain) throws ParseExceptions{
+		if(isNameAlphNumeric(testString)){
 			return true;
 		}
 		throw new AlphanumFormatProblem(testString, domain);
+	}
+
+
+	protected boolean isThisCommandLineEnd() throws ParseExceptions{
+		String finalCommand = getNewTokenSafe(DomainType.SEMICOLON);
+		if(isThisSemicolonTHROW(finalCommand)) {
+			String extraCommand = tokeniser.nextToken();
+			if (isThisCommandEndTHROW(extraCommand)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected boolean isThisCommandEnd(String extraCommand){
@@ -116,6 +129,20 @@ public abstract class CMDType {
 			return true;
 		}
 		throw new ExtraCommandGiven(extraCommand);
+	}
+
+	protected boolean isThisSemicolon(String nextCommand){
+		if (nextCommand.equals(";")) {
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean isThisSemicolonTHROW(String nextCommand) throws ParseExceptions{
+		if(isThisSemicolon(nextCommand)){
+			return true;
+		}
+		throw new MissingSemiColon(nextCommand);
 	}
 
 	/******************************************************
