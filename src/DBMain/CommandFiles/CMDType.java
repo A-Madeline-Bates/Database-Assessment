@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
+import java.util.regex.Pattern;
 
 public abstract class CMDType {
 	protected DBModelData dataModel;
@@ -163,5 +164,59 @@ public abstract class CMDType {
 		else {
 			throw new DoesNotExistTable(tableName);
 		}
+	}
+
+	/******************************************************
+	 ******************* VALID VALUE TEST *****************
+	 *****************************************************/
+
+
+	protected boolean isItValidValue(String nextInstruction) throws ParseExceptions{
+		if(isItStringLiteral(nextInstruction)){
+			return true;
+		} else if(isItBooleanLiteral(nextInstruction)){
+			return true;
+		} else if (isItFloatLiteral(nextInstruction)){
+			return true;
+		} else if (isItIntegerLiteral(nextInstruction)){
+			return true;
+		}
+		else{
+			throw new InvalidValue(nextInstruction);
+		}
+	}
+
+	protected boolean isItStringLiteral(String nextInstruction){
+		if(nextInstruction.startsWith("'") && nextInstruction.endsWith("'")){
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean isItBooleanLiteral(String nextInstruction){
+		if(nextInstruction.equalsIgnoreCase("true") || nextInstruction.equalsIgnoreCase("false")) {
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean isItFloatLiteral(String nextInstruction){
+		try{
+			Float.parseFloat(nextInstruction);
+		}
+		catch(NumberFormatException n){
+			return false;
+		}
+		return true;
+	}
+
+	protected boolean isItIntegerLiteral(String nextInstruction){
+		try{
+			Integer.parseInt(nextInstruction);
+		}
+		catch(NumberFormatException n){
+			return false;
+		}
+		return true;
 	}
 }

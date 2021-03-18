@@ -12,6 +12,7 @@ public class TestCMD {
 		testIsItFinalCommand();
 		testIsItAlphNumeric();
 		testIsItSemiColon();
+		isItValidValue();
 	}
 
 	private void testIsItFinalCommand() {
@@ -34,5 +35,43 @@ public class TestCMD {
 		assert(command.isThisSemicolon(";"));
 		assert(!command.isThisSemicolon(":"));
 		assert(!command.isThisSemicolon("this"));
+	}
+
+	private void isItValidValue(){
+		assert(command.isItStringLiteral("'hello'"));
+		assert(!command.isItStringLiteral("hello"));
+		assert(command.isItStringLiteral("''hello'"));
+		assert(command.isItStringLiteral("'123'"));
+		assert(command.isItStringLiteral("'^&*)'"));
+		assert(command.isItStringLiteral("' '"));
+		assert(!command.isItStringLiteral("'oh no"));
+
+		assert(command.isItBooleanLiteral("true"));
+		assert(command.isItBooleanLiteral("false"));
+		assert(command.isItBooleanLiteral("TRUE"));
+		assert(!command.isItBooleanLiteral("truefalse"));
+		assert(!command.isItBooleanLiteral("hello"));
+		assert(!command.isItBooleanLiteral("1"));
+		assert(!command.isItBooleanLiteral("flase"));
+
+		assert(command.isItIntegerLiteral("1"));
+		assert(command.isItIntegerLiteral("1000000"));
+		assert(command.isItIntegerLiteral("-1"));
+		assert(!command.isItIntegerLiteral("-"));
+		assert(!command.isItIntegerLiteral("--1"));
+		assert(command.isItIntegerLiteral("0"));
+		assert(!command.isItIntegerLiteral("1.5"));
+		assert(!command.isItIntegerLiteral("one"));
+		assert(!command.isItIntegerLiteral("13567abc"));
+
+		assert(command.isItFloatLiteral("1.5680"));
+		assert(!command.isItFloatLiteral("1.5.4"));
+		assert(command.isItFloatLiteral("-144.5"));
+		//this is not disqualified- may need to keep an eye in case this is a problem
+		assert(command.isItFloatLiteral("15"));
+		assert(!command.isItFloatLiteral("--7"));
+		assert(!command.isItFloatLiteral("ten"));
+		assert(command.isItFloatLiteral("-.89"));
+		assert(command.isItFloatLiteral(".89"));
 	}
 }

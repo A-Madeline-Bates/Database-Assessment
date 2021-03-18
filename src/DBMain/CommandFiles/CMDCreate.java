@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class CMDCreate extends CMDType {
-	protected ArrayList<String> attributeNames = new ArrayList<>();
+	private ArrayList<String> attributeNames = new ArrayList<>();
 
 	public String query(DBServer server){
 		return "Create";

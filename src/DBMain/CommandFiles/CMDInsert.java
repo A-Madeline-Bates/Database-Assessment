@@ -5,7 +5,10 @@ import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;
 
+import java.util.ArrayList;
+
 public class CMDInsert extends CMDType {
+	private ArrayList<String> valueList = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions {
 		//<Insert> ::= INTO <TableName> VALUES (<ValueList>)
@@ -26,31 +29,29 @@ public class CMDInsert extends CMDType {
 	}
 
 	private void collectValues(String tableName) throws ParseExceptions{
-		String nextInstruction = getNewTokenSafe(DomainType.VALUE);
+		String nextCommand = getNewTokenSafe(DomainType.VALUE);
 		//if it's a ')', leave recursive loop and update table
-		if (nextInstruction.equals(")")) {
+		if (nextCommand.equals(")")) {
 			if(isThisCommandLineEnd()) {
 				updateTable(tableName);
 			}
 		}
 		//if it fits the conditions to be a value, save it to our list and call collectValues again
-		else if (isItValidValue(nextInstruction)){
-			validValue.add(nextInstruction);
+		else if (isItValidValue(nextCommand)){
+			valueList.add(nextCommand);
 			collectValues(tableName);
 			//WHEN WE ARE UPDATING TABLE, CHECK THAT VALIDVALUE.SIZE<COLUMNVALUE.SIZE
 		}
 		//if it's not a value or a ')', throw an error
 		else{
-			throw new InvalidCommand(nextInstruction, "INSERT INTO [TableName] VALUES (",
-					"[value]", ");";
+			throw new InvalidCommand(nextCommand, "INSERT INTO [TableName] VALUES (",
+					"[value]", ");");
 		}
 	}
 
-	private void updateTable(){
+	private void updateTable(String tableName){
 
 	}
-
-	//insert whatever is given into a new row
 
 	public String query(DBServer server){
 		return "Insert";
