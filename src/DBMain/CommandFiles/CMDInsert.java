@@ -59,7 +59,12 @@ public class CMDInsert extends CMDType {
 		DBModelData temporaryModel = new DBModelData();
 		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
 		if(isValueListSmallEnough(temporaryModel)){
-			new DBLoad(dataModel, pathModel.getDatabaseName(), tableName);
+			//saving database name before clearing model
+			String databaseName = pathModel.getDatabaseName();
+			//we need to clear model before loading to it in order to prevent messy data
+			clearModel();
+			new DBLoad(dataModel, databaseName, tableName);
+			pathModel.setDatabaseName(databaseName);
 			pathModel.setFilename(tableName);
 			dataModel.setNewRow(valueList);
 		}
