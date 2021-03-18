@@ -73,22 +73,6 @@ public abstract class CMDType {
 	 ******************** STRING TESTS ********************
 	 *****************************************************/
 
-//	protected boolean doesTokenExist(String testString){
-//		if(testString != null){
-//			return true;
-//		}
-//		else{
-//			return false;
-//		}
-//	}
-//
-//	protected boolean doesTokenExistTHROW(String testString, DomainType domain) throws ParseExceptions{
-//		if(doesTokenExist(testString)){
-//			return true;
-//		}
-//		throw new CommandMissing(domain);
-//	}
-
 	protected boolean isNameAlphNumeric (String testString){
 		if(testString.matches("[a-zA-Z0-9]+")){
 			return true;
@@ -156,7 +140,7 @@ public abstract class CMDType {
 			return true;
 		}
 		else {
-			throw new DBDoesNotExist(dbName);
+			throw new DoesNotExistDB(dbName);
 		}
 	}
 
@@ -166,6 +150,18 @@ public abstract class CMDType {
 		}
 		else{
 			throw new WorkingOutsideDatabase();
+		}
+	}
+
+	protected boolean doesTableExist(String tableName) throws ParseExceptions {
+		String currentDatabase = pathModel.getDatabaseName();
+		String location = "databaseFiles" + File.separator + currentDatabase + File.separator + tableName;
+		Path path = Paths.get(location);
+		if(Files.exists(path) && Files.isRegularFile(path)){
+			return true;
+		}
+		else {
+			throw new DoesNotExistTable(tableName);
 		}
 	}
 }

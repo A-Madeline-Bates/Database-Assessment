@@ -1,7 +1,7 @@
 package DBMain.ParseExceptions;
 
-public class DBDoesNotExist extends ParseExceptions{
-	public DBDoesNotExist(String token) {
+public class DoesNotExistDB extends ParseExceptions{
+	public DoesNotExistDB(String token) {
 		this.token = token;
 	}
 

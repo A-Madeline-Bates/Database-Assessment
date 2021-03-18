@@ -13,10 +13,10 @@ public class CMDCreate extends CMDType {
 
 	public void transformModel() throws ParseExceptions {
 		String firstInstruction = getNewTokenSafe(DomainType.UNKNOWN);
-		if (firstInstruction.toUpperCase().equals("DATABASE")) {
+		if (firstInstruction.equalsIgnoreCase("DATABASE")) {
 			processDatabase();
 		}
-		else if (firstInstruction.toUpperCase().equals("TABLE")) {
+		else if (firstInstruction.equalsIgnoreCase("TABLE")) {
 			processTable();
 		} else {
 			throw new InvalidCommand(firstInstruction, "CREATE", "DATABASE", "TABLE");
@@ -55,6 +55,7 @@ public class CMDCreate extends CMDType {
 					//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 					String extraInstruction = tokeniser.nextToken();
 					if (isThisCommandEndTHROW(extraInstruction)) {
+						//pass secondCommand on as it is our tableName
 						createTable(secondInstruction);
 					}
 				}
@@ -104,7 +105,7 @@ public class CMDCreate extends CMDType {
 		//if it's not an attribute or a ')', throw an error
 		else{
 			throw new InvalidCommand(nextInstruction, "CREATE [table name] (",
-					"[attributename])", null);
+					"[attributename])", ");");
 		}
 	}
 }

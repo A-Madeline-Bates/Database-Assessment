@@ -59,15 +59,8 @@
 //	- add ID column to all new files !!
 	     //Any file which is committed to memory should have an ID column, as we should have
          //created it.
-//  - SPLIT cmdtype INTO DIFFERENT CHILD CLASSES WHEN WE KNOW WHAT COMMANDS WILL NEED WHAT THINGS
+//  - SPLIT cmdtype further down the line
 //  - investigate automated testing?
 //  - maybe think about/ worry about empty cells?
-//  - CREATE doesn't automatically set USE- change that.
-
-
-
-
-
-
-
+//  - CREATE shouldn't automatically set USE- change that.
 
