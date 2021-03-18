@@ -6,6 +6,6 @@ public class DBDoesNotExist extends ParseExceptions{
 	}
 
 	public String toString(){
-		return "Invalid database. Database called does not exist. Database name given was " + token + ".";
+		return "Invalid database. Database called does not exist. \nDatabase name given was " + token + ".";
 	}
 }

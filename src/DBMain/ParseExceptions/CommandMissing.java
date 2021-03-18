@@ -13,10 +13,10 @@ public class CommandMissing extends ParseExceptions {
 
 	private String specifyDomain(){
 		if(domain!=DomainType.UNKNOWN){
-			return "You need to specify a " + domain + ".";
+			return "\nYou need to specify a " + domain + ".";
 		}
 		else{
-			return "Please try again.";
+			return "\nPlease try again.";
 		}
 	}
 }

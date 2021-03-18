@@ -7,6 +7,6 @@ public class ExtraCommandGiven extends ParseExceptions{
 	}
 
 	public String toString(){
-		return "Extra command. You added one more command than was expected. Extra command was " + token + ".";
+		return "Extra command. You added one more command than was expected. \nExtra command was " + token + ".";
 	}
 }

@@ -13,8 +13,8 @@ public class InvalidCommand extends ParseExceptions{
 	}
 
 	public String toString(){
-		return "Invalid command. The expected value following a " + previousCommand + " was " + optionOne +
-				extraOptionString() + ". Command used was " + token + ".";
+		return "Invalid command. The expected value following a " + previousCommand + "\nwas " + optionOne +
+				extraOptionString() + ".\nCommand used was " + token + ".";
 	}
 
 	private String extraOptionString(){

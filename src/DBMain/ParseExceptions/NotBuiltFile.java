@@ -6,7 +6,7 @@ public class NotBuiltFile extends ParseExceptions{
 	}
 
 	public String toString(){
-		return "File could not be created. This is probably because the file " +
+		return "File could not be created. This is probably because the file \n" +
 				"specified already exists. File name given was " + token + ".";
 	}
 }

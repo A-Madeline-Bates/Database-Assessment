@@ -12,7 +12,7 @@ public class DBServer
     DBModelData modelData;
     DBModelPath modelPath;
     DBCommandFactory cmdFactory;
-    String exceptionMessage;
+    String exceptionMessage = "";
 
     public DBServer(int portNumber)
     {
@@ -45,8 +45,8 @@ public class DBServer
     {
         //incomingCommand contains the message we're going to use.
         String incomingCommand = socketReader.readLine();
-
         DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
+
         processParse(tokeniser);
         socketWriter.write(exceptionMessage);
 
@@ -82,27 +82,27 @@ public class DBServer
         this.cmdFactory = new DBCommandFactory();
     }
 
-    private void processParse(DBTokeniser tokeniser){
+    private void processParse(DBTokeniser tokeniser) {
         try {
             //this instantiates the command class we are using based on incomingCommand
             CMDType commandClass = cmdFactory.createCMD(tokeniser);
+            //this is too many calls to commandClass- create a nice workaround
+            //we could put getters and setting is DBServer and do it the other way around?
             //this gives the model to our class
             commandClass.setModel(modelData, modelPath);
             commandClass.setInstructionSet(tokeniser);
             commandClass.transformModel();
             modelData = commandClass.getModelData();
             modelPath = commandClass.getModelPath();
-            //this has to be within process parse because we want to skip DBStore is an exception is called.
+            //this has to be within process parse because we want to skip DBStore if an exception is called.
             //We need to create a fix for this.
             new DBStore(modelData, modelPath);
-        }
-		catch(ParseExceptions exception){
+        } catch (ParseExceptions exception) {
             this.exceptionMessage = "[ERROR]\nCommand exception: " + exception;
-            //System.out.println(exceptionMessage);
-        }
-        catch(IOException IOParseException){
+//            System.out.println(exceptionMessage);
+        } catch (IOException ioParseException) {
             this.exceptionMessage = "[ERROR]\nIO exception: Error when try to access file.";
-            //System.out.println("IO exception: Error when try to access file.");
+//            System.out.println("IO exception: Error when try to access file.");
         }
     }
 
