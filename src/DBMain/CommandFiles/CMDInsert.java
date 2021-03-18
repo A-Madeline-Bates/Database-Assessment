@@ -1,9 +1,7 @@
 package DBMain.CommandFiles;
 import DBMain.*;
 import DBMain.ModelFiles.*;
-import DBMain.ParseExceptions.DomainType;
-import DBMain.ParseExceptions.InvalidCommand;
-import DBMain.ParseExceptions.ParseExceptions;
+import DBMain.ParseExceptions.*;
 
 import java.util.ArrayList;
 
@@ -11,19 +9,26 @@ public class CMDInsert extends CMDType {
 	private ArrayList<String> valueList = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions {
-		//<Insert> ::= INTO <TableName> VALUES (<ValueList>)
 		String firstCommand = getNewTokenSafe(DomainType.INTO);
-		if(firstCommand.equalsIgnoreCase("INTO")){
-			String secondCommand = getNewTokenSafe(DomainType.TABLENAME);
-			if(doesTableExist(secondCommand)) {
-				String thirdCommand = getNewTokenSafe(DomainType.INTO);
-				if (thirdCommand.equalsIgnoreCase("VALUES")) {
-					String fourthCommand = getNewTokenSafe(DomainType.BRACKET);
-					if(fourthCommand.equals("(")) {
-						//pass secondCommand on as it is our tableName
-						collectValues(secondCommand);
+		if(areWeInADatabase()) {
+			if (firstCommand.equalsIgnoreCase("INTO")) {
+				String secondCommand = getNewTokenSafe(DomainType.TABLENAME);
+				if (doesTableExist(secondCommand)) {
+					String thirdCommand = getNewTokenSafe(DomainType.VALUES);
+					if (thirdCommand.equalsIgnoreCase("VALUES")) {
+						String fourthCommand = getNewTokenSafe(DomainType.BRACKET);
+						if (fourthCommand.equals("(")) {
+							//pass secondCommand on as it is our tableName
+							collectValues(secondCommand);
+						} else {
+							throw new InvalidCommand(fourthCommand, "VALUES", "(", null);
+						}
+					} else {
+						throw new InvalidCommand(thirdCommand, "INSERT INTO [tablename]", "VALUES", null);
 					}
 				}
+			} else {
+				throw new InvalidCommand(firstCommand, "INSERT", "INTO", null);
 			}
 		}
 	}
@@ -40,7 +45,6 @@ public class CMDInsert extends CMDType {
 		else if (isItValidValue(nextCommand)){
 			valueList.add(nextCommand);
 			collectValues(tableName);
-			//WHEN WE ARE UPDATING TABLE, CHECK THAT VALIDVALUE.SIZE<COLUMNVALUE.SIZE
 		}
 		//if it's not a value or a ')', throw an error
 		else{
@@ -49,12 +53,28 @@ public class CMDInsert extends CMDType {
 		}
 	}
 
-	private void updateTable(String tableName){
+	private void updateTable(String tableName) throws ParseExceptions{
+		//create an temporary instance of DBModel so that we can find out if the user is trying to
+		//load too many values into our table before they do it.
+		DBModelData temporaryModel = new DBModelData();
+		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+		if(isValueListSmallEnough(temporaryModel)){
+			new DBLoad(dataModel, pathModel.getDatabaseName(), tableName);
+			pathModel.setFilename(tableName);
+			dataModel.setNewRow(valueList);
+		}
+	}
 
+	private boolean isValueListSmallEnough(DBModelData temporaryModel) throws ParseExceptions{
+		if(valueList.size()<=temporaryModel.getColumnNumber()){
+			return true;
+		}
+		else {
+			throw new TooManyValues(valueList.size(), dataModel.getColumnNumber());
+		}
 	}
 
 	public String query(DBServer server){
 		return "Insert";
 	}
-
 }
