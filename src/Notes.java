@@ -1,31 +1,4 @@
-//public class DBController {
-//    DBModelData modelData;
-//    DBModelPath modelPath;
-
-//    DBController(DBModelData modelData, DBModelPath modelPath) {
-//        this.modelData = modelData;
-//        this.modelPath = modelPath;
-//    }
-
-//    public void handleIncomingCommand(String command) {
-//        System.out.println(command);
-//        //split the command
-//        //create a 'command' factory and call different instruction classes depending on the command
-//        //command factory -> command interface -> call new instances of commands rather than initing them all
-//        //store is called after every instruction
-//        //break this command into individual words so it can be parsed
-//
-//        //this has been handed the instructions from DBClient
-//        //The idea is that this class will call model methods, DBStore and DBLoad as appropriate-
-//        //although this might change
-//    }
-
-//    public String getUserMessage() {
-//        return "hello there";
-//        //return printMessage.stringifyTable();
-//    }
-
-    //Any file which is committed to memory should have an ID column, as we should have
+ 	//Any file which is committed to memory should have an ID column, as we should have
     //created it. So it's not something we need to worry about when doing a straight-
     //forward file read like we are doing here.
     //When initialising a table we must add ID column automatically
@@ -78,9 +51,24 @@
 //    then build a print method which is able to print it all out
 //    perhaps separate treatment of instructions which alter the model and which print the table
 
-//    maybe printing should be put back in a 'view' context (although obviously things are not
-//    always printed) - something is always printed with 'yes' or 'error'
 
-//    implement an instruction factory or tree?
-//    we need a new instance of the model for each new file we're looking at
+
+
+	//THINGS TO CHECK :
+//check whether we need to close files? readers/writers
+//whether alphanum can contain special characters
+//whether () are delimiters in and of themselves
+//	it's currently set up so craete could create one database inside another- decide if this is a problem
+
+
+	//TO DO :
+// separate methods from their exception statements to allow testing
+
+//	file is actually created in two locations-in CMD creates and then in DBStore. Need to change.
+//	this will also involve creating db sensibly
+
+//	find a fix to take dbstore out of parse try block
+
+
+
 

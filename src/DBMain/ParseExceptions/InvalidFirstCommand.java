@@ -1,8 +1,8 @@
 package DBMain.ParseExceptions;
 
-public class InvalidFirstCommandError extends ParseExceptions{
+public class InvalidFirstCommand extends ParseExceptions{
 
-	public InvalidFirstCommandError(String token){
+	public InvalidFirstCommand(String token){
 		this.token = token;
 	}
 

@@ -48,7 +48,7 @@ public class DBServer
 
         DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
         processParse(tokeniser);
-        new DBStore(modelData, modelPath);
+        socketWriter.write(exceptionMessage);
 
 //        //this takes a copy of server so that we can execute our command
 //        //in order to execute a command we must appropriately manipulate our data,
@@ -65,6 +65,8 @@ public class DBServer
 //        //DBRespond(socketWriter, DBModelData, DBModelPath, DBModelResponse, DBModelError);
 //        //(Definitely work out if can just pass DBModel as one)
 
+        //clear exception message
+        this.exceptionMessage = "";
         //This is used for EOF
         socketWriter.write("\n" + ((char)4) + "\n");
         socketWriter.flush();
@@ -90,12 +92,17 @@ public class DBServer
             commandClass.transformModel();
             modelData = commandClass.getModelData();
             modelPath = commandClass.getModelPath();
+            //this has to be within process parse because we want to skip DBStore is an exception is called.
+            //We need to create a fix for this.
+            new DBStore(modelData, modelPath);
         }
 		catch(ParseExceptions exception){
-            //We don't want this printed- we want it to be sent to socketWriter but we'll
-            //print it for now
-            this.exceptionMessage = "Command exception: " + exception;
-            System.out.println(exceptionMessage);
+            this.exceptionMessage = "[ERROR]\nCommand exception: " + exception;
+            //System.out.println(exceptionMessage);
+        }
+        catch(IOException IOParseException){
+            this.exceptionMessage = "[ERROR]\nIO exception: Error when try to access file.";
+            //System.out.println("IO exception: Error when try to access file.");
         }
     }
 

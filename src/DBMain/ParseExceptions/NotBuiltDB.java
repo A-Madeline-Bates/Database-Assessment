@@ -1,7 +1,7 @@
 package DBMain.ParseExceptions;
 
-public class DBNotBuiltErr extends ParseExceptions{
-	public DBNotBuiltErr(String token) {
+public class NotBuiltDB extends ParseExceptions{
+	public NotBuiltDB(String token) {
 		this.token = token;
 	}
 

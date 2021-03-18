@@ -27,7 +27,7 @@ public class DBCommandFactory {
 //			case "JOIN":
 //				return new CMDJoin();
 			default:
-				throw new InvalidFirstCommandError(nextToken);
+				throw new InvalidFirstCommand(nextToken);
 		}
 	}
 }

@@ -1,9 +1,9 @@
 package DBMain.ParseExceptions;
 
-public class AlphanumErr extends ParseExceptions{
+public class AlphanumFormatProblem extends ParseExceptions{
 	DomainType domain;
 
-	public AlphanumErr(String token, DomainType domain){
+	public AlphanumFormatProblem(String token, DomainType domain){
 		this.domain = domain;
 		this.token = token;
 	}

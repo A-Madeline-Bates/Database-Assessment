@@ -2,6 +2,8 @@ package DBMain.CommandFiles;
 import DBMain.*;
 import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.*;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +40,7 @@ public abstract class CMDType {
 		this.pathModel = new DBModelPath();
 	}
 
-	public abstract void transformModel() throws ParseExceptions;
+	public abstract void transformModel() throws ParseExceptions, IOException;
 
 	/******************************************************
 	 ****************** SET TOKENISER ********************
@@ -79,7 +81,7 @@ public abstract class CMDType {
 			return true;
 		}
 		else{
-			throw new CommandMissingErr(domain);
+			throw new CommandMissing(domain);
 		}
 	}
 
@@ -88,7 +90,7 @@ public abstract class CMDType {
 			return true;
 		}
 		else{
-			throw new AlphanumErr(testString, domain);
+			throw new AlphanumFormatProblem(testString, domain);
 		}
 	}
 
@@ -103,7 +105,7 @@ public abstract class CMDType {
 		if(isThisCommandEnd(extraCommand)){
 			return true;
 		}
-		throw new ExtraCommandErr(extraCommand);
+		throw new ExtraCommandGiven(extraCommand);
 	}
 
 	/******************************************************
@@ -117,7 +119,7 @@ public abstract class CMDType {
 			return true;
 		}
 		else {
-			throw new DBDoesNotExistErr(dbName);
+			throw new DBDoesNotExist(dbName);
 		}
 	}
 
@@ -126,7 +128,7 @@ public abstract class CMDType {
 			return true;
 		}
 		else{
-			throw new OutsideDatabaseErr();
+			throw new WorkingOutsideDatabase();
 		}
 	}
 }

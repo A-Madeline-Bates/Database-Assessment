@@ -11,7 +11,7 @@ public class CMDCreate extends CMDType {
 		return "Create";
 	}
 
-	public void transformModel() throws ParseExceptions {
+	public void transformModel() throws ParseExceptions, IOException {
 		String firstInstruction = tokeniser.nextToken();
 		if(doesTokenExist(firstInstruction, DomainType.UNKNOWN)) {
 			if (firstInstruction.toUpperCase().equals("DATABASE")) {
@@ -20,7 +20,7 @@ public class CMDCreate extends CMDType {
 			else if (firstInstruction.toUpperCase().equals("TABLE")) {
 				processTable();
 			} else {
-				throw new InvalidCommandError(firstInstruction, "CREATE", "DATABASE", "TABLE");
+				throw new InvalidCommand(firstInstruction, "CREATE", "DATABASE", "TABLE");
 			}
 		}
 	}
@@ -45,8 +45,9 @@ public class CMDCreate extends CMDType {
 	private void createDatabase(String dbName) throws ParseExceptions{
 		String directoryPath = "databaseFiles" + File.separator + dbName;
 		File newFolder = new File(directoryPath);
-		if(!newFolder.mkdirs()){
-			throw new DBNotBuiltErr(dbName);
+		//if database.exists, then call NotBuiltDB. If it doesn't, clear model and setDatabaseName
+		if(newFolder.exists()){
+			throw new NotBuiltDB(dbName);
 		}
 		//By clearing model, we are letting go of information about the file that was loaded
 		//before this file was called. We want there to be no file loaded.
@@ -55,7 +56,7 @@ public class CMDCreate extends CMDType {
 		pathModel.setDatabaseName(dbName.toUpperCase());
 	}
 
-	private void processTable() throws ParseExceptions{
+	private void processTable() throws ParseExceptions, IOException {
 		String secondInstruction = tokeniser.nextToken();
 		if(areWeInADatabase()) {
 			if (isNameValid(secondInstruction, DomainType.TABLENAME)) {
@@ -67,35 +68,24 @@ public class CMDCreate extends CMDType {
 					collectAttributes(secondInstruction);
 				}
 				else{
-					throw new InvalidCommandError(thirdInstruction, "CREATE [table name]", "(", null);
+					throw new InvalidCommand(thirdInstruction, "CREATE [table name]", "(", null);
 				}
 			}
 		}
 	}
 
-	private void createTable(String tableName){
+	private void createTable(String tableName) throws ParseExceptions, IOException {
 		//Save our database name before clearing the model so it doesn't get lost
 		String databaseName = pathModel.getDatabaseName();
-		String filePath = "databaseName" + File.separator + tableName;
+		String filePath = "databaseFiles" + File.separator + databaseName + File.separator + tableName;
 		File newFile = new File(filePath);
-
-		//Obviously need a new way of doing this !
-		//This always seems to be triggered?
-		//DBstore is creating a null file whenever USE database is called (although this will probably
-		//not be a problem as soon as we do something sensible with that end of processing)
-		//database name seems to be case sensitive
-		//*****clarify if attribute names can only be alphanum******
-		//test all of this
-		//separate methods from their exception statements to allow testing
-		try {
-			newFile.createNewFile();
+		//if file.exists, then call NotBuiltFile. If it doesn't, setDatabaseName then set information.
+		//This is to prevent CMDCreate overwriting a file which might have information in.
+		if(newFile.exists()){
+			throw new NotBuiltFile(tableName);
 		}
-		catch(IOException e){
-			System.out.println("Oh no - IO exception");
-		}
-
 		//By clearing model, we are letting go of information about the file that was loaded
-		//before this file was called. We want there to be no file loaded.
+		//before this file was called.
 		clearModel();
 		//This is copying information about what we've created into the model. New file information from
 		//the model will be properly stored to file when DBStore is called.
@@ -104,10 +94,10 @@ public class CMDCreate extends CMDType {
 		dataModel.setColumnDataByArrlist(attributeNames);
 	}
 
-	private void collectAttributes(String tableName) throws ParseExceptions{
+	private void collectAttributes(String tableName) throws ParseExceptions, IOException{
 		String nextInstruction = tokeniser.nextToken();
 		if(doesTokenExist(nextInstruction, DomainType.ATTRIBUTENAME)) {
-			//if it's a ), leave recursive loop and create table
+			//if it's a ')', leave recursive loop and create table
 			if (nextInstruction.equals(")")) {
 				createTable(tableName);
 			}
@@ -118,7 +108,8 @@ public class CMDCreate extends CMDType {
 			}
 			//if it's not an attribute or a ')', throw an error
 			else{
-				throw new InvalidCommandError(nextInstruction, "CREATE [table name] (", "[attributename])", null);
+				throw new InvalidCommand(nextInstruction, "CREATE [table name] (",
+						"[attributename])", null);
 			}
 		}
 	}

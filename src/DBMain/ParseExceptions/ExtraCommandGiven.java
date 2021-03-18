@@ -1,8 +1,8 @@
 package DBMain.ParseExceptions;
 
-public class ExtraCommandErr extends ParseExceptions{
+public class ExtraCommandGiven extends ParseExceptions{
 
-	public ExtraCommandErr(String token){
+	public ExtraCommandGiven(String token){
 		this.token = token;
 	}
 

@@ -1,5 +1,7 @@
 package DBMain;
 import DBMain.ModelFiles.*;
+import DBMain.ParseExceptions.NotBuiltDB;
+
 import java.io.*;
 
 public class DBStore {
@@ -8,11 +10,35 @@ public class DBStore {
 
     public DBStore(DBModelData modelData, DBModelPath modelPath){
         //THIS MIGHT BE TOO CLOSELY COUPLED WITH MODELDATA
-        //SHOULD WE BYPASS CREATING FILE IF FILE ALREADY EXISTS?
         this.modelData = modelData;
         this.modelPath  = modelPath;
-        String filePath = getFilePath(modelPath);
-        File currentFile = new File(filePath);
+
+        if(modelPath.getDatabaseName() != null){
+            createDatabase();
+            if(modelPath.getFilename() != null){
+                processFile();
+            }
+        }
+    }
+
+    private String getFilePath(){
+        return "databaseFiles" + File.separator + modelPath.getDatabaseName() + File.separator + modelPath.getFilename();
+    }
+
+    private String getDirectoryPath(){
+        return "databaseFiles" + File.separator + modelPath.getDatabaseName();
+    }
+
+    private void createDatabase(){
+        File newFolder = new File(getDirectoryPath());
+        //if database doesn't exist then create it.
+        if(!newFolder.exists()){
+            newFolder.mkdirs();
+        }
+    }
+
+    private void processFile(){
+        File currentFile = new File(getFilePath());
         try{
             createFile(currentFile);
             writeToFile(currentFile);
@@ -20,10 +46,6 @@ public class DBStore {
         catch(IOException exception) {
             System.out.println("IOException trying to store file " + modelPath.getFilename());
         }
-    }
-
-    private String getFilePath(DBModelPath modelPath){
-        return "databaseFiles" + File.separator + modelPath.getDatabaseName() + File.separator + modelPath.getFilename();
     }
 
     private void createFile(File currentFile) throws IOException{
