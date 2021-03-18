@@ -1,10 +1,3 @@
- 	//Any file which is committed to memory should have an ID column, as we should have
-    //created it. So it's not something we need to worry about when doing a straight-
-    //forward file read like we are doing here.
-    //When initialising a table we must add ID column automatically
-    //Any file in our database would therefore contain an ID column
-    //The same thing applies to 'creating' file names
-
 //    USE: changes the database against which the following queries will be run
 //    -needs to be able to alter the file we are looking at
 //    ALTER MODEL
@@ -46,28 +39,35 @@
 //    PRINT TABLE
 
 
-    
-//    build a structure which populates model with exactly what we want to see in the table
-//    then build a print method which is able to print it all out
-//    perhaps separate treatment of instructions which alter the model and which print the table
-
 
 
 
 	//THINGS TO CHECK :
-//check whether we need to close files? readers/writers
-//whether alphanum can contain special characters
-//whether () are delimiters in and of themselves
-//	it's currently set up so craete could create one database inside another- decide if this is a problem
+// check whether we need to close files? readers/writers
+// whether alphanum can contain special characters
+// whether () are delimiters in and of themselves - CREATE TABLE ( ... ) currently needs too many spaces
 
 
 	//TO DO :
 // separate methods from their exception statements to allow testing
 
-//	file is actually created in two locations-in CMD creates and then in DBStore. Need to change.
-//	this will also involve creating db sensibly
-
 //	find a fix to take dbstore out of parse try block
+
+//	decouple DBStore from DBModel
+
+//	sort exceptions in DBstore
+
+//	build other commands
+
+//	fix DBPrint
+
+//	fix control structure in DBServer
+
+//	add ID column to all new files !!
+	//Any file which is committed to memory should have an ID column, as we should have
+	//created it.
+
+
 
 
 

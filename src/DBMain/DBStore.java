@@ -1,6 +1,5 @@
 package DBMain;
 import DBMain.ModelFiles.*;
-import DBMain.ParseExceptions.NotBuiltDB;
 
 import java.io.*;
 
@@ -50,9 +49,8 @@ public class DBStore {
 
     private void createFile(File currentFile) throws IOException{
         if(currentFile.exists()){
+            //we need to overwrite files to update them
             System.out.println("file overwrite");
-            //it's not problem is the file already exists, but is worth noting for what we're doing
-            //later
         }
         currentFile.createNewFile();
     }
