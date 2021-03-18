@@ -11,9 +11,9 @@ public class CMDCreate extends CMDType {
 		return "Create";
 	}
 
-	public void transformModel() throws ParseExceptions, IOException {
+	public void transformModel() throws ParseExceptions {
 		String firstInstruction = tokeniser.nextToken();
-		if(doesTokenExist(firstInstruction, DomainType.UNKNOWN)) {
+		if(doesTokenExistTHROW(firstInstruction, DomainType.UNKNOWN)) {
 			if (firstInstruction.toUpperCase().equals("DATABASE")) {
 				processDatabase();
 			}
@@ -56,10 +56,11 @@ public class CMDCreate extends CMDType {
 		pathModel.setDatabaseName(dbName.toUpperCase());
 	}
 
-	private void processTable() throws ParseExceptions, IOException {
+	private void processTable() throws ParseExceptions {
 		String secondInstruction = tokeniser.nextToken();
 		if(areWeInADatabase()) {
 			if (isNameValid(secondInstruction, DomainType.TABLENAME)) {
+				//maybe split this into a different method?
 				String thirdInstruction = tokeniser.nextToken();
 				if(isThisCommandEnd(thirdInstruction)){
 					createTable(secondInstruction);
@@ -74,7 +75,7 @@ public class CMDCreate extends CMDType {
 		}
 	}
 
-	private void createTable(String tableName) throws ParseExceptions, IOException {
+	private void createTable(String tableName) throws ParseExceptions {
 		//Save our database name before clearing the model so it doesn't get lost
 		String databaseName = pathModel.getDatabaseName();
 		String filePath = "databaseFiles" + File.separator + databaseName + File.separator + tableName;
@@ -94,15 +95,15 @@ public class CMDCreate extends CMDType {
 		dataModel.setColumnDataByArrlist(attributeNames);
 	}
 
-	private void collectAttributes(String tableName) throws ParseExceptions, IOException{
+	private void collectAttributes(String tableName) throws ParseExceptions{
 		String nextInstruction = tokeniser.nextToken();
-		if(doesTokenExist(nextInstruction, DomainType.ATTRIBUTENAME)) {
+		if(doesTokenExistTHROW(nextInstruction, DomainType.ATTRIBUTENAME)) {
 			//if it's a ')', leave recursive loop and create table
 			if (nextInstruction.equals(")")) {
 				createTable(tableName);
 			}
 			//if it fits the conditions for an attribute name, save it to our list and call collectAttributes again
-			else if (isItAlphNumeric(nextInstruction, DomainType.ATTRIBUTENAME)){
+			else if (isItAlphNumTHROW(nextInstruction, DomainType.ATTRIBUTENAME)){
 				attributeNames.add(nextInstruction);
 				collectAttributes(tableName);
 			}

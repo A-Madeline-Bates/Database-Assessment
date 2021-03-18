@@ -5,17 +5,34 @@ import DBMain.ParseExceptions.ParseExceptions;
 public class TestCMD {
 	CMDType command;
 
-	//testing on this level may be done by black box testing? I need to look further at this to work out
-	//how to access protected methods + handle exceptions being thrown
+	//test all command instructions here?
 
 	public TestCMD(CMDType command) {
 		this.command = command;
 		testIsItFinalCommand();
+		testIsItAlphNumeric();
+		testDoesTokenExist();
 	}
 
 	private void testIsItFinalCommand() {
 		assert(command.isThisCommandEnd(null));
 		assert(!command.isThisCommandEnd("hello"));
-//		assert(command.isDBNameValid("hello"));
+		assert(!command.isThisCommandEnd("123"));
+	}
+
+	private void testIsItAlphNumeric(){
+		assert(command.isItAlphNumeric("abc"));
+		assert(command.isItAlphNumeric("ABc"));
+		assert(command.isItAlphNumeric("ABC"));
+		assert(command.isItAlphNumeric("123"));
+		assert(!command.isItAlphNumeric("!"));
+		assert(!command.isItAlphNumeric(" "));
+		assert(!command.isItAlphNumeric("_"));
+	}
+
+	private void testDoesTokenExist(){
+		assert(command.doesTokenExist("hello"));
+		assert(command.doesTokenExist("hello world"));
+		assert(!command.doesTokenExist(null));
 	}
 }

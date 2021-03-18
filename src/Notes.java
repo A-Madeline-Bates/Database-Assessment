@@ -43,29 +43,26 @@
 
 
 	//THINGS TO CHECK :
-// check whether we need to close files? readers/writers
-// whether alphanum can contain special characters
-// whether () are delimiters in and of themselves - CREATE TABLE ( ... ) currently needs too many spaces
-
+// - check whether we need to close files? readers/writers
+// - whether alphanum can contain special characters
+// - whether () are delimiters in and of themselves - CREATE TABLE ( ... ) currently needs too many spaces
+// - make sure there are no case (ie lower/upper) problems
 
 	//TO DO :
-// separate methods from their exception statements to allow testing
+//  - separate more methods from their exception statements to allow testing
+//	- find a fix to take dbstore out of parse try block
+//	- decouple DBStore from DBModel
+//	- sort exceptions in DBstore
+//	- build other commands
+//	- fix DBPrint
+//	- fix control structure in DBServer
+//	- add ID column to all new files !!
+	     //Any file which is committed to memory should have an ID column, as we should have
+         //created it.
+//  - SPLIT cmdtype INTO DIFFERENT CHILD CLASSES WHEN WE KNOW WHAT COMMANDS WILL NEED WHAT THINGS
+//  - investigate automated testing?
 
-//	find a fix to take dbstore out of parse try block
 
-//	decouple DBStore from DBModel
-
-//	sort exceptions in DBstore
-
-//	build other commands
-
-//	fix DBPrint
-
-//	fix control structure in DBServer
-
-//	add ID column to all new files !!
-	//Any file which is committed to memory should have an ID column, as we should have
-	//created it.
 
 
 

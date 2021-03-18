@@ -100,10 +100,12 @@ public class DBServer
         } catch (ParseExceptions exception) {
             this.exceptionMessage = "[ERROR]\nCommand exception: " + exception;
 //            System.out.println(exceptionMessage);
-        } catch (IOException ioParseException) {
-            this.exceptionMessage = "[ERROR]\nIO exception: Error when try to access file.";
-//            System.out.println("IO exception: Error when try to access file.");
         }
+//        CURRENTLY UNUSED:
+//        catch (IOException ioParseException) {
+//            this.exceptionMessage = "[ERROR]\nIO exception: Error when try to access file.";
+//            System.out.println("IO exception: Error when try to access file.");
+//        }
     }
 
     public static void main(String args[])

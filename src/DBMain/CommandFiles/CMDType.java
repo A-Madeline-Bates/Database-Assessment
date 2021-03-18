@@ -2,8 +2,6 @@ package DBMain.CommandFiles;
 import DBMain.*;
 import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.*;
-
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,8 +11,6 @@ public abstract class CMDType {
 	protected DBModelData dataModel;
 	protected DBModelPath pathModel;
 	protected DBTokeniser tokeniser;
-
-	//SPLIT THIS INTO DIFFERENT CHILD CLASSES WHEN WE KNOW WHAT COMMANDS WILL NEED WHAT THINGS
 
 	public abstract String query(DBServer server);
 
@@ -40,7 +36,7 @@ public abstract class CMDType {
 		this.pathModel = new DBModelPath();
 	}
 
-	public abstract void transformModel() throws ParseExceptions, IOException;
+	public abstract void transformModel() throws ParseExceptions ;
 
 	/******************************************************
 	 ****************** SET TOKENISER ********************
@@ -68,30 +64,44 @@ public abstract class CMDType {
 	 *****************************************************/
 
 	protected boolean isNameValid(String dbName, DomainType domain) throws ParseExceptions{
-		if (doesTokenExist(dbName, domain)){
-			if (isItAlphNumeric(dbName, domain)){
+		if(doesTokenExistTHROW(dbName, domain)){
+			if (isItAlphNumTHROW(dbName, domain)){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	protected boolean doesTokenExist(String testString, DomainType domain) throws ParseExceptions{
+	protected boolean doesTokenExist(String testString){
 		if(testString != null){
 			return true;
 		}
 		else{
-			throw new CommandMissing(domain);
+			return false;
 		}
 	}
 
-	protected boolean isItAlphNumeric (String testString, DomainType domain) throws ParseExceptions{
+	protected boolean doesTokenExistTHROW(String testString, DomainType domain) throws ParseExceptions{
+		if(doesTokenExist(testString)){
+			return true;
+		}
+		throw new CommandMissing(domain);
+	}
+
+	protected boolean isItAlphNumeric (String testString){
 		if(testString.matches("[a-zA-Z0-9]+")){
 			return true;
 		}
 		else{
-			throw new AlphanumFormatProblem(testString, domain);
+			return false;
 		}
+	}
+
+	protected boolean isItAlphNumTHROW (String testString, DomainType domain) throws ParseExceptions{
+		if(isItAlphNumeric(testString)){
+			return true;
+		}
+		throw new AlphanumFormatProblem(testString, domain);
 	}
 
 	protected boolean isThisCommandEnd(String extraCommand){
