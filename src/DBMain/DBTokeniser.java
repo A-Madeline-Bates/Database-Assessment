@@ -8,7 +8,10 @@ public class DBTokeniser {
 
 	public DBTokeniser(String incomingCommand){
 		//This splits the string and turns it into tokens with no white space
-		TokenList.addAll(Arrays.asList(incomingCommand.split("\\s+")));
+		TokenList.addAll(Arrays.asList(incomingCommand.split("\\s+|(?=[;,()])|(?<=[;,()])")));
+		//"\\s+|(?=\\p{Pe})|(?=\\p{Pe})|(?<=\\p{Ps})|(?<=\\p{Ps})"
+		//"\\s+|(?=\\p{Punct})|(?<=\\p{Punct})"
+		TokenList.removeAll(Arrays.asList("", null));
 	}
 
 	//Find a way to create defined String type 'token'

@@ -48,6 +48,7 @@
 // - whether () are delimiters in and of themselves - CREATE TABLE ( ... ) currently needs too many spaces
 // - make sure there are no case (ie lower/upper) problems
 // - check if insert into adds empty strings if user doesn't supply enough strings, or it just denies the request.
+// - check everything is in camelcase
 
 	//TO DO :
 //  - separate more methods from their exception statements to allow testing
