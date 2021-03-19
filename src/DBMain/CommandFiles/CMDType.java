@@ -73,6 +73,7 @@ public abstract class CMDType {
 	 *****************************************************/
 
 	protected boolean isDBValid(String dbName) throws ParseExceptions{
+		//shouldn't actually need to test alphanum if database exists?
 		if (isNameAlphNumTHROW(dbName, DomainType.DATABASENAME)){
 			if(doesDatabaseExist(dbName)){
 				return true;
@@ -143,11 +144,13 @@ public abstract class CMDType {
 
 	protected boolean isItCommaSeparated(DomainType domain) throws ParseExceptions{
 		String nextCommand = peakTokenSafe(1, DomainType.COMMA);
+		//is the next instruction a comma
 		if(isItComma(nextCommand)){
 			//call nextToken so that our array position steps forward by one
 			tokeniser.nextToken();
 			return true;
 		}
+		//if next instruction is ")" a comma is not necessary
 		else if(nextCommand.equals(")")){
 			return true;
 		}

@@ -14,16 +14,16 @@ public class DBCommandFactory {
 				return new CMDCreate();
 			case "INSERT":
 				return new CMDInsert();
-			case "SELECT":
-				return new CMDSelect();
+//			case "SELECT":
+//				return new CMDSelect();
 //			case "UPDATE":
 //				return new CMDUpdate();
 //			case "ALTER":
 //				return new CMDAlter();
 //			case "DELETE":
 //				return new CMDDelete();
-//			case "DROP":
-//				return new CMDDrop();
+			case "DROP":
+				return new CMDDrop();
 //			case "JOIN":
 //				return new CMDJoin();
 			default:
