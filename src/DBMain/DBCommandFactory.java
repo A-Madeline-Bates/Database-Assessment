@@ -10,13 +10,12 @@ public class DBCommandFactory {
 		switch (nextToken.toUpperCase()) {
 			case "USE":
 				return new CMDUse();
-//			case "CREATE":
-//				return new CMDCreate();
-//			case "INSERT":
-//				return new CMDInsert();
-//			case "SELECT":
-//				return new CMDSelect();
-
+			case "CREATE":
+				return new CMDCreate();
+			case "INSERT":
+				return new CMDInsert();
+			case "SELECT":
+				return new CMDSelect();
 //			case "UPDATE":
 //				return new CMDUpdate();
 //			case "ALTER":

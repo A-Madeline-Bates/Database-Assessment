@@ -44,7 +44,9 @@ public class CMDInsert extends CMDType {
 		//if it fits the conditions to be a value, save it to our list and call collectValues again
 		else if (isItValidValue(nextCommand)){
 			valueList.add(nextCommand);
-			collectValues(tableName);
+			if(isItCommaSeparated(DomainType.VALUE)) {
+				collectValues(tableName);
+			}
 		}
 		//if it's not a value or a ')', throw an error
 		else{

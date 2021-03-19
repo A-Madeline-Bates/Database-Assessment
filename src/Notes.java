@@ -45,7 +45,6 @@
 	//THINGS TO CHECK :
 // - check whether we need to close files? readers/writers
 // - whether alphanum can contain special characters
-// - whether () are delimiters in and of themselves - CREATE TABLE ( ... ) currently needs too many spaces
 // - make sure there are no case (ie lower/upper) problems
 // - check if insert into adds empty strings if user doesn't supply enough strings, or it just denies the request.
 // - check everything is in camelcase
@@ -67,4 +66,6 @@
 //  - CREATE shouldn't automatically set USE- change that.
 //  - break up excessively large methods
 //  - string literals need some refining in terms of what's allowed - fix that
+//  - shorten method names
+//  - make sure comma separation is completely secure
 

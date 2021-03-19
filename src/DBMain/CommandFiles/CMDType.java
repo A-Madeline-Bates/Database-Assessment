@@ -12,6 +12,7 @@ public abstract class CMDType {
 	protected DBModelData dataModel;
 	protected DBModelPath pathModel;
 	protected DBTokeniser tokeniser;
+//	private boolean commaTF = true;
 
 	public abstract String query(DBServer server);
 
@@ -51,6 +52,16 @@ public abstract class CMDType {
 		String nextToken = tokeniser.nextToken();
 		if(nextToken != null){
 			return nextToken;
+		}
+		else{
+			throw new CommandMissing(domain);
+		}
+	}
+
+	protected String peakTokenSafe(int lookForward, DomainType domain) throws ParseExceptions{
+		String tokenPreview = tokeniser.peakToken(lookForward);
+		if(tokenPreview != null){
+			return tokenPreview;
 		}
 		else{
 			throw new CommandMissing(domain);
@@ -128,6 +139,28 @@ public abstract class CMDType {
 			return true;
 		}
 		throw new MissingSemiColon(nextCommand);
+	}
+
+	protected boolean isItCommaSeparated(DomainType domain) throws ParseExceptions{
+		String nextCommand = peakTokenSafe(1, DomainType.COMMA);
+		if(isItComma(nextCommand)){
+			//call nextToken so that our array position steps forward by one
+			tokeniser.nextToken();
+			return true;
+		}
+		else if(nextCommand.equals(")")){
+			return true;
+		}
+		else{
+			throw new NotCommaSeparated(domain);
+		}
+	}
+
+	protected boolean isItComma(String nextCommand){
+		if (nextCommand.equals(",")) {
+			return true;
+		}
+		return false;
 	}
 
 	/******************************************************

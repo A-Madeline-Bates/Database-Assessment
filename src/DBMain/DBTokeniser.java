@@ -9,8 +9,6 @@ public class DBTokeniser {
 	public DBTokeniser(String incomingCommand){
 		//This splits the string and turns it into tokens with no white space
 		TokenList.addAll(Arrays.asList(incomingCommand.split("\\s+|(?=[;,()])|(?<=[;,()])")));
-		//"\\s+|(?=\\p{Pe})|(?=\\p{Pe})|(?<=\\p{Ps})|(?<=\\p{Ps})"
-		//"\\s+|(?=\\p{Punct})|(?<=\\p{Punct})"
 		TokenList.removeAll(Arrays.asList("", null));
 	}
 
@@ -19,6 +17,19 @@ public class DBTokeniser {
 		if(ArrayPosition < TokenList.size()){
 			String Token = TokenList.get(ArrayPosition);
 			ArrayPosition++;
+			return Token;
+		}
+		else{
+			return null;
+		}
+	}
+
+	//Peak at the next token
+	public String peakToken(int lookForward){
+		//ArrayPosition is always one ahead of us, so we have to rewind it to see our current position.
+		int basePosition = ArrayPosition-1;
+		if((basePosition + lookForward) < TokenList.size()){
+			String Token = TokenList.get(basePosition + lookForward);
 			return Token;
 		}
 		else{
