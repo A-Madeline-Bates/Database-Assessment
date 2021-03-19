@@ -54,12 +54,8 @@
 //	- find a fix to take dbstore out of parse try block
 //	- decouple DBStore from DBModel
 //	- sort exceptions in DBstore
-//	- build other commands
 //	- fix DBPrint
 //	- fix control structure in DBServer
-//	- add ID column to all new files !!
-	     //Any file which is committed to memory should have an ID column, as we should have
-         //created it.
 //  - SPLIT cmdtype further down the line
 //  - investigate automated testing?
 //  - maybe think about/ worry about empty cells?
@@ -68,4 +64,8 @@
 //  - string literals need some refining in terms of what's allowed - fix that
 //  - shorten method names
 //  - make sure comma separation is completely secure
+//  - use methods in combination with one another- build a test strategy
 
+//	- add ID column to all new files !!
+//Any file which is committed to memory should have an ID column, as we should have
+//created it.
