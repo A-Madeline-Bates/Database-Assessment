@@ -58,7 +58,7 @@ public class CMDInsert extends CMDType {
 		//load too many values into our table before they do it.
 		DBModelData temporaryModel = new DBModelData();
 		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
-		if(isValueListSmallEnough(temporaryModel)){
+		if(isListSizeCorrect(temporaryModel)){
 			//saving database name before clearing model
 			String databaseName = pathModel.getDatabaseName();
 			//we need to clear model before loading to it in order to prevent messy data
@@ -66,16 +66,16 @@ public class CMDInsert extends CMDType {
 			new DBLoad(dataModel, databaseName, tableName);
 			pathModel.setDatabaseName(databaseName);
 			pathModel.setFilename(tableName);
-			dataModel.setNewRow(valueList);
+			dataModel.setRowsDataFromSQL(valueList);
 		}
 	}
 
-	private boolean isValueListSmallEnough(DBModelData temporaryModel) throws ParseExceptions{
-		if(valueList.size()<=temporaryModel.getColumnNumber()){
+	private boolean isListSizeCorrect(DBModelData temporaryModel) throws ParseExceptions{
+		if(valueList.size()==temporaryModel.getColumnNumber()){
 			return true;
 		}
 		else {
-			throw new TooManyValues(valueList.size(), dataModel.getColumnNumber());
+			throw new WrongNoValues(valueList.size(), dataModel.getColumnNumber());
 		}
 	}
 

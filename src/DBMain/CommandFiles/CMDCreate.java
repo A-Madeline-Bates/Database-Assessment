@@ -86,7 +86,7 @@ public class CMDCreate extends CMDType {
 		//the model will be properly stored to file when DBStore is called.
 		pathModel.setDatabaseName(databaseName);
 		pathModel.setFilename(tableName);
-		dataModel.setColumnDataByArrlist(attributeNames);
+		dataModel.setColumnDataFromSQL(attributeNames);
 	}
 
 	private void collectAttributes(String tableName) throws ParseExceptions{

@@ -23,10 +23,10 @@ public class DBLoad {
             //the first line need to be treated differently because it holds column information
             //rather than data
             String firstLine = reader.readLine();
-            modelData.setColumnData(firstLine);
+            modelData.setColumnDataFromLoad(firstLine);
             String currentLine;
             while((currentLine = reader.readLine()) != null){
-                modelData.setRowsData(currentLine);
+                modelData.setRowsDataFromLoad(currentLine);
             }
             reader.close();
         }

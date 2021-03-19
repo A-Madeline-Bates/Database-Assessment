@@ -4,13 +4,12 @@ import java.util.*;
 public class DBModelData extends DBModel {
 	//Should need a method to return column coordinate by name
 
-	public void setColumnData(String command) {
+	public void setColumnDataFromLoad(String command) {
 		columnNames.addAll(Arrays.asList(command.split("\\t")));
 		columnNames.removeAll(Arrays.asList("", null));
 	}
 
-	public void setColumnDataByArrlist(ArrayList newColNames) {
-		//Make this safer!!!!
+	public void setColumnDataFromSQL(ArrayList<String> newColNames) {
 		columnNames.addAll(newColNames);
 	}
 
@@ -23,7 +22,7 @@ public class DBModelData extends DBModel {
 		return columnNames.size();
 	}
 
-	public void setRowsData(String command) {
+	public void setRowsDataFromLoad(String command) {
 		//setDataArray() is called row by row, and we are exploiting
 		//this to initialise each row as we go
 		List<String> rowData = new ArrayList<>();
@@ -34,18 +33,18 @@ public class DBModelData extends DBModel {
 		row++;
 	}
 
+	public void setRowsDataFromSQL(ArrayList<String> newValues) {
+		List<String> rowData = new ArrayList<>();
+		tableData.add(rowData);
+		tableData.get(getRowNumber() - 1).addAll(newValues);
+//		tableData.add(newValues);
+	}
+
 	public List<List<String>> getRowsData() {
 		return tableData;
 	}
 
 	public int getRowNumber() {
 		return tableData.size();
-	}
-
-	public void setNewRow(ArrayList newValues) {
-		//Make this safer!!!!
-		List<String> rowData = new ArrayList<>();
-		tableData.add(rowData);
-		tableData.get(getRowNumber() - 1).addAll(newValues);
 	}
 }

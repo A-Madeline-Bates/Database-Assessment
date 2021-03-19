@@ -14,8 +14,8 @@ public class DBCommandFactory {
 				return new CMDCreate();
 			case "INSERT":
 				return new CMDInsert();
-//			case "SELECT":
-//				return new CMDSelect();
+			case "SELECT":
+				return new CMDSelect();
 //			case "UPDATE":
 //				return new CMDUpdate();
 //			case "ALTER":
