@@ -164,17 +164,31 @@ public class CMDSelect extends CMDType {
 			}
 		}
 		else if(isItWhere(nextCommand)){
-			processWhereClause();
+			executeCondition();
+			recursiveWhereClause();
 		}
 		else{
 			throw new InvalidCommand(nextCommand, "FROM [tablename]", "WHERE", ";");
 		}
 	}
 
-	private void processWhereClause() throws ParseExceptions{
-		executeCondition();
-
-
+	private void recursiveWhereClause() throws ParseExceptions{
+		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
+		if(isThisSemicolon(nextCommand)) {
+			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
+			String extraInstruction = tokeniser.nextToken();
+			if (isThisCommandEndTHROW(extraInstruction)) {
+				createPrintStatement();
+			}
+		} else if(nextCommand.equalsIgnoreCase("AND")){
+			//work out some AND logic
+			recursiveWhereClause();
+		} else if(nextCommand.equalsIgnoreCase("OR")){
+			//work out some OR logic
+			recursiveWhereClause();
+		} else{
+			throw new InvalidCommand(nextCommand, "[WHERE CLAUSE]", "AND/OR", ";");
+		}
 	}
 
 	private void executeCondition() throws ParseExceptions{
@@ -190,9 +204,9 @@ public class CMDSelect extends CMDType {
 			if(opType.equals(OperatorType.NUMERICAL)) {
 				searchAttributeNum(attributeCoordinate, opCommand, valueCommand);
 			}
+			//we are currently treating '==' and LIKE (i.e STRING and UNIVERSAL) as the same,
+			// so we're sending them to the same place
 			else{
-				//we are currently treating '==' and LIKE as the same, so we're sending them
-				//to the same place
 				searchAttributeString(attributeCoordinate, opCommand, valueCommand);
 			}
 		}
@@ -287,7 +301,7 @@ public class CMDSelect extends CMDType {
 		DBModelData temporaryModel = new DBModelData();
 		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
 		for(int i=0; i<dataModel.getRowNumber(); i++){
-			if(opCommand.equals("==")){
+			if(opCommand.equals("==") || opCommand.equalsIgnoreCase("LIKE")){
 				if (dataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.add(i);
 				}
