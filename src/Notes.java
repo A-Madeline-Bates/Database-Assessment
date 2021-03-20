@@ -52,6 +52,7 @@
 // - is it a better idea to always create temporary data models to load to rather than
 //       having continuous data + clearing it? - turn make temp model into its own method
 // - got through every equals and make sure IgnoreCase is selected
+// - check domaintypes are correct
 
 	//TO DO :
 //  - separate more methods from their exception statements to allow testing
@@ -69,6 +70,7 @@
 //  - shorten method names
 //  - make sure comma separation is completely secure
 //  - use methods in combination with one another- build a test strategy
+//  - unpick some of the weird things we've done with booleans?
 
 //	- add ID column to all new files !!
 //Any file which is committed to memory should have an ID column, as we should have

@@ -142,7 +142,7 @@ public abstract class CMDType {
 		throw new MissingSemiColon(nextCommand);
 	}
 
-	protected boolean isItCommaSeparated(DomainType domain) throws ParseExceptions{
+	protected boolean isItCommaSeparated(DomainType domain, String exitToken) throws ParseExceptions{
 		String nextCommand = peakTokenSafe(1, DomainType.COMMA);
 		//is the next instruction a comma
 		if(isItComma(nextCommand)){
@@ -150,8 +150,8 @@ public abstract class CMDType {
 			tokeniser.nextToken();
 			return true;
 		}
-		//if next instruction is ")" a comma is not necessary
-		else if(nextCommand.equals(")")){
+		//if next instruction is the exit token a comma is not necessary
+		else if(nextCommand.equalsIgnoreCase(exitToken)){
 			return true;
 		}
 		else{

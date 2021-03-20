@@ -100,7 +100,7 @@ public class CMDCreate extends CMDType {
 		//if it fits the conditions for an attribute name, save it to our list and call collectAttributes again
 		else if (isNameAlphNumeric(nextInstruction)){
 			attributeNames.add(nextInstruction);
-			if(isItCommaSeparated(DomainType.ATTRIBUTENAME)) {
+			if(isItCommaSeparated(DomainType.ATTRIBUTENAME, ")")) {
 				collectAttributes(tableName);
 			}
 		}
