@@ -52,4 +52,8 @@ public class DBModelData extends DBModel {
 	public int getRowNumber() {
 		return tableData.size();
 	}
+
+	public String getCell(int rowNo, int columnNo){
+		return tableData.get(rowNo).get(columnNo);
+	}
 }

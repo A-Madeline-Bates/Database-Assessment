@@ -73,6 +73,7 @@
 //  - use methods in combination with one another- build a test strategy
 //  - unpick some of the weird things we've done with booleans?
 //  - add operator to tokeniser split
+//  - sort out LIKE in SELECT
 
 //	- add ID column to all new files !!
 //Any file which is committed to memory should have an ID column, as we should have

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class CMDSelect extends CMDType {
 	private String tableName;
 	private ArrayList<Integer> requestedColumns = new ArrayList<>();
+	private ArrayList<Integer> requestedRows = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions {
 		//<Select>         ::=  SELECT <WildAttribList> FROM <TableName> |
@@ -99,15 +100,25 @@ public class CMDSelect extends CMDType {
 		return false;
 	}
 
+	//see if there is a more efficient way of doing this! This is also not DRY.
 	private void requestAllColumns(){
-		//see if there is a more efficient way of doing this! This is also not DRY.
-
 		//create temporaryModel so that we can see how many columns we have
 		DBModelData temporaryModel = new DBModelData();
 		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
 		//iterate through the columns of our table until we find a match
 		for(int i=0; i<temporaryModel.getColumnNumber(); i++){
 			requestedColumns.add(i);
+		}
+	}
+
+	//MERGE THESE METHODS
+	private void requestAllRows(){
+		//create temporaryModel so that we can see how many columns we have
+		DBModelData temporaryModel = new DBModelData();
+		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+		//iterate through the columns of our table until we find a match
+		for(int i=0; i<temporaryModel.getRowNumber(); i++){
+			requestedRows.add(i);
 		}
 	}
 
@@ -146,6 +157,8 @@ public class CMDSelect extends CMDType {
 			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 			String extraInstruction = tokeniser.nextToken();
 			if (isThisCommandEndTHROW(extraInstruction)) {
+				//we want all rows, so set them all
+				requestAllRows();
 				//if there is no WHERE condition, we can end and create our print statement
 				createPrintStatement();
 			}
@@ -166,10 +179,23 @@ public class CMDSelect extends CMDType {
 
 	private void executeCondition() throws ParseExceptions{
 		String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-		//find Attribute we're processing- if it doesn't exist, an exception will be thrown
+		//find attribute we're processing- if it doesn't exist, an exception will be thrown
 		int attributeCoordinate = findAttributeTHROW(nextCommand);
-		nextCommand = getNewTokenSafe(DomainType.OPERATOR);
-
+		String opCommand = getNewTokenSafe(DomainType.OPERATOR);
+		//find opType- if it's not valid, an exception will be thrown
+		OperatorType opType = returnOperatorType(opCommand);
+		String valueCommand = getNewTokenSafe(DomainType.VALUE);
+		//if our command doesn't match our operator, there is no point trying to search
+		if(doesValueMatchOperator(opType, nextCommand)){
+			if(opType.equals(OperatorType.NUMERICAL)) {
+				searchAttributeNum(attributeCoordinate, opCommand, valueCommand);
+			}
+			else{
+				//we are currently treating '==' and LIKE as the same, so we're sending them
+				//to the same place
+				searchAttributeString(attributeCoordinate, opCommand, valueCommand);
+			}
+		}
 	}
 
 	//WE HAVE TO MERGE THIS WITH doesAttributeExist!!
@@ -186,23 +212,92 @@ public class CMDSelect extends CMDType {
 		throw new DoesNotExistAttribute(nextCommand, tableName);
 	}
 
-	private boolean returnOperator(String operator){
+	private OperatorType returnOperatorType(String operator) throws ParseExceptions{
 		if(operator.equals("==")){
-			//return =;
+			return OperatorType.UNIVERSAL;
 		} else if(operator.equals(">")){
-
+			return OperatorType.NUMERICAL;
 		} else if(operator.equals("<")){
-
+			return OperatorType.NUMERICAL;
 		} else if(operator.equals(">=")){
-
+			return OperatorType.NUMERICAL;
 		} else if(operator.equals("<=")){
-
+			return OperatorType.NUMERICAL;
 		} else if(operator.equals("!=")){
-
+			return OperatorType.UNIVERSAL;
 		} else if(operator.equalsIgnoreCase("LIKE")){
-
+			return OperatorType.STRING;
 		} else{
-			throw new InvalidCommand(operator, "WHERE [attributename]", [operator], null)
+			throw new InvalidCommand(operator, "WHERE [attributename]", "[operator]", null);
+		}
+	}
+
+	private boolean doesValueMatchOperator(OperatorType opType, String nextCommand) throws ParseExceptions{
+		switch(opType){
+			case NUMERICAL:
+				return isItNumLiteralTHROW(nextCommand);
+			case STRING :
+				return isItStringLiteralTHROW(nextCommand);
+			//default means the opType is universal, so we only need to know if it's a valid value
+			default: return isItValidValue(nextCommand);
+		}
+	}
+
+	//definitely create a temp model which is global to the class so we don't have to keep doing this
+	private void searchAttributeNum(int attributeCoordinate, String opCommand, String valueCommand){
+		//create temporaryModel so that we can search it
+		DBModelData temporaryModel = new DBModelData();
+		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+		float comparisonValue = Float.parseFloat(valueCommand);
+		for(int i=0; i<dataModel.getRowNumber(); i++){
+			//if the operation was caught by NumberFormatException our cell value is not a valid number, so we want it
+			//to pass by assignByOperator
+			try{
+				float tableValue = Float.parseFloat(dataModel.getCell(i, attributeCoordinate));
+				assignByOperator(i, opCommand, tableValue, comparisonValue);
+			} catch(NumberFormatException n){}
+		}
+	}
+
+	private void assignByOperator(int i, String opCommand, float tableValue, float comparisonValue) {
+		if (opCommand.equals(">")) {
+			if(tableValue > comparisonValue){
+				requestedRows.add(i);
+			}
+		} else if (opCommand.equals("<")) {
+			if(tableValue < comparisonValue){
+				requestedRows.add(i);
+			}
+		} else if (opCommand.equals(">=")) {
+			if(tableValue >= comparisonValue){
+				requestedRows.add(i);
+			}
+		} //opCommand doesn't equal any of the above, it has to equal "<="
+		else {
+			if(tableValue <= comparisonValue){
+				requestedRows.add(i);
+			}
+		}
+	}
+
+	//this is currently dealing with both == and LIKE, which isn't correct
+	//if there's a match with one of the cells in our array in the relevant column, then save that row coordinate
+	private void searchAttributeString(int attributeCoordinate, String opCommand, String valueCommand){
+		//create temporaryModel so that we can search it
+		DBModelData temporaryModel = new DBModelData();
+		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+		for(int i=0; i<dataModel.getRowNumber(); i++){
+			if(opCommand.equals("==")){
+				if (dataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
+					requestedRows.add(i);
+				}
+			}
+			//if opCommand doesn't equal "==" it has to equal "!="
+			else {
+				if (!dataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
+					requestedRows.add(i);
+				}
+			}
 		}
 	}
 

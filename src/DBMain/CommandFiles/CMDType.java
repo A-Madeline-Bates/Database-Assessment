@@ -229,6 +229,13 @@ public abstract class CMDType {
 		return false;
 	}
 
+	protected boolean isItStringLiteralTHROW(String nextInstruction) throws ParseExceptions{
+		if(isItStringLiteral(nextInstruction)){
+			return true;
+		}
+		throw new InvalidValueType(nextInstruction, OperatorType.STRING);
+	}
+
 	protected boolean isItBooleanLiteral(String nextInstruction){
 		if(nextInstruction.equalsIgnoreCase("true") || nextInstruction.equalsIgnoreCase("false")) {
 			return true;
@@ -254,5 +261,12 @@ public abstract class CMDType {
 			return false;
 		}
 		return true;
+	}
+
+	protected boolean isItNumLiteralTHROW(String nextInstruction) throws ParseExceptions{
+		if(isItIntegerLiteral(nextInstruction) || isItFloatLiteral(nextInstruction)){
+			return true;
+		}
+		throw new InvalidValueType(nextInstruction, OperatorType.NUMERICAL);
 	}
 }
