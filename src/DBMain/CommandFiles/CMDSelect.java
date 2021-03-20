@@ -16,8 +16,10 @@ public class CMDSelect extends CMDType {
 		if(canWeReadTable()){
 			if(doesWildAttributeExist(firstCommand)){
 				System.out.println("It exists!" + requestedColumns);
-				//call getNewToken three times because we know we have the correct commands
-				//then see if it's end or WHERE
+				//calling getNewTokenSafe to move past the tablename, which we've already processed and so
+				//don't need here
+				getNewTokenSafe(DomainType.ATTRIBUTENAME);
+				processEndOfString();
 			}
 		}
 	}
@@ -48,7 +50,7 @@ public class CMDSelect extends CMDType {
 		if(isItAsterisk(firstCommand)){
 			String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
 			//check that it's an Asterisk followed immediately by a FROM
-			if (isItFrom(nextCommand)) {
+			if (isItFromTHROW(nextCommand, "SELECT *")) {
 				requestAllColumns();
 			}
 			return true;
@@ -117,11 +119,91 @@ public class CMDSelect extends CMDType {
 		return false;
 	}
 
-	private boolean isItFrom(String nextCommand) throws ParseExceptions{
+	private boolean isItFrom(String nextCommand){
 		if (nextCommand.equalsIgnoreCase("FROM")) {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean isItFromTHROW(String nextCommand, String prevCommand) throws ParseExceptions{
+		if (isItFrom(nextCommand)) {
+			return true;
+		}
+		throw new InvalidCommand(nextCommand, prevCommand, "FROM", null);
+	}
+
+	private boolean isItWhere(String nextCommand){
+		if (nextCommand.equalsIgnoreCase("WHERE")) {
+			return true;
+		}
+		return false;
+	}
+
+	private void processEndOfString() throws ParseExceptions{
+		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
+		if(isThisSemicolon(nextCommand)) {
+			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
+			String extraInstruction = tokeniser.nextToken();
+			if (isThisCommandEndTHROW(extraInstruction)) {
+				//if there is no WHERE condition, we can end and create our print statement
+				createPrintStatement();
+			}
+		}
+		else if(isItWhere(nextCommand)){
+			processWhereClause();
+		}
+		else{
+			throw new InvalidCommand(nextCommand, "FROM [tablename]", "WHERE", ";");
+		}
+	}
+
+	private void processWhereClause() throws ParseExceptions{
+		executeCondition();
+
+
+	}
+
+	private void executeCondition() throws ParseExceptions{
+		String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
+		//find Attribute we're processing- if it doesn't exist, an exception will be thrown
+		int attributeCoordinate = findAttributeTHROW(nextCommand);
+		nextCommand = getNewTokenSafe(DomainType.OPERATOR);
+
+	}
+
+	//WE HAVE TO MERGE THIS WITH doesAttributeExist!!
+	private int findAttributeTHROW(String nextCommand) throws ParseExceptions{
+		//create temporaryModel so that we can see if there are any attribute matches with our command
+		DBModelData temporaryModel = new DBModelData();
+		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+		//iterate through the columns of our table until we find a match
+		for(int i=0; i<temporaryModel.getColumnNumber(); i++){
+			if(temporaryModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
+				return i;
+			}
+		}
+		throw new DoesNotExistAttribute(nextCommand, tableName);
+	}
+
+	private boolean returnOperator(String operator){
+		if(operator.equals("==")){
+			//return =;
+		} else if(operator.equals(">")){
+
+		} else if(operator.equals("<")){
+
+		} else if(operator.equals(">=")){
+
+		} else if(operator.equals("<=")){
+
+		} else if(operator.equals("!=")){
+
+		} else if(operator.equalsIgnoreCase("LIKE")){
+
+		} else{
+			throw new InvalidCommand(operator, "WHERE [attributename]", [operator], null)
+		}
 	}
 
 	public String query(DBServer server){

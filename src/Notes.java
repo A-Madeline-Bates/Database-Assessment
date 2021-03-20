@@ -53,6 +53,7 @@
 //       having continuous data + clearing it? - turn make temp model into its own method
 // - got through every equals and make sure IgnoreCase is selected
 // - check domaintypes are correct
+// - the string recognition methods could all be made into one
 
 	//TO DO :
 //  - separate more methods from their exception statements to allow testing
@@ -71,6 +72,7 @@
 //  - make sure comma separation is completely secure
 //  - use methods in combination with one another- build a test strategy
 //  - unpick some of the weird things we've done with booleans?
+//  - add operator to tokeniser split
 
 //	- add ID column to all new files !!
 //Any file which is committed to memory should have an ID column, as we should have
