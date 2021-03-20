@@ -9,7 +9,10 @@ public class DBModelData extends DBModel {
 		columnNames.removeAll(Arrays.asList("", null));
 	}
 
+	//This should only ever be called after clearing the model
 	public void setColumnDataFromSQL(ArrayList<String> newColNames) {
+		//adding an ID column
+		columnNames.add("ID");
 		columnNames.addAll(newColNames);
 	}
 
@@ -34,9 +37,11 @@ public class DBModelData extends DBModel {
 	}
 
 	public void setRowsDataFromSQL(ArrayList<String> newValues) {
-		//add an ID no in the first column of every row
 		List<String> rowData = new ArrayList<>();
 		tableData.add(rowData);
+		//setting an ID number for the row
+		String idNo = String.valueOf(getRowNumber() - 1);
+		tableData.get(getRowNumber() - 1).add(idNo);
 		tableData.get(getRowNumber() - 1).addAll(newValues);
 	}
 

@@ -73,11 +73,12 @@ public class CMDInsert extends CMDType {
 	}
 
 	private boolean isListSizeCorrect(DBModelData temporaryModel) throws ParseExceptions{
-		if(valueList.size()==temporaryModel.getColumnNumber()){
+		int columnsAvailable = temporaryModel.getColumnNumber() - 1;
+		if(valueList.size()==columnsAvailable){
 			return true;
 		}
 		else {
-			throw new WrongNoValues(valueList.size(), dataModel.getColumnNumber());
+			throw new WrongNoValues(valueList.size(), columnsAvailable);
 		}
 	}
 
