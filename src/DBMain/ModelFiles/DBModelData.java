@@ -34,10 +34,10 @@ public class DBModelData extends DBModel {
 	}
 
 	public void setRowsDataFromSQL(ArrayList<String> newValues) {
+		//add an ID no in the first column of every row
 		List<String> rowData = new ArrayList<>();
 		tableData.add(rowData);
 		tableData.get(getRowNumber() - 1).addAll(newValues);
-//		tableData.add(newValues);
 	}
 
 	public List<List<String>> getRowsData() {
