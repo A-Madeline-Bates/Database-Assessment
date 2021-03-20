@@ -48,6 +48,10 @@
 // - make sure there are no case (ie lower/upper) problems
 // - check if insert into adds empty strings if user doesn't supply enough strings, or it just denies the request.
 // - check everything is in camelcase
+// - are we passing things that are global to the class?
+// - is it a better idea to always create temporary data models to load to rather than
+//       having continuous data + clearing it? - turn make temp model into its own method
+// - got through every equals and make sure IgnoreCase is selected
 
 	//TO DO :
 //  - separate more methods from their exception statements to allow testing

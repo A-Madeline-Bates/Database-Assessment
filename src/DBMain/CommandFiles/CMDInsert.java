@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class CMDInsert extends CMDType {
 	private ArrayList<String> valueList = new ArrayList<>();
 
+	//divide word identifiers in 'isIt...' methods
 	public void transformModel() throws ParseExceptions {
 		String firstCommand = getNewTokenSafe(DomainType.INTO);
 		if(areWeInADatabase()) {
