@@ -195,12 +195,12 @@ public class CMDSelect extends CMDType {
 			if (isThisCommandEndTHROW(extraInstruction)) {
 				createPrintStatement();
 			}
-		} else if(nextCommand.equalsIgnoreCase("AND")){
-			//work out some AND logic
-			recursiveWhereClause();
-		} else if(nextCommand.equalsIgnoreCase("OR")){
-			//work out some OR logic
-			recursiveWhereClause();
+//		} else if(nextCommand.equalsIgnoreCase("AND")){
+//			//work out some AND logic
+//			recursiveWhereClause();
+//		} else if(nextCommand.equalsIgnoreCase("OR")){
+//			//work out some OR logic
+//			recursiveWhereClause();
 		} else{
 			throw new InvalidCommand(nextCommand, "[WHERE CLAUSE]", "AND/OR", ";");
 		}
@@ -242,12 +242,14 @@ public class CMDSelect extends CMDType {
 			case NUMERICAL:
 				isItNumLiteralTHROW(valueCommand);
 				searchAttributeNum(attributeCoordinate, opCommand, valueCommand);
+				break;
 			case STRING : //we are currently treating '==' and LIKE (i.e STRING and UNIVERSAL) as the same.
 				isItStringLiteralTHROW(valueCommand);
-				searchAttributeString(attributeCoordinate, opCommand, valueCommand);
+				searchAttributeUniversal(attributeCoordinate, opCommand, valueCommand);
+				break;
 			default: //default means the opType is universal, so we only need to know if it's a valid value
 				isItValidValue(valueCommand);
-				searchAttributeString(attributeCoordinate, opCommand, valueCommand);
+				searchAttributeUniversal(attributeCoordinate, opCommand, valueCommand);
 		}
 	}
 
@@ -278,12 +280,12 @@ public class CMDSelect extends CMDType {
 	private void searchAttributeNum(int attributeCoordinate, String opCommand, String valueCommand){
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
-		for(int i=0; i<dataModel.getRowNumber(); i++){
+		for(int i=0; i<temporaryModel.getRowNumber(); i++){
 			//if the operation was caught by NumberFormatException our cell value is not a valid number, and so we
 			//want to jump to catch + don't want assignByOperator to consider it
 			try{
 				//consider every cell in our attribute's column
-				float tableValue = Float.parseFloat(dataModel.getCell(i, attributeCoordinate));
+				float tableValue = Float.parseFloat(temporaryModel.getCell(i, attributeCoordinate));
 				assignByOperator(i, opCommand, tableValue, comparisonValue);
 			} catch(NumberFormatException n){}
 		}
@@ -314,16 +316,16 @@ public class CMDSelect extends CMDType {
 	 ********* STRING/UNIVERSAL CONDITION METHODS *********
 	 *****************************************************/
 
-	private void searchAttributeString(int attributeCoordinate, String opCommand, String valueCommand){
-		for(int i=0; i<dataModel.getRowNumber(); i++){
+	private void searchAttributeUniversal(int attributeCoordinate, String opCommand, String valueCommand){
+		for(int i=0; i<temporaryModel.getRowNumber(); i++){
 			if(opCommand.equals("==") || opCommand.equalsIgnoreCase("LIKE")){
-				if (dataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
+				if (temporaryModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.add(i);
 				}
 			}
 			//if opCommand doesn't equal "==" it has to equal "!="
 			else {
-				if (!dataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
+				if (!temporaryModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.add(i);
 				}
 			}
@@ -331,7 +333,7 @@ public class CMDSelect extends CMDType {
 	}
 
 	private void createPrintStatement(){
-		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + requestedColumns);
+		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + requestedRows);
 	}
 
 	public String query(DBServer server){

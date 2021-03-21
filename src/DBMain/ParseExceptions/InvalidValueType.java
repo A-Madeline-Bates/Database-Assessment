@@ -8,7 +8,7 @@ public class InvalidValueType extends ParseExceptions{
 	}
 
 	public String toString(){
-		return "Invalid operator type. The operator you used in your where cause only works with values\n" +
-				"of type" + opType + ". Invalid value was " + token + ".";
+		return "Invalid operator type. The operator you used in your WHERE cause only works with values\n" +
+				"of type " + opType + ". Invalid value was " + token + ".";
 	}
 }
