@@ -8,7 +8,8 @@ import java.util.ArrayList;
 public class CMDSelect extends CMDType {
 	private String tableName;
 	private ArrayList<Integer> requestedColumns = new ArrayList<>();
-	private ArrayList<Integer> requestedRows = new ArrayList<>();
+	private ArrayList<RequestedRow> requestedRows = new ArrayList<>();
+	private ArrayList<RequestedRow> finalRows = new ArrayList<>();
 	DBModelData temporaryModel;
 
 	public void transformModel() throws ParseExceptions {
@@ -162,6 +163,8 @@ public class CMDSelect extends CMDType {
 		//if WHERE is called, call our recursive where operation
 		else if(isItWhere(nextCommand)){
 			executeCondition();
+			//the first set of rows we find with WHERE we can consider all relevant
+			finalRows.addAll(requestedRows);
 			recursiveWhereClause();
 		}
 		else{
@@ -178,7 +181,7 @@ public class CMDSelect extends CMDType {
 
 	private void requestAllRows(){
 		for(int i=0; i<temporaryModel.getRowNumber(); i++){
-			requestedRows.add(i);
+			requestedRows.add(RequestedRow.TRUE);
 		}
 	}
 
@@ -281,6 +284,9 @@ public class CMDSelect extends CMDType {
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
 		for(int i=0; i<temporaryModel.getRowNumber(); i++){
+			//create a cell for each row and set RequestedRow to false. If the cell does fit the criteria, it will be
+			//set to true later in this loop.
+			requestedRows.add(RequestedRow.FALSE);
 			//if the operation was caught by NumberFormatException our cell value is not a valid number, and so we
 			//want to jump to catch + don't want assignByOperator to consider it
 			try{
@@ -295,19 +301,19 @@ public class CMDSelect extends CMDType {
 		switch(opCommand){
 			case ">":
 				if(tableValue > comparisonValue){
-					requestedRows.add(i);
+					requestedRows.set(i, RequestedRow.TRUE);
 				} break;
 			case "<":
 				if(tableValue < comparisonValue){
-					requestedRows.add(i);
+					requestedRows.set(i, RequestedRow.TRUE);
 				} break;
 			case ">=":
 				if(tableValue >= comparisonValue){
-					requestedRows.add(i);
+					requestedRows.set(i, RequestedRow.TRUE);
 				} break;
 			default: //opCommand doesn't equal any of the above, it has to equal "<="
 				if(tableValue <= comparisonValue){
-					requestedRows.add(i);
+					requestedRows.set(i, RequestedRow.TRUE);
 				}
 		}
 	}
@@ -318,15 +324,16 @@ public class CMDSelect extends CMDType {
 
 	private void searchAttributeUniversal(int attributeCoordinate, String opCommand, String valueCommand){
 		for(int i=0; i<temporaryModel.getRowNumber(); i++){
+			requestedRows.add(RequestedRow.FALSE);
 			if(opCommand.equals("==") || opCommand.equalsIgnoreCase("LIKE")){
 				if (temporaryModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
-					requestedRows.add(i);
+					requestedRows.set(i, RequestedRow.TRUE);
 				}
 			}
 			//if opCommand doesn't equal "==" it has to equal "!="
 			else {
 				if (!temporaryModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
-					requestedRows.add(i);
+					requestedRows.set(i, RequestedRow.TRUE);
 				}
 			}
 		}

@@ -74,6 +74,7 @@
 //  - unpick some of the weird things we've done with booleans?
 //  - add operator to tokeniser split
 //  - sort out LIKE in SELECT
+//  - move enum classes?
 
 //	- add ID column to all new files !!
 //Any file which is committed to memory should have an ID column, as we should have
