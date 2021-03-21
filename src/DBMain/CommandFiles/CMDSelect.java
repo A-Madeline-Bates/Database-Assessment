@@ -9,12 +9,12 @@ public class CMDSelect extends CMDType {
 	private String tableName;
 	private ArrayList<Integer> requestedColumns = new ArrayList<>();
 	private ArrayList<Integer> requestedRows = new ArrayList<>();
+	DBModelData temporaryModel;
 
 	public void transformModel() throws ParseExceptions {
-		//<Select>         ::=  SELECT <WildAttribList> FROM <TableName> |
-		//						SELECT <WildAttribList> FROM <TableName> WHERE <Condition>
 		String firstCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
 		if(canWeReadTable()){
+			loadTemporaryModel();
 			if(doesWildAttributeExist(firstCommand)){
 				System.out.println("It exists!" + requestedColumns);
 				//calling getNewTokenSafe to move past the tablename, which we've already processed and so
@@ -25,6 +25,10 @@ public class CMDSelect extends CMDType {
 		}
 	}
 
+	/******************************************************
+	 *************  METHOD TO IDENTIFY FILE  **************
+	 *****************************************************/
+
 	private boolean canWeReadTable() throws ParseExceptions {
 		//we need to know tablename before we can identify if our attribute is valid, so we start by 'peaking'
 		//forwards at it.
@@ -32,13 +36,10 @@ public class CMDSelect extends CMDType {
 			//we search the command line for FROM- if we hit the end of the line without finding it,
 			//peakTokenSafe will throw an error
 			String peakOne = peakTokenSafe(i, DomainType.FROM);
-			System.out.println(peakOne);
 			if (isItFrom(peakOne)) {
-				System.out.println("*" + peakOne);
 				//if we find FROM, check if the next command is a valid table name. If it isn't,
 				//doesTableExist will throw an error
 				String peakTwo = peakTokenSafe(i+1, DomainType.TABLENAME);
-				System.out.println(peakTwo);
 				if (doesTableExist(peakTwo)) {
 					tableName = peakTwo;
 					return true;
@@ -47,7 +48,22 @@ public class CMDSelect extends CMDType {
 		}
 	}
 
+	/******************************************************
+	 ***************** LOAD TEMPORARY MODEL ****************
+	 *****************************************************/
+
+	private void loadTemporaryModel() {
+		//create temporaryModel so that we can see if there are any attribute matches with our command
+		this.temporaryModel = new DBModelData();
+		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+	}
+
+	/******************************************************
+	 ***  METHODS TO READ IN THE ATTRIBUTES FOR DISPLAY  ***
+	 *****************************************************/
+
 	private boolean doesWildAttributeExist(String firstCommand) throws ParseExceptions{
+		//check if it's a 'select all' asterisk
 		if(isItAsterisk(firstCommand)){
 			String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
 			//check that it's an Asterisk followed immediately by a FROM
@@ -56,11 +72,13 @@ public class CMDSelect extends CMDType {
 			}
 			return true;
 		}
+		//check if it's a normal attribute that's present in our table. If so, recursively check for more attributes.
 		else if(doesAttributeExist(firstCommand)){
 			isItCommaSeparated(DomainType.ATTRIBUTENAME, "FROM");
 			doesAttrExistRecursive();
 			return true;
 		}
+		//throw error if it's neither
 		else{
 			throw new DoesNotExistAttribute(firstCommand, tableName);
 		}
@@ -68,7 +86,7 @@ public class CMDSelect extends CMDType {
 
 	private void doesAttrExistRecursive() throws ParseExceptions{
 		String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-		//if it's a 'FROM', leave recursive loop and update table
+		//if it's a 'FROM', leave recursive loop
 		if (isItFrom(nextCommand)) {
 			return;
 		}
@@ -86,9 +104,6 @@ public class CMDSelect extends CMDType {
 	}
 
 	private boolean doesAttributeExist(String nextCommand){
-		//create temporaryModel so that we can see if there are any attribute matches with our command
-		DBModelData temporaryModel = new DBModelData();
-		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
 		//iterate through the columns of our table until we find a match
 		for(int i=0; i<temporaryModel.getColumnNumber(); i++){
 			if(temporaryModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
@@ -100,28 +115,12 @@ public class CMDSelect extends CMDType {
 		return false;
 	}
 
-	//see if there is a more efficient way of doing this! This is also not DRY.
 	private void requestAllColumns(){
-		//create temporaryModel so that we can see how many columns we have
-		DBModelData temporaryModel = new DBModelData();
-		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
 		//iterate through the columns of our table until we find a match
 		for(int i=0; i<temporaryModel.getColumnNumber(); i++){
 			requestedColumns.add(i);
 		}
 	}
-
-	//MERGE THESE METHODS
-	private void requestAllRows(){
-		//create temporaryModel so that we can see how many columns we have
-		DBModelData temporaryModel = new DBModelData();
-		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
-		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryModel.getRowNumber(); i++){
-			requestedRows.add(i);
-		}
-	}
-
 
 	private boolean isItAsterisk(String nextCommand){
 		if (nextCommand.equals("*")) {
@@ -144,25 +143,23 @@ public class CMDSelect extends CMDType {
 		throw new InvalidCommand(nextCommand, prevCommand, "FROM", null);
 	}
 
-	private boolean isItWhere(String nextCommand){
-		if (nextCommand.equalsIgnoreCase("WHERE")) {
-			return true;
-		}
-		return false;
-	}
+	/******************************************************
+	 ****** METHOD TO END STRING OR TRIGGER 'WHERE' ******
+	 *****************************************************/
 
 	private void processEndOfString() throws ParseExceptions{
 		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
+		//if there is no WHERE condition, exit and prepare our print statement
 		if(isThisSemicolon(nextCommand)) {
 			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 			String extraInstruction = tokeniser.nextToken();
 			if (isThisCommandEndTHROW(extraInstruction)) {
 				//we want all rows, so set them all
 				requestAllRows();
-				//if there is no WHERE condition, we can end and create our print statement
 				createPrintStatement();
 			}
 		}
+		//if WHERE is called, call our recursive where operation
 		else if(isItWhere(nextCommand)){
 			executeCondition();
 			recursiveWhereClause();
@@ -172,8 +169,26 @@ public class CMDSelect extends CMDType {
 		}
 	}
 
+	private boolean isItWhere(String nextCommand){
+		if (nextCommand.equalsIgnoreCase("WHERE")) {
+			return true;
+		}
+		return false;
+	}
+
+	private void requestAllRows(){
+		for(int i=0; i<temporaryModel.getRowNumber(); i++){
+			requestedRows.add(i);
+		}
+	}
+
+	/******************************************************
+	 ************* RECURSIVE 'WHERE' OPERATOR *************
+	 *****************************************************/
+
 	private void recursiveWhereClause() throws ParseExceptions{
 		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
+		//if we find a semicolon, exit and prepare our print statement
 		if(isThisSemicolon(nextCommand)) {
 			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 			String extraInstruction = tokeniser.nextToken();
@@ -191,32 +206,21 @@ public class CMDSelect extends CMDType {
 		}
 	}
 
-	private void executeCondition() throws ParseExceptions{
-		String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
+	/******************************************************
+	 ****************** CONDITION METHODS *****************
+	 *****************************************************/
+
+	private void executeCondition() throws ParseExceptions {
+		String attributeCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
 		//find attribute we're processing- if it doesn't exist, an exception will be thrown
-		int attributeCoordinate = findAttributeTHROW(nextCommand);
+		int attributeCoordinate = findSingleAttributeTHROW(attributeCommand);
 		String opCommand = getNewTokenSafe(DomainType.OPERATOR);
-		//find opType- if it's not valid, an exception will be thrown
+		//find the type of our operator- if it's not valid, an exception will be thrown
 		OperatorType opType = returnOperatorType(opCommand);
-		String valueCommand = getNewTokenSafe(DomainType.VALUE);
-		//if our command doesn't match our operator, there is no point trying to search
-		if(doesValueMatchOperator(opType, nextCommand)){
-			if(opType.equals(OperatorType.NUMERICAL)) {
-				searchAttributeNum(attributeCoordinate, opCommand, valueCommand);
-			}
-			//we are currently treating '==' and LIKE (i.e STRING and UNIVERSAL) as the same,
-			// so we're sending them to the same place
-			else{
-				searchAttributeString(attributeCoordinate, opCommand, valueCommand);
-			}
-		}
+		splitByOpType(opType, opCommand, attributeCoordinate);
 	}
 
-	//WE HAVE TO MERGE THIS WITH doesAttributeExist!!
-	private int findAttributeTHROW(String nextCommand) throws ParseExceptions{
-		//create temporaryModel so that we can see if there are any attribute matches with our command
-		DBModelData temporaryModel = new DBModelData();
-		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+	private int findSingleAttributeTHROW(String nextCommand) throws ParseExceptions{
 		//iterate through the columns of our table until we find a match
 		for(int i=0; i<temporaryModel.getColumnNumber(); i++){
 			if(temporaryModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
@@ -224,6 +228,27 @@ public class CMDSelect extends CMDType {
 			}
 		}
 		throw new DoesNotExistAttribute(nextCommand, tableName);
+	}
+
+	/******************************************************
+	 *********** SPLIT CONDITION BY OPERATOR TYPE **********
+	 *****************************************************/
+
+	private void splitByOpType(OperatorType opType, String opCommand, int attributeCoordinate) throws ParseExceptions{
+		String valueCommand = getNewTokenSafe(DomainType.VALUE);
+		//this operation checks whether a value is valid for the operator (throwing an error if not). It then
+		//directs it to the appropriate method.
+		switch(opType){
+			case NUMERICAL:
+				isItNumLiteralTHROW(valueCommand);
+				searchAttributeNum(attributeCoordinate, opCommand, valueCommand);
+			case STRING : //we are currently treating '==' and LIKE (i.e STRING and UNIVERSAL) as the same.
+				isItStringLiteralTHROW(valueCommand);
+				searchAttributeString(attributeCoordinate, opCommand, valueCommand);
+			default: //default means the opType is universal, so we only need to know if it's a valid value
+				isItValidValue(valueCommand);
+				searchAttributeString(attributeCoordinate, opCommand, valueCommand);
+		}
 	}
 
 	private OperatorType returnOperatorType(String operator) throws ParseExceptions{
@@ -246,27 +271,18 @@ public class CMDSelect extends CMDType {
 		}
 	}
 
-	private boolean doesValueMatchOperator(OperatorType opType, String nextCommand) throws ParseExceptions{
-		switch(opType){
-			case NUMERICAL:
-				return isItNumLiteralTHROW(nextCommand);
-			case STRING :
-				return isItStringLiteralTHROW(nextCommand);
-			//default means the opType is universal, so we only need to know if it's a valid value
-			default: return isItValidValue(nextCommand);
-		}
-	}
+	/******************************************************
+	 ************* NUMERICAL CONDITION METHODS ************
+	 *****************************************************/
 
-	//definitely create a temp model which is global to the class so we don't have to keep doing this
 	private void searchAttributeNum(int attributeCoordinate, String opCommand, String valueCommand){
-		//create temporaryModel so that we can search it
-		DBModelData temporaryModel = new DBModelData();
-		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
 		for(int i=0; i<dataModel.getRowNumber(); i++){
-			//if the operation was caught by NumberFormatException our cell value is not a valid number, so we want it
-			//to pass by assignByOperator
+			//if the operation was caught by NumberFormatException our cell value is not a valid number, and so we
+			//want to jump to catch + don't want assignByOperator to consider it
 			try{
+				//consider every cell in our attribute's column
 				float tableValue = Float.parseFloat(dataModel.getCell(i, attributeCoordinate));
 				assignByOperator(i, opCommand, tableValue, comparisonValue);
 			} catch(NumberFormatException n){}
@@ -274,32 +290,31 @@ public class CMDSelect extends CMDType {
 	}
 
 	private void assignByOperator(int i, String opCommand, float tableValue, float comparisonValue) {
-		if (opCommand.equals(">")) {
-			if(tableValue > comparisonValue){
-				requestedRows.add(i);
-			}
-		} else if (opCommand.equals("<")) {
-			if(tableValue < comparisonValue){
-				requestedRows.add(i);
-			}
-		} else if (opCommand.equals(">=")) {
-			if(tableValue >= comparisonValue){
-				requestedRows.add(i);
-			}
-		} //opCommand doesn't equal any of the above, it has to equal "<="
-		else {
-			if(tableValue <= comparisonValue){
-				requestedRows.add(i);
-			}
+		switch(opCommand){
+			case ">":
+				if(tableValue > comparisonValue){
+					requestedRows.add(i);
+				} break;
+			case "<":
+				if(tableValue < comparisonValue){
+					requestedRows.add(i);
+				} break;
+			case ">=":
+				if(tableValue >= comparisonValue){
+					requestedRows.add(i);
+				} break;
+			default: //opCommand doesn't equal any of the above, it has to equal "<="
+				if(tableValue <= comparisonValue){
+					requestedRows.add(i);
+				}
 		}
 	}
 
-	//this is currently dealing with both == and LIKE, which isn't correct
-	//if there's a match with one of the cells in our array in the relevant column, then save that row coordinate
+	/******************************************************
+	 ********* STRING/UNIVERSAL CONDITION METHODS *********
+	 *****************************************************/
+
 	private void searchAttributeString(int attributeCoordinate, String opCommand, String valueCommand){
-		//create temporaryModel so that we can search it
-		DBModelData temporaryModel = new DBModelData();
-		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
 		for(int i=0; i<dataModel.getRowNumber(); i++){
 			if(opCommand.equals("==") || opCommand.equalsIgnoreCase("LIKE")){
 				if (dataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
@@ -313,6 +328,10 @@ public class CMDSelect extends CMDType {
 				}
 			}
 		}
+	}
+
+	private void createPrintStatement(){
+		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + requestedColumns);
 	}
 
 	public String query(DBServer server){
