@@ -41,9 +41,9 @@ public class CMDCreate extends CMDType {
 		}
 		//By clearing model, we are letting go of information about the file that was loaded
 		//before this file was called. We want there to be no file loaded.
-		clearModel();
+		clearFilePath();
 		//This is copying information about what we've created into the model
-		pathModel.setDatabaseName(dbName.toUpperCase());
+		storagePath.setDatabaseName(dbName.toUpperCase());
 	}
 
 	private void processTable() throws ParseExceptions {
@@ -71,7 +71,7 @@ public class CMDCreate extends CMDType {
 
 	private void createTable(String tableName) throws ParseExceptions {
 		//Save our database name before clearing the model so it doesn't get lost
-		String databaseName = pathModel.getDatabaseName();
+		String databaseName = storagePath.getDatabaseName();
 		String filePath = "databaseFiles" + File.separator + databaseName + File.separator + tableName;
 		File newFile = new File(filePath);
 		//if file.exists, then call NotBuiltFile. If it doesn't, setDatabaseName then set information.
@@ -81,12 +81,12 @@ public class CMDCreate extends CMDType {
 		}
 		//By clearing model, we are letting go of information about the file that was loaded
 		//before this file was called.
-		clearModel();
-		//This is copying information about what we've created into the model. New file information from
-		//the model will be properly stored to file when DBStore is called.
-		pathModel.setDatabaseName(databaseName);
-		pathModel.setFilename(tableName);
-		dataModel.setColumnDataFromSQL(attributeNames);
+		clearFilePath();
+		//This is copying information about what we've created into the model. Information from
+		//the storagePath and storageData model will be stored to file when DBStore is called.
+		storagePath.setDatabaseName(databaseName);
+		storagePath.setFilename(tableName);
+		storageData.setColumnDataFromSQL(attributeNames);
 	}
 
 	private void collectAttributes(String tableName) throws ParseExceptions{

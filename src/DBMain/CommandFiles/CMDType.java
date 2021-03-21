@@ -9,10 +9,15 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public abstract class CMDType {
-	protected DBModelData dataModel;
-	protected DBModelPath pathModel;
+	//these are the models that will get 'stored' by DBStore at the end of handleIncomingCommand
+	protected DBModelData storageData;
+	protected DBModelPath storagePath;
+	//these are 'temporary' versions of the model that can be used to check data without running the risk of
+	//storing what you're working on
+	protected DBModelData temporaryDataModel = new DBModelData();
+	protected DBModelPath temporaryPathModel = new DBModelPath();
+
 	protected DBTokeniser tokeniser;
-//	private boolean commaTF = true;
 
 	public abstract String query(DBServer server);
 
@@ -20,25 +25,29 @@ public abstract class CMDType {
 	 *************** MODEL ALTERING METHODS ***************
 	 *****************************************************/
 
-	public void setModel(DBModelData dataModel, DBModelPath pathModel){
-		this.dataModel = dataModel;
-		this.pathModel = pathModel;
+	public void setModel(DBModelPath storagePath){
+		this.storageData = new DBModelData();
+		this.storagePath = storagePath;
 	}
 
 	public DBModelData getModelData(){
-		return dataModel;
+		return storageData;
 	}
 
 	public DBModelPath getModelPath(){
-		return pathModel;
+		return storagePath;
 	}
 
 	protected void clearModel(){
-		this.dataModel = new DBModelData();
-		this.pathModel = new DBModelPath();
+		this.storageData = new DBModelData();
+		this.storagePath = new DBModelPath();
 	}
 
-	public abstract void transformModel() throws ParseExceptions ;
+	protected void clearFilePath() {
+		this.storageData = new DBModelData();
+	}
+
+		public abstract void transformModel() throws ParseExceptions ;
 
 	/******************************************************
 	 ****************** SET TOKENISER ********************
@@ -182,7 +191,7 @@ public abstract class CMDType {
 	}
 
 	protected boolean areWeInADatabase() throws ParseExceptions {
-		if(pathModel.getDatabaseName() != null){
+		if(storagePath.getDatabaseName() != null){
 			return true;
 		}
 		else{
@@ -191,7 +200,7 @@ public abstract class CMDType {
 	}
 
 	protected boolean doesTableExist(String tableName) throws ParseExceptions {
-		String currentDatabase = pathModel.getDatabaseName();
+		String currentDatabase = storagePath.getDatabaseName();
 		String location = "databaseFiles" + File.separator + currentDatabase + File.separator + tableName;
 		Path path = Paths.get(location);
 		if(Files.exists(path) && Files.isRegularFile(path)){

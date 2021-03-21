@@ -6,11 +6,10 @@ import DBMain.ParseExceptions.*;
 import java.util.ArrayList;
 
 public abstract class CMDWhere extends CMDType {
-	protected DBModelData temporaryModel;
 	private ArrayList<RequestedRow> requestedRows = new ArrayList<>();
 	private ArrayList<RequestedRow> finalRows = new ArrayList<>();
 
-	abstract void executeCMD(ArrayList<RequestedRow> finalRows);
+	protected abstract void executeCMD(ArrayList<RequestedRow> finalRows);
 
 	/******************************************************
 	 ****** METHOD TO END STRING OR TRIGGER 'WHERE' ******
@@ -26,7 +25,6 @@ public abstract class CMDWhere extends CMDType {
 				//we want all rows, so set them all
 				requestAllRows();
 				currentCommand.executeCMD(finalRows);
-				//createPrintStatement();
 			}
 		}
 		//if WHERE is called, call our recursive where operation
@@ -49,7 +47,7 @@ public abstract class CMDWhere extends CMDType {
 	}
 
 	protected void requestAllRows(){
-		for(int i=0; i<temporaryModel.getRowNumber(); i++){
+		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			finalRows.add(RequestedRow.TRUE);
 		}
 	}
@@ -66,7 +64,6 @@ public abstract class CMDWhere extends CMDType {
 			String extraInstruction = tokeniser.nextToken();
 			if (isThisCommandEndTHROW(extraInstruction)) {
 				currentCommand.executeCMD(finalRows);
-				//createPrintStatement();
 			}
 		} else if(nextCommand.equalsIgnoreCase("AND")){
 			//clear requestedRows
@@ -87,7 +84,7 @@ public abstract class CMDWhere extends CMDType {
 
 	//computeAND decides which cells from our most recent requestedRows result should make it into our finalRows
 	protected void computeAND(){
-		for(int i=0; i<temporaryModel.getRowNumber(); i++) {
+		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {
 			if((requestedRows.get(i) == RequestedRow.TRUE) && (finalRows.get(i) == RequestedRow.TRUE)){
 				finalRows.set(i, RequestedRow.TRUE);
 			}
@@ -99,7 +96,7 @@ public abstract class CMDWhere extends CMDType {
 
 	//computeOR decides which cells from our most recent requestedRows result should make it into our finalRows
 	protected void computeOR(){
-		for(int i=0; i<temporaryModel.getRowNumber(); i++) {
+		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {
 			if((requestedRows.get(i) == RequestedRow.TRUE) || (finalRows.get(i) == RequestedRow.TRUE)){
 				finalRows.set(i, RequestedRow.TRUE);
 			}
@@ -122,12 +119,12 @@ public abstract class CMDWhere extends CMDType {
 
 	protected int findSingleAttributeTHROW(String nextCommand) throws ParseExceptions{
 		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryModel.getColumnNumber(); i++){
-			if(temporaryModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
+		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
+			if(temporaryDataModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
 				return i;
 			}
 		}
-		throw new DoesNotExistAttribute(nextCommand, tableName);
+		throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename());
 	}
 
 	/******************************************************
@@ -180,7 +177,7 @@ public abstract class CMDWhere extends CMDType {
 	protected void searchAttributeNum(int attributeCoordinate, String opCommand, String valueCommand){
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
-		for(int i=0; i<temporaryModel.getRowNumber(); i++){
+		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			//create a cell for each row and set RequestedRow to false. If the cell does fit the criteria, it will be
 			//set to true later in this loop.
 			requestedRows.add(RequestedRow.FALSE);
@@ -188,7 +185,7 @@ public abstract class CMDWhere extends CMDType {
 			//want to jump to catch + don't want assignByOperator to consider it
 			try{
 				//consider every cell in our attribute's column
-				float tableValue = Float.parseFloat(temporaryModel.getCell(i, attributeCoordinate));
+				float tableValue = Float.parseFloat(temporaryDataModel.getCell(i, attributeCoordinate));
 				assignByOperator(i, opCommand, tableValue, comparisonValue);
 			} catch(NumberFormatException n){}
 		}
@@ -220,16 +217,16 @@ public abstract class CMDWhere extends CMDType {
 	 *****************************************************/
 
 	protected void searchAttributeUniversal(int attributeCoordinate, String opCommand, String valueCommand){
-		for(int i=0; i<temporaryModel.getRowNumber(); i++){
+		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			requestedRows.add(RequestedRow.FALSE);
 			if(opCommand.equals("==") || opCommand.equalsIgnoreCase("LIKE")){
-				if (temporaryModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
+				if (temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.set(i, RequestedRow.TRUE);
 				}
 			}
 			//if opCommand doesn't equal "==" it has to equal "!="
 			else {
-				if (!temporaryModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
+				if (!temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.set(i, RequestedRow.TRUE);
 				}
 			}

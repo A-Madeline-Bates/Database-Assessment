@@ -6,31 +6,25 @@ import DBMain.ParseExceptions.*;
 import java.util.ArrayList;
 
 public class CMDSelect extends CMDWhere {
-	private String tableName;
 	private ArrayList<Integer> requestedColumns = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions {
 		String firstCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
 		if(canWeReadTable()){
-			loadTemporaryModel();
 			if(doesWildAttributeExist(firstCommand)){
-				System.out.println("It exists!" + requestedColumns);
-				//calling getNewTokenSafe to move past the tablename, which we've already processed and so
-				//don't need here
-				getNewTokenSafe(DomainType.ATTRIBUTENAME);
+				//calling getNewTokenSafe to step past the table name, which we've already processed
+				getNewTokenSafe(DomainType.TABLENAME);
 				processWhere(this);
 			}
 		}
 	}
-
-
 
 	/******************************************************
 	 *************  METHOD TO IDENTIFY FILE  **************
 	 *****************************************************/
 
 	private boolean canWeReadTable() throws ParseExceptions {
-		//we need to know tablename before we can identify if our attribute is valid, so we start by 'peaking'
+		//we need to know table name before we can identify if our attribute is valid, so we start by 'peaking'
 		//forwards at it.
 		for(int i=1; ; i++) {
 			//we search the command line for FROM- if we hit the end of the line without finding it,
@@ -41,7 +35,8 @@ public class CMDSelect extends CMDWhere {
 				//doesTableExist will throw an error
 				String peakTwo = peakTokenSafe(i+1, DomainType.TABLENAME);
 				if (doesTableExist(peakTwo)) {
-					tableName = peakTwo;
+					setTemporaryPath(peakTwo);
+					setTemporaryData();
 					return true;
 				}
 			}
@@ -52,10 +47,16 @@ public class CMDSelect extends CMDWhere {
 	 ***************** LOAD TEMPORARY MODEL ****************
 	 *****************************************************/
 
-	private void loadTemporaryModel() {
-		//create temporaryModel so that we can see if there are any attribute matches with our command
-		this.temporaryModel = new DBModelData();
-		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
+	//nothing will be stored at the end of this command's execution, so rather than using our storage models, we've
+	//instantiated temporary models which we can use without running the risk of creating messy data and it
+	//being stored. We will use these models for the rest of the operation.
+	private void setTemporaryData() {
+		new DBLoad(temporaryDataModel, storagePath.getDatabaseName(), temporaryPathModel.getFilename());
+	}
+
+	private void setTemporaryPath(String fileName) {
+		temporaryPathModel.setFilename(fileName);
+		temporaryPathModel.setDatabaseName(storagePath.getDatabaseName());
 	}
 
 	/******************************************************
@@ -80,7 +81,7 @@ public class CMDSelect extends CMDWhere {
 		}
 		//throw error if it's neither
 		else{
-			throw new DoesNotExistAttribute(firstCommand, tableName);
+			throw new DoesNotExistAttribute(firstCommand, temporaryPathModel.getFilename());
 		}
 	}
 
@@ -99,14 +100,14 @@ public class CMDSelect extends CMDWhere {
 		}
 		//if it's not a value or a 'FROM', throw an error
 		else{
-			throw new DoesNotExistAttribute(nextCommand, tableName);
+			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename());
 		}
 	}
 
 	private boolean doesAttributeExist(String nextCommand){
 		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryModel.getColumnNumber(); i++){
-			if(temporaryModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
+		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
+			if(temporaryDataModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
 				//if we get an attribute match, save the column coordinate where the match occurred
 				requestedColumns.add(i);
 				return true;
@@ -117,7 +118,7 @@ public class CMDSelect extends CMDWhere {
 
 	private void requestAllColumns(){
 		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryModel.getColumnNumber(); i++){
+		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
 			requestedColumns.add(i);
 		}
 	}
@@ -143,8 +144,8 @@ public class CMDSelect extends CMDWhere {
 		throw new InvalidCommand(nextCommand, prevCommand, "FROM", null);
 	}
 
-	private void createPrintStatement(){
-		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);
+	protected void executeCMD(ArrayList<RequestedRow> finalRows){
+		//		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);
 	}
 
 	public String query(DBServer server){

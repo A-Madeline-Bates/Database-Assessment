@@ -25,9 +25,9 @@ public class CMDDrop extends CMDType {
 		String nextCommand = getNewTokenSafe(DomainType.DATABASENAME);
 		if(isDBValid(nextCommand)) {
 			if (isThisCommandLineEnd()) {
-				//IT MAY BE A BETTER DECISION NOT TO CLEAR MODEL- DECIDE
-				if(nextCommand == pathModel.getDatabaseName()) {
-					clearModel();
+				//if database in use is the one we're deleting, remove it
+				if(nextCommand == storagePath.getDatabaseName()) {
+					clearFilePath();
 				}
 				String dbLocation = "databaseFiles" + File.separator + nextCommand;
 				File file = new File(dbLocation);
@@ -50,10 +50,11 @@ public class CMDDrop extends CMDType {
 		String nextCommand = getNewTokenSafe(DomainType.DATABASENAME);
 		if(doesTableExist(nextCommand)) {
 			if (isThisCommandLineEnd()) {
-				if (nextCommand == pathModel.getFilename()) {
-					clearModel();
+				//if filename in use is the one we're deleting, remove it
+				if (nextCommand == storagePath.getFilename()) {
+					storagePath.setFilename(null);
 				}
-				String currentDatabase = pathModel.getDatabaseName();
+				String currentDatabase = storagePath.getDatabaseName();
 				String fileLocation = "databaseFiles" + File.separator + currentDatabase + File.separator + nextCommand;
 				File file = new File(fileLocation);
 				file.delete();

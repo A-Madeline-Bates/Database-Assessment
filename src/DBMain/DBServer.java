@@ -77,7 +77,6 @@ public class DBServer
         new DBTest();
         //creating classes that we don't want to re-instantiate with every new incoming command
         this.model = new DBModel();
-        this.modelData = new DBModelData();
         this.modelPath = new DBModelPath();
         this.cmdFactory = new DBCommandFactory();
     }
@@ -89,7 +88,7 @@ public class DBServer
             //this is too many calls to commandClass- create a nice workaround
             //we could put getters and setting is DBServer and do it the other way around?
             //this gives the model to our class
-            commandClass.setModel(modelData, modelPath);
+            commandClass.setModel(modelPath);
             commandClass.setInstructionSet(tokeniser);
             commandClass.transformModel();
             modelData = commandClass.getModelData();

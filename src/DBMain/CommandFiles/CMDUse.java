@@ -10,8 +10,8 @@ public class CMDUse extends CMDType {
 		String firstCommand = getNewTokenSafe(DomainType.DATABASENAME);
 		if(isDBValid(firstCommand)){
 			if(isThisCommandLineEnd()) {
-				clearModel();
-				pathModel.setDatabaseName(firstCommand.toUpperCase());
+				clearFilePath();
+				storagePath.setDatabaseName(firstCommand.toUpperCase());
 			}
 		}
 	}

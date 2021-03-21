@@ -57,24 +57,21 @@ public class CMDInsert extends CMDType {
 	}
 
 	private void updateTable(String tableName) throws ParseExceptions{
-		//create an temporary instance of DBModel so that we can find out if the user is trying to
+
+		//load data into a temporary instance of DBModel so that we can find out if the user is trying to
 		//load too many values into our table before they do it.
-		DBModelData temporaryModel = new DBModelData();
-		new DBLoad(temporaryModel, pathModel.getDatabaseName(), tableName);
-		if(isListSizeCorrect(temporaryModel)){
-			//saving database name before clearing model
-			String databaseName = pathModel.getDatabaseName();
-			//we need to clear model before loading to it in order to prevent messy data
-			clearModel();
-			new DBLoad(dataModel, databaseName, tableName);
-			pathModel.setDatabaseName(databaseName);
-			pathModel.setFilename(tableName);
-			dataModel.setRowsDataFromSQL(valueList);
+		String databaseName = storagePath.getDatabaseName();
+		new DBLoad(temporaryDataModel, databaseName, tableName);
+		//columnsAvailable is total column number - 1 to accommodate for the ID column
+		if(isListSizeCorrect(temporaryDataModel.getColumnNumber() - 1)){
+			//we can now load the data into our 'storage' model- i.e the one that will be pushed to file
+			new DBLoad(storageData, databaseName, tableName);
+			storagePath.setFilename(tableName);
+			storageData.setRowsDataFromSQL(valueList);
 		}
 	}
 
-	private boolean isListSizeCorrect(DBModelData temporaryModel) throws ParseExceptions{
-		int columnsAvailable = temporaryModel.getColumnNumber() - 1;
+	private boolean isListSizeCorrect(int columnsAvailable) throws ParseExceptions{
 		if(valueList.size()==columnsAvailable){
 			return true;
 		}
