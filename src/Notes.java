@@ -77,6 +77,7 @@
 //  - move enum classes?
 //  - consider fixing extra comma err on lists
 //  - fix program crashing when empty command is entered
+//  - stop users updating/changing ID column
 
 //	- add ID column to all new files !!
 //Any file which is committed to memory should have an ID column, as we should have
