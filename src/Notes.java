@@ -75,6 +75,7 @@
 //  - add operator to tokeniser split
 //  - sort out LIKE in SELECT
 //  - move enum classes?
+//  - consider fixing extra comma err on lists
 
 //	- add ID column to all new files !!
 //Any file which is committed to memory should have an ID column, as we should have

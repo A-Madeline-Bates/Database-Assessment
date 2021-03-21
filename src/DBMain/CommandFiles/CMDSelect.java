@@ -181,7 +181,7 @@ public class CMDSelect extends CMDType {
 
 	private void requestAllRows(){
 		for(int i=0; i<temporaryModel.getRowNumber(); i++){
-			requestedRows.add(RequestedRow.TRUE);
+			finalRows.add(RequestedRow.TRUE);
 		}
 	}
 
@@ -367,7 +367,7 @@ public class CMDSelect extends CMDType {
 	}
 
 	private void createPrintStatement(){
-		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + requestedRows);
+		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);
 	}
 
 	public String query(DBServer server){
