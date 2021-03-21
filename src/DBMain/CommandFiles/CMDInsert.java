@@ -8,9 +8,10 @@ import java.util.ArrayList;
 public class CMDInsert extends CMDType {
 	private ArrayList<String> valueList = new ArrayList<>();
 
-	//divide word identifiers in 'isIt...' methods
 	public void transformModel() throws ParseExceptions {
+		//divide word identifiers in 'isIt...' methods
 		String firstCommand = getNewTokenSafe(DomainType.INTO);
+		// !! maybe don't need areweinadatabase? If we are outside, file won't be found
 		if(areWeInADatabase()) {
 			if (firstCommand.equalsIgnoreCase("INTO")) {
 				String secondCommand = getNewTokenSafe(DomainType.TABLENAME);

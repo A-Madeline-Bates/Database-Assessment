@@ -35,28 +35,15 @@ public class CMDSelect extends CMDWhere {
 				//doesTableExist will throw an error
 				String peakTwo = peakTokenSafe(i+1, DomainType.TABLENAME);
 				if (doesTableExist(peakTwo)) {
+					//nothing will be stored at the end of this command's execution, so rather than using our storage
+					// models, we've instantiating temporary models which we can use without running the risk of
+					// creating messy data and it being stored. We will use these models for the rest of the operation.
 					setTemporaryPath(peakTwo);
 					setTemporaryData();
 					return true;
 				}
 			}
 		}
-	}
-
-	/******************************************************
-	 ***************** LOAD TEMPORARY MODEL ****************
-	 *****************************************************/
-
-	//nothing will be stored at the end of this command's execution, so rather than using our storage models, we've
-	//instantiated temporary models which we can use without running the risk of creating messy data and it
-	//being stored. We will use these models for the rest of the operation.
-	private void setTemporaryData() {
-		new DBLoad(temporaryDataModel, storagePath.getDatabaseName(), temporaryPathModel.getFilename());
-	}
-
-	private void setTemporaryPath(String fileName) {
-		temporaryPathModel.setFilename(fileName);
-		temporaryPathModel.setDatabaseName(storagePath.getDatabaseName());
 	}
 
 	/******************************************************
@@ -145,7 +132,7 @@ public class CMDSelect extends CMDWhere {
 	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){
-		//		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);
+		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);
 	}
 
 	public String query(DBServer server){

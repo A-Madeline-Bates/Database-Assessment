@@ -13,7 +13,7 @@ public abstract class CMDType {
 	protected DBModelData storageData;
 	protected DBModelPath storagePath;
 	//these are 'temporary' versions of the model that can be used to check data without running the risk of
-	//storing what you're working on
+	//storing the data you're working on (or wiping a file)
 	protected DBModelData temporaryDataModel = new DBModelData();
 	protected DBModelPath temporaryPathModel = new DBModelPath();
 
@@ -25,29 +25,26 @@ public abstract class CMDType {
 	 *************** MODEL ALTERING METHODS ***************
 	 *****************************************************/
 
+	//most data is cleared because it minimises the possibility of mistakes and overwrites
 	public void setModel(DBModelPath storagePath){
 		this.storageData = new DBModelData();
 		this.storagePath = storagePath;
+		storagePath.setFilename(null);
 	}
 
-	public DBModelData getModelData(){
+	public DBModelData getDataForStorage(){
 		return storageData;
 	}
 
-	public DBModelPath getModelPath(){
+	public DBModelPath getPathForStorage(){
 		return storagePath;
-	}
-
-	protected void clearModel(){
-		this.storageData = new DBModelData();
-		this.storagePath = new DBModelPath();
 	}
 
 	protected void clearFilePath() {
 		this.storageData = new DBModelData();
 	}
 
-		public abstract void transformModel() throws ParseExceptions ;
+	public abstract void transformModel() throws ParseExceptions ;
 
 	/******************************************************
 	 ****************** SET TOKENISER ********************

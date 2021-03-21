@@ -1,5 +1,6 @@
 package DBMain.CommandFiles;
 
+import DBMain.DBLoad;
 import DBMain.ModelFiles.DBModelData;
 import DBMain.ParseExceptions.*;
 
@@ -10,6 +11,20 @@ public abstract class CMDWhere extends CMDType {
 	private ArrayList<RequestedRow> finalRows = new ArrayList<>();
 
 	protected abstract void executeCMD(ArrayList<RequestedRow> finalRows);
+
+
+	/******************************************************
+	 ***************** LOAD TEMPORARY MODEL ****************
+	 *****************************************************/
+
+	protected void setTemporaryData() {
+		new DBLoad(temporaryDataModel, storagePath.getDatabaseName(), temporaryPathModel.getFilename());
+	}
+
+	protected void setTemporaryPath(String fileName) {
+		temporaryPathModel.setFilename(fileName);
+		temporaryPathModel.setDatabaseName(storagePath.getDatabaseName());
+	}
 
 	/******************************************************
 	 ****** METHOD TO END STRING OR TRIGGER 'WHERE' ******
@@ -50,6 +65,19 @@ public abstract class CMDWhere extends CMDType {
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			finalRows.add(RequestedRow.TRUE);
 		}
+	}
+
+	/******************************************************
+	 ***************** ALT 'WHERE' METHOD *****************
+	 *****************************************************/
+
+	//a method to allow you to use the where methods if you know you have to use a where- there is no option for the
+	//command line to end before using WHERE
+	protected void processForcedWhere(CMDWhere currentCommand) throws ParseExceptions{
+		executeCondition();
+		//the first set of rows we find with WHERE we can consider all relevant
+		finalRows.addAll(requestedRows);
+		recursiveWhereClause(currentCommand);
 	}
 
 	/******************************************************
@@ -109,7 +137,7 @@ public abstract class CMDWhere extends CMDType {
 
 	protected void executeCondition() throws ParseExceptions {
 		String attributeCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-		//find attribute we're processing- if it doesn't exist, an exception will be thrown
+		//find coordinate of attribute we're processing- if it doesn't exist, an exception will be thrown
 		int attributeCoordinate = findSingleAttributeTHROW(attributeCommand);
 		String opCommand = getNewTokenSafe(DomainType.OPERATOR);
 		//find the type of our operator- if it's not valid, an exception will be thrown
@@ -232,4 +260,6 @@ public abstract class CMDWhere extends CMDType {
 			}
 		}
 	}
+
+
 }

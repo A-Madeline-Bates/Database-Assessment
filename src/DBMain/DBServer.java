@@ -91,20 +91,14 @@ public class DBServer
             commandClass.setModel(modelPath);
             commandClass.setInstructionSet(tokeniser);
             commandClass.transformModel();
-            modelData = commandClass.getModelData();
-            modelPath = commandClass.getModelPath();
+            modelData = commandClass.getDataForStorage();
+            modelPath = commandClass.getPathForStorage();
             //this has to be within process parse because we want to skip DBStore if an exception is called.
             //We need to create a fix for this.
             new DBStore(modelData, modelPath);
         } catch (ParseExceptions exception) {
             this.exceptionMessage = "[ERROR]\nCommand exception: " + exception;
-//            System.out.println(exceptionMessage);
         }
-//        CURRENTLY UNUSED:
-//        catch (IOException ioParseException) {
-//            this.exceptionMessage = "[ERROR]\nIO exception: Error when try to access file.";
-//            System.out.println("IO exception: Error when try to access file.");
-//        }
     }
 
     public static void main(String args[])
