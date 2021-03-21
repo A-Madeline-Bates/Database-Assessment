@@ -198,14 +198,41 @@ public class CMDSelect extends CMDType {
 			if (isThisCommandEndTHROW(extraInstruction)) {
 				createPrintStatement();
 			}
-//		} else if(nextCommand.equalsIgnoreCase("AND")){
-//			//work out some AND logic
-//			recursiveWhereClause();
-//		} else if(nextCommand.equalsIgnoreCase("OR")){
-//			//work out some OR logic
-//			recursiveWhereClause();
+		} else if(nextCommand.equalsIgnoreCase("AND")){
+			//clear requestedRows
+			requestedRows = new ArrayList<RequestedRow>();
+			executeCondition();
+			computeAND();
+			recursiveWhereClause();
+		} else if(nextCommand.equalsIgnoreCase("OR")){
+			//clear requestedRows
+			requestedRows = new ArrayList<RequestedRow>();
+			executeCondition();
+			computeOR();
+			recursiveWhereClause();
 		} else{
-			throw new InvalidCommand(nextCommand, "[WHERE CLAUSE]", "AND/OR", ";");
+			throw new InvalidCommand(nextCommand, "[WHERE CLAUSE]", "AND, OR", ";");
+		}
+	}
+
+	//computeAND decides which cells from our most recent requestedRows result should make it into our finalRows
+	private void computeAND(){
+		for(int i=0; i<temporaryModel.getRowNumber(); i++) {
+			if((requestedRows.get(i) == RequestedRow.TRUE) && (finalRows.get(i) == RequestedRow.TRUE)){
+				finalRows.set(i, RequestedRow.TRUE);
+			}
+			else{
+				finalRows.set(i, RequestedRow.FALSE);
+			}
+		}
+	}
+
+	//computeOR decides which cells from our most recent requestedRows result should make it into our finalRows
+	private void computeOR(){
+		for(int i=0; i<temporaryModel.getRowNumber(); i++) {
+			if((requestedRows.get(i) == RequestedRow.TRUE) || (finalRows.get(i) == RequestedRow.TRUE)){
+				finalRows.set(i, RequestedRow.TRUE);
+			}
 		}
 	}
 
