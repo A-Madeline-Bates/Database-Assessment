@@ -20,8 +20,8 @@ public class DBCommandFactory {
 				return new CMDUpdate();
 //			case "ALTER":
 //				return new CMDAlter();
-//			case "DELETE":
-//				return new CMDDelete();
+			case "DELETE":
+				return new CMDDelete();
 			case "DROP":
 				return new CMDDrop();
 //			case "JOIN":

@@ -16,7 +16,6 @@ public class CMDUpdate extends CMDWhere {
 			String secondCommand = getNewTokenSafe(DomainType.SET);
 			if (isItSet(secondCommand)) {
 				collectNameValList();
-				System.out.println(updatedColumns);
 				processForcedWhere(this);
 			}
 		}

@@ -61,6 +61,13 @@ public abstract class CMDWhere extends CMDType {
 		return false;
 	}
 
+	protected boolean isItWhereThrow(String nextCommand, String prevCommand) throws ParseExceptions{
+		if (isItWhere(nextCommand)) {
+			return true;
+		}
+		throw new InvalidCommand(nextCommand, prevCommand, "WHERE", null) ;
+	}
+
 	protected void requestAllRows(){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			finalRows.add(RequestedRow.TRUE);
