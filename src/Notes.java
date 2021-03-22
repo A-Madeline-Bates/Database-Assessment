@@ -67,7 +67,7 @@
 //  - maybe think about/ worry about empty cells?
 //  - CREATE shouldn't automatically set USE- change that.
 //  - break up excessively large methods
-//  - string literals need some refining in terms of what's allowed - fix that
+//  - string literals need some refining in terms of what's allowed - fix that. ANYTHING APART FROM TABS AND SINGLE QUOTES ALLOWED
 //  - shorten method names
 //  - make sure comma separation is completely secure
 //  - use methods in combination with one another- build a test strategy
@@ -79,6 +79,8 @@
 //  - fix program crashing when empty command is entered
 //  - stop users updating/changing ID column
 //  - fix WHERE bracket problem!
+//  - decide whether to implement 'if there is no databaseFiles, create one'
+
 
 //	- add ID column to all new files !!
 //Any file which is committed to memory should have an ID column, as we should have
