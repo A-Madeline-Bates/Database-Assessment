@@ -19,7 +19,8 @@ public class CMDDelete extends CMDWhere {
 				setTemporaryData();
 				String thirdCommand = getNewTokenSafe(DomainType.WHERE);
 				if(isItWhereThrow(thirdCommand, "DELETE FROM [table]")) {
-					processForcedWhere(this);
+					splitIfBrackets(this);
+					//processForcedWhere(this);
 				}
 			}
 		}

@@ -61,7 +61,7 @@ public class CMDSelect extends CMDWhere {
 			return true;
 		}
 		//check if it's a normal attribute that's present in our table. If so, recursively check for more attributes.
-		else if(doesAttributeExist(firstCommand)){
+		else if(doesAttributeExistSelect(firstCommand)){
 			isItCommaSeparated(DomainType.ATTRIBUTENAME, "FROM");
 			doesAttrExistRecursive();
 			return true;
@@ -80,7 +80,7 @@ public class CMDSelect extends CMDWhere {
 		}
 		//if it fits the conditions to be a attribute, call doesAttrExistRecursive again
 		//doesAttrExistRecursive will automatically save the coordinate if it is valid
-		else if (doesAttributeExist(nextCommand)){
+		else if (doesAttributeExistSelect(nextCommand)){
 			if(isItCommaSeparated(DomainType.ATTRIBUTENAME, "FROM")) {
 				doesAttrExistRecursive();
 			}
@@ -91,7 +91,7 @@ public class CMDSelect extends CMDWhere {
 		}
 	}
 
-	private boolean doesAttributeExist(String nextCommand){
+	private boolean doesAttributeExistSelect(String nextCommand){
 		//iterate through the columns of our table until we find a match
 		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
 			if(temporaryDataModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){

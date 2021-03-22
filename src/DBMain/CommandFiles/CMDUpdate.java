@@ -16,7 +16,8 @@ public class CMDUpdate extends CMDWhere {
 			String secondCommand = getNewTokenSafe(DomainType.SET);
 			if (isItSet(secondCommand)) {
 				collectNameValList();
-				processForcedWhere(this);
+				splitIfBrackets(this);
+				//processForcedWhere(this);
 			}
 		}
 	}
@@ -68,16 +69,6 @@ public class CMDUpdate extends CMDWhere {
 				updatedColumns.set(attributeCoordinate, nextCommand);
 			}
 		}
-	}
-
-	private int doesAttributeExist(String nextCommand){
-		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
-			if(temporaryDataModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
-				return i;
-			}
-		}
-		return -1;
 	}
 
 	//creating an array to hold our name value pair data. We are initialising all cells to 'n/a' because that would

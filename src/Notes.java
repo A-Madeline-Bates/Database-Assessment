@@ -68,7 +68,7 @@
 //  - CREATE shouldn't automatically set USE- change that.
 //  - break up excessively large methods
 //  - string literals need some refining in terms of what's allowed - fix that. ANYTHING APART FROM TABS AND SINGLE QUOTES ALLOWED
-//  - shorten method names
+//  - shorten method names - prioritise short method names over perfect ones
 //  - make sure comma separation is completely secure
 //  - use methods in combination with one another- build a test strategy
 //  - unpick some of the weird things we've done with booleans?
@@ -80,8 +80,6 @@
 //  - stop users updating/changing ID column
 //  - fix WHERE bracket problem!
 //  - decide whether to implement 'if there is no databaseFiles, create one'
+//  - make some of 'where' methods private
+//  - sort doesAttributeExist in WHERE !!
 
-
-//	- add ID column to all new files !!
-//Any file which is committed to memory should have an ID column, as we should have
-//created it.
