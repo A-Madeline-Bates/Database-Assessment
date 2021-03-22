@@ -106,16 +106,6 @@ public abstract class CMDWhere extends CMDType {
 		}
 	}
 
-	protected int doesAttributeExist(String nextCommand){
-		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
-			if(temporaryDataModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
-				return i;
-			}
-		}
-		return -1;
-	}
-
 	/******************************************************
 	 ************* RECURSIVE 'WHERE' OPERATOR *************
 	 *****************************************************/
@@ -244,16 +234,6 @@ public abstract class CMDWhere extends CMDType {
 		splitByOpType(opType, opCommand, attributeCoordinate);
 	}
 
-	protected int findSingleAttributeTHROW(String nextCommand) throws ParseExceptions{
-		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
-			if(temporaryDataModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
-				return i;
-			}
-		}
-		throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename());
-	}
-
 	/******************************************************
 	 *********** SPLIT CONDITION BY OPERATOR TYPE **********
 	 *****************************************************/
@@ -359,6 +339,4 @@ public abstract class CMDWhere extends CMDType {
 			}
 		}
 	}
-
-
 }

@@ -56,4 +56,18 @@ public class DBModelData extends DBModel {
 	public String getCell(int rowNo, int columnNo){
 		return tableData.get(rowNo).get(columnNo);
 	}
+
+	public void addColumn(String colName){
+		columnNames.add(colName);
+		for(int i=0; i<getRowNumber(); i++){
+			tableData.get(i).add("");
+		}
+	}
+
+	public void deleteColumn(int colNum){
+		columnNames.remove(colNum);
+		for(int i=0; i<getRowNumber(); i++){
+			tableData.get(i).remove(colNum);
+		}
+	}
 }

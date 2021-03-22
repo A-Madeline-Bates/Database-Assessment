@@ -26,17 +26,17 @@ public abstract class CMDType {
 	 *****************************************************/
 
 	//most data is cleared because it minimises the possibility of mistakes and overwrites
-	public void setModel(DBModelPath storagePath){
+	public void setModel(DBModelPath storagePath) {
 		this.storageData = new DBModelData();
 		this.storagePath = storagePath;
 		storagePath.setFilename(null);
 	}
 
-	public DBModelData getDataForStorage(){
+	public DBModelData getDataForStorage() {
 		return storageData;
 	}
 
-	public DBModelPath getPathForStorage(){
+	public DBModelPath getPathForStorage() {
 		return storagePath;
 	}
 
@@ -44,32 +44,30 @@ public abstract class CMDType {
 		this.storageData = new DBModelData();
 	}
 
-	public abstract void transformModel() throws ParseExceptions ;
+	public abstract void transformModel() throws ParseExceptions;
 
 	/******************************************************
 	 ****************** SET TOKENISER ********************
 	 *****************************************************/
 
-	public void setInstructionSet(DBTokeniser tokeniser){
+	public void setInstructionSet(DBTokeniser tokeniser) {
 		this.tokeniser = tokeniser;
 	}
 
-	protected String getNewTokenSafe(DomainType domain) throws ParseExceptions{
+	protected String getNewTokenSafe(DomainType domain) throws ParseExceptions {
 		String nextToken = tokeniser.nextToken();
-		if(nextToken != null){
+		if (nextToken != null) {
 			return nextToken;
-		}
-		else{
+		} else {
 			throw new CommandMissing(domain);
 		}
 	}
 
-	protected String peakTokenSafe(int lookForward, DomainType domain) throws ParseExceptions{
+	protected String peakTokenSafe(int lookForward, DomainType domain) throws ParseExceptions {
 		String tokenPreview = tokeniser.peakToken(lookForward);
-		if(tokenPreview != null){
+		if (tokenPreview != null) {
 			return tokenPreview;
-		}
-		else{
+		} else {
 			throw new CommandMissing(domain);
 		}
 	}
@@ -78,10 +76,10 @@ public abstract class CMDType {
 	 *************** DIRECTORY SEARCH TEST ****************
 	 *****************************************************/
 
-	protected boolean isDBValid(String dbName) throws ParseExceptions{
+	protected boolean isDBValid(String dbName) throws ParseExceptions {
 		//shouldn't actually need to test alphanum if database exists?
-		if (isNameAlphNumTHROW(dbName, DomainType.DATABASENAME)){
-			if(doesDatabaseExist(dbName)){
+		if (isNameAlphNumTHROW(dbName, DomainType.DATABASENAME)) {
+			if (doesDatabaseExist(dbName)) {
 				return true;
 			}
 		}
@@ -92,26 +90,25 @@ public abstract class CMDType {
 	 ******************** STRING TESTS ********************
 	 *****************************************************/
 
-	protected boolean isNameAlphNumeric (String testString){
-		if(testString.matches("[a-zA-Z0-9]+")){
+	protected boolean isNameAlphNumeric(String testString) {
+		if (testString.matches("[a-zA-Z0-9]+")) {
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
 	}
 
-	protected boolean isNameAlphNumTHROW (String testString, DomainType domain) throws ParseExceptions{
-		if(isNameAlphNumeric(testString)){
+	protected boolean isNameAlphNumTHROW(String testString, DomainType domain) throws ParseExceptions {
+		if (isNameAlphNumeric(testString)) {
 			return true;
 		}
 		throw new AlphanumFormatProblem(testString, domain);
 	}
 
 
-	protected boolean isThisCommandLineEnd() throws ParseExceptions{
+	protected boolean isThisCommandLineEnd() throws ParseExceptions {
 		String finalCommand = getNewTokenSafe(DomainType.SEMICOLON);
-		if(isThisSemicolonTHROW(finalCommand)) {
+		if (isThisSemicolonTHROW(finalCommand)) {
 			String extraCommand = tokeniser.nextToken();
 			if (isThisCommandEndTHROW(extraCommand)) {
 				return true;
@@ -120,52 +117,51 @@ public abstract class CMDType {
 		return false;
 	}
 
-	protected boolean isThisCommandEnd(String extraCommand){
-		if(extraCommand == null){
+	protected boolean isThisCommandEnd(String extraCommand) {
+		if (extraCommand == null) {
 			return true;
 		}
 		return false;
 	}
 
-	protected boolean isThisCommandEndTHROW(String extraCommand) throws ParseExceptions{
-		if(isThisCommandEnd(extraCommand)){
+	protected boolean isThisCommandEndTHROW(String extraCommand) throws ParseExceptions {
+		if (isThisCommandEnd(extraCommand)) {
 			return true;
 		}
 		throw new ExtraCommandGiven(extraCommand);
 	}
 
-	protected boolean isThisSemicolon(String nextCommand){
+	protected boolean isThisSemicolon(String nextCommand) {
 		if (nextCommand.equals(";")) {
 			return true;
 		}
 		return false;
 	}
 
-	protected boolean isThisSemicolonTHROW(String nextCommand) throws ParseExceptions{
-		if(isThisSemicolon(nextCommand)){
+	protected boolean isThisSemicolonTHROW(String nextCommand) throws ParseExceptions {
+		if (isThisSemicolon(nextCommand)) {
 			return true;
 		}
 		throw new MissingSemiColon(nextCommand);
 	}
 
-	protected boolean isItCommaSeparated(DomainType domain, String exitToken) throws ParseExceptions{
+	protected boolean isItCommaSeparated(DomainType domain, String exitToken) throws ParseExceptions {
 		String nextCommand = peakTokenSafe(1, DomainType.COMMA);
 		//is the next instruction a comma
-		if(isItComma(nextCommand)){
+		if (isItComma(nextCommand)) {
 			//call nextToken so that our array position steps forward by one
 			tokeniser.nextToken();
 			return true;
 		}
 		//if next instruction is the exit token a comma is not necessary
-		else if(nextCommand.equalsIgnoreCase(exitToken)){
+		else if (nextCommand.equalsIgnoreCase(exitToken)) {
 			return true;
-		}
-		else{
+		} else {
 			throw new NotCommaSeparated(domain);
 		}
 	}
 
-	protected boolean isItComma(String nextCommand){
+	protected boolean isItComma(String nextCommand) {
 		if (nextCommand.equals(",")) {
 			return true;
 		}
@@ -176,22 +172,20 @@ public abstract class CMDType {
 	 ******************** PATH TESTS ********************
 	 *****************************************************/
 
-	private boolean doesDatabaseExist(String dbName) throws ParseExceptions{
+	private boolean doesDatabaseExist(String dbName) throws ParseExceptions {
 		String location = "databaseFiles" + File.separator + dbName;
 		Path path = Paths.get(location);
-		if(Files.exists(path) && Files.isDirectory(path)){
+		if (Files.exists(path) && Files.isDirectory(path)) {
 			return true;
-		}
-		else {
+		} else {
 			throw new DoesNotExistDB(dbName);
 		}
 	}
 
 	protected boolean areWeInADatabase() throws ParseExceptions {
-		if(storagePath.getDatabaseName() != null){
+		if (storagePath.getDatabaseName() != null) {
 			return true;
-		}
-		else{
+		} else {
 			throw new WorkingOutsideDatabase();
 		}
 	}
@@ -200,10 +194,9 @@ public abstract class CMDType {
 		String currentDatabase = storagePath.getDatabaseName();
 		String location = "databaseFiles" + File.separator + currentDatabase + File.separator + tableName;
 		Path path = Paths.get(location);
-		if(Files.exists(path) && Files.isRegularFile(path)){
+		if (Files.exists(path) && Files.isRegularFile(path)) {
 			return true;
-		}
-		else {
+		} else {
 			throw new DoesNotExistTable(tableName);
 		}
 	}
@@ -213,66 +206,87 @@ public abstract class CMDType {
 	 *****************************************************/
 
 
-	protected boolean isItValidValue(String nextInstruction) throws ParseExceptions{
-		if(isItStringLiteral(nextInstruction)){
+	protected boolean isItValidValue(String nextInstruction) throws ParseExceptions {
+		if (isItStringLiteral(nextInstruction)) {
 			return true;
-		} else if(isItBooleanLiteral(nextInstruction)){
+		} else if (isItBooleanLiteral(nextInstruction)) {
 			return true;
-		} else if (isItFloatLiteral(nextInstruction)){
+		} else if (isItFloatLiteral(nextInstruction)) {
 			return true;
-		} else if (isItIntegerLiteral(nextInstruction)){
+		} else if (isItIntegerLiteral(nextInstruction)) {
 			return true;
-		}
-		else{
+		} else {
 			throw new InvalidValue(nextInstruction);
 		}
 	}
 
-	protected boolean isItStringLiteral(String nextInstruction){
-		if(nextInstruction.startsWith("'") && nextInstruction.endsWith("'")){
+	protected boolean isItStringLiteral(String nextInstruction) {
+		if (nextInstruction.startsWith("'") && nextInstruction.endsWith("'")) {
 			return true;
 		}
 		return false;
 	}
 
-	protected boolean isItStringLiteralTHROW(String nextInstruction) throws ParseExceptions{
-		if(isItStringLiteral(nextInstruction)){
+	protected boolean isItStringLiteralTHROW(String nextInstruction) throws ParseExceptions {
+		if (isItStringLiteral(nextInstruction)) {
 			return true;
 		}
 		throw new InvalidValueType(nextInstruction, OperatorType.STRING);
 	}
 
-	protected boolean isItBooleanLiteral(String nextInstruction){
-		if(nextInstruction.equalsIgnoreCase("true") || nextInstruction.equalsIgnoreCase("false")) {
+	protected boolean isItBooleanLiteral(String nextInstruction) {
+		if (nextInstruction.equalsIgnoreCase("true") || nextInstruction.equalsIgnoreCase("false")) {
 			return true;
 		}
 		return false;
 	}
 
-	protected boolean isItFloatLiteral(String nextInstruction){
-		try{
+	protected boolean isItFloatLiteral(String nextInstruction) {
+		try {
 			Float.parseFloat(nextInstruction);
-		}
-		catch(NumberFormatException n){
+		} catch (NumberFormatException n) {
 			return false;
 		}
 		return true;
 	}
 
-	protected boolean isItIntegerLiteral(String nextInstruction){
-		try{
+	protected boolean isItIntegerLiteral(String nextInstruction) {
+		try {
 			Integer.parseInt(nextInstruction);
-		}
-		catch(NumberFormatException n){
+		} catch (NumberFormatException n) {
 			return false;
 		}
 		return true;
 	}
 
-	protected boolean isItNumLiteralTHROW(String nextInstruction) throws ParseExceptions{
-		if(isItIntegerLiteral(nextInstruction) || isItFloatLiteral(nextInstruction)){
+	protected boolean isItNumLiteralTHROW(String nextInstruction) throws ParseExceptions {
+		if (isItIntegerLiteral(nextInstruction) || isItFloatLiteral(nextInstruction)) {
 			return true;
 		}
 		throw new InvalidValueType(nextInstruction, OperatorType.NUMERICAL);
 	}
+
+	/******************************************************
+	 ****************** ATTRIBUTE METHODS ****************
+	 *****************************************************/
+
+	protected int doesAttributeExist(String nextCommand) {
+		//iterate through the columns of our table until we find a match
+		for (int i = 0; i < temporaryDataModel.getColumnNumber(); i++) {
+			if (temporaryDataModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	protected int doesAttributeExistTHROW(String nextCommand) throws ParseExceptions {
+		int attributeCoordinate = doesAttributeExist(nextCommand);
+		if (attributeCoordinate >= 0) {
+			return attributeCoordinate;
+		} else {
+			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename());
+		}
+	}
+
 }
