@@ -9,7 +9,7 @@ public abstract class CMDWhere extends CMDType {
 	private ArrayList<RequestedRow> requestedRows = new ArrayList<>();
 	private ArrayList<RequestedRow> finalRows = new ArrayList<>();
 	private Stack<ArrayList<RequestedRow>> rowStack = new Stack<>();
-	private Stack<String> conditionsStack = new Stack<>();
+	private Stack<String> operatorStack = new Stack<>();
 
 	protected abstract void executeCMD(ArrayList<RequestedRow> finalRows);
 
@@ -85,8 +85,9 @@ public abstract class CMDWhere extends CMDType {
 		if (nextCommand.equals("(")) {
 			//we use stacks a lot in these operations. If they are ever used while empty, throw EmptyStackException
 			try {
-				recursiveWhere();
+				recursiveWhere(currentCommand);
 			} catch(EmptyStackException e){
+				System.out.println("stack is empty");
 				throw new SumError();
 			}
 		} //attribute coordinate will be set to negative if attribute doesn't exist
@@ -119,29 +120,29 @@ public abstract class CMDWhere extends CMDType {
 	 ************* RECURSIVE 'WHERE' OPERATOR *************
 	 *****************************************************/
 
-	private void recursiveWhere() throws ParseExceptions, EmptyStackException{
+	private void recursiveWhere(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
 		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
 		if(nextCommand.equals("(")){
-			openBracketOp();
+			openBracketOp(currentCommand);
 		}
 		else if(nextCommand.equals(")")){
-			while (!conditionsStack.isEmpty() && conditionsStack.peek().equals("(")) {
-				String andOrOp = conditionsStack.pop();
+			while ((!operatorStack.isEmpty()) && (!operatorStack.peek().equals("("))) {
+				String andOrOp = operatorStack.pop();
 				performStackOperation(andOrOp);
 			} //pop the stack again to remove the open bracket
-			if(conditionsStack.peek().equals("(")) {
-				conditionsStack.pop();
+			if(operatorStack.peek().equals("(")) {
+				operatorStack.pop();
 			}
-			recursiveWhere();
+			recursiveWhere(currentCommand);
 		}
 		else if(nextCommand.equalsIgnoreCase("AND") || nextCommand.equalsIgnoreCase("OR")) {
-			conditionsStack.push(nextCommand);
-			recursiveWhere();
+			operatorStack.push(nextCommand);
+			recursiveWhere(currentCommand);
 		} //if command equals ";" we are done- we now need to clear the stack and execute the rest of the operations
 		else if(nextCommand.equals(";")){
 			String extraInstruction = tokeniser.nextToken();
 			if (isThisCommandEndTHROW(extraInstruction)) {
-				clearUpStack();
+				clearUpStack(currentCommand);
 			}
 		}
 		else{
@@ -149,24 +150,28 @@ public abstract class CMDWhere extends CMDType {
 		}
 	}
 
-	private void openBracketOp() throws ParseExceptions, EmptyStackException{
+	private void openBracketOp(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
 		int attributeCoordinate = doesAttributeExist(nextCommand);
 		//we don't know yet whether this is an open bracket or part of a condition yet, so we can only use
 		//this information to conclude that the last "(" WAS an open bracket
 		if(nextCommand.equals("(")) {
-			conditionsStack.push(nextCommand);
-			recursiveWhere();
+			operatorStack.push(nextCommand);
+			recursiveWhere(currentCommand);
 		}
 		//we have found a condition and NOT an open bracket. If there is only a single bracket it doesn't 'count'-
 		// i.e it is considered part of the condition in this operation
 		else if(attributeCoordinate>=0){
+			//call getNewTokenSafe() to step past attribute name
+			getNewTokenSafe(DomainType.ATTRIBUTENAME);
+			//clear requested rows
+			requestedRows = new ArrayList<RequestedRow>();
 			executeCondition(attributeCoordinate);
 			nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
 			if(nextCommand.equals(")")){
 				//make sure this is pushing the data and not a pointer to the data :/
 				rowStack.push(requestedRows);
-				recursiveWhere();
+				recursiveWhere(currentCommand);
 			} else{
 				throw new InvalidCommand(nextCommand, "[condition]", ")", null);
 			}
@@ -189,51 +194,23 @@ public abstract class CMDWhere extends CMDType {
 		}
 	}
 
-	private void clearUpStack() throws ParseExceptions, EmptyStackException{
-		while(!conditionsStack.isEmpty()) {
-			if (conditionsStack.peek().equals("(")) {
+	private void clearUpStack(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
+		while(!operatorStack.isEmpty()) {
+			if (operatorStack.peek().equals("(")) {
+				System.out.println("extra (");
 				throw new SumError();
 			}
-			String andOrOp = conditionsStack.pop();
+			String andOrOp = operatorStack.pop();
 			performStackOperation(andOrOp);
 		}
 		//pop what should hopefully be our final result from the stack
 		finalRows.addAll(rowStack.pop());
 		if(!rowStack.isEmpty()){
+			System.out.println("stack isn't empty");
 			throw new SumError();
 		}
 		currentCommand.executeCMD(finalRows);
 	}
-
-//	protected void recursiveWhereClause(CMDWhere currentCommand) throws ParseExceptions{
-//		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
-//		//if we find a semicolon, exit and prepare our print statement
-//		if(isThisSemicolon(nextCommand)) {
-//			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
-//			String extraInstruction = tokeniser.nextToken();
-//			if (isThisCommandEndTHROW(extraInstruction)) {
-//				currentCommand.executeCMD(finalRows);
-//			}
-//		} else if(nextCommand.equalsIgnoreCase("AND")){
-//			//clear requestedRows
-//			requestedRows = new ArrayList<RequestedRow>();
-//			nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-//			int attributeCoordinate = findSingleAttributeTHROW(nextCommand);
-//			executeCondition(attributeCoordinate);
-//			computeAND();
-//			recursiveWhereClause(currentCommand);
-//		} else if(nextCommand.equalsIgnoreCase("OR")){
-//			//clear requestedRows
-//			requestedRows = new ArrayList<RequestedRow>();
-//			nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-//			int attributeCoordinate = findSingleAttributeTHROW(nextCommand);
-//			executeCondition(attributeCoordinate);
-//			computeOR();
-//			recursiveWhereClause(currentCommand);
-//		} else{
-//			throw new InvalidCommand(nextCommand, "[WHERE CLAUSE]", "AND, OR", ";");
-//		}
-//	}
 
 	protected ArrayList<RequestedRow> computeAND(ArrayList<RequestedRow> rowsOne, ArrayList<RequestedRow> rowsTwo){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {

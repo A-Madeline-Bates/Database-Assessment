@@ -82,4 +82,5 @@
 //  - decide whether to implement 'if there is no databaseFiles, create one'
 //  - make some of 'where' methods private
 //  - sort doesAttributeExist in WHERE !!
+//  - test the hello out of WHERE
 
