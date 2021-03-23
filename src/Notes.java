@@ -52,8 +52,8 @@
 //	- decouple DBStore from DBModel
 //	- sort exceptions in DBstore
 //	- fix DBPrint
-//	- fix control structure in DBServer
 //  - decide whether to implement 'if there is no databaseFiles, create one'
+//  - clean up CMDfactory?
 
 //TO DO CMD CLASSES :
 //  - maybe think about/ worry about empty cells?
@@ -66,6 +66,7 @@
 //  - split into more classes/ decouple from model
 //  - break any cyclic dependency
 //  - finish unfinished CMDs
+//  - decouple!!
 
 //TO DO REGEX :
 //  - string literals need some refining in terms of what's allowed - fix that. ANYTHING APART FROM TABS AND SINGLE QUOTES ALLOWED
@@ -75,5 +76,4 @@
 //  - investigate automated testing?
 //  - use methods in combination with one another- build a test strategy
 
-//  - look again at good practice code rules from reading week
-
+//  - delete testing classes before submitting

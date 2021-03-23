@@ -8,7 +8,6 @@ public class DBStore {
     DBModelPath modelPath;
 
     public DBStore(DBModelData modelData, DBModelPath modelPath){
-        //THIS MIGHT BE TOO CLOSELY COUPLED WITH MODELDATA
         this.modelData = modelData;
         this.modelPath  = modelPath;
 
