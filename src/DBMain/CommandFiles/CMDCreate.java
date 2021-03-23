@@ -50,22 +50,26 @@ public class CMDCreate extends CMDType {
 		String secondInstruction = getTokenSafe(DomainType.TABLENAME);
 		if(areWeInDB()) {
 			if (isItAlphNumTHROW(secondInstruction, DomainType.TABLENAME)) {
-				String thirdInstruction = getTokenSafe(DomainType.UNKNOWN);
-				if(isItSemicolonTHROW(thirdInstruction)) {
-					//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
-					String extraInstruction = tokeniser.nextToken();
-					if (isItNullEndTHROW(extraInstruction)) {
-						//pass secondCommand on as it is our tableName
-						createTable(secondInstruction);
-					}
-				}
-				else if(stringMatcher("(", thirdInstruction)){
-					collectAttributes(secondInstruction);
-				}
-				else{
-					throw new InvalidCommand(thirdInstruction, "CREATE [table name]", "(", null);
-				}
+				splitByBrackets(secondInstruction);
 			}
+		}
+	}
+
+	private void splitByBrackets(String tableName) throws ParseExceptions{
+		String thirdInstruction = getTokenSafe(DomainType.UNKNOWN);
+		if(isItSemicolonTHROW(thirdInstruction)) {
+			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
+			String extraInstruction = tokeniser.nextToken();
+			if (isItNullEndTHROW(extraInstruction)) {
+				//pass secondCommand on as it is our tableName
+				createTable(tableName);
+			}
+		}
+		else if(stringMatcher("(", thirdInstruction)){
+			collectAttributes(tableName);
+		}
+		else{
+			throw new InvalidCommand(thirdInstruction, "CREATE [table name]", "(", null);
 		}
 	}
 

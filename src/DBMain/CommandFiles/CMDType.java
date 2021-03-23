@@ -198,13 +198,10 @@ public abstract class CMDType {
 
 
 	protected boolean isItValidValue(String nextInstruction) throws ParseExceptions {
-		if (isItString(nextInstruction)) {
-			return true;
-		} else if (isItBoolean(nextInstruction)) {
-			return true;
-		} else if (isItFloat(nextInstruction)) {
-			return true;
-		} else if (isItInteger(nextInstruction)) {
+		if (isItString(nextInstruction)
+				|| isItBoolean(nextInstruction)
+				|| isItFloat(nextInstruction)
+				|| isItInteger(nextInstruction)) {
 			return true;
 		} else {
 			throw new InvalidValue(nextInstruction);

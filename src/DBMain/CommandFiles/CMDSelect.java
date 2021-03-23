@@ -38,6 +38,7 @@ public class CMDSelect extends CMDWhere {
 					// creating messy data and it being stored. We will use these models for the rest of the operation.
 					setTemporaryPath(peakTwo);
 					setTemporaryData();
+					return;
 				}
 			}
 		}

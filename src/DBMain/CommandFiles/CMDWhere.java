@@ -55,12 +55,7 @@ public abstract class CMDWhere extends CMDType {
 		int attributeCoordinate = findAttribute(nextCommand);
 		//if it's a '(', that indicates we'll be doing a recursive where operation
 		if (stringMatcher("(", nextCommand)) {
-			//we use stacks a lot in these operations. If they are ever used while empty, throw EmptyStackException
-			try {
-				recursiveWhere(currentCommand);
-			} catch(EmptyStackException e){
-				throw new SumError();
-			}
+			callComplexWhere(currentCommand);
 		} //attribute coordinate will be set to negative if attribute doesn't exist
 		else if(attributeCoordinate >= 0){
 			//call getNewTokenSafe so that executeCondition is looking at the correct token
@@ -77,6 +72,15 @@ public abstract class CMDWhere extends CMDType {
 		}
 	}
 
+	private void callComplexWhere(CMDWhere currentCommand) throws ParseExceptions{
+		//we use stacks a lot in these operations. If they are ever used while empty, throw EmptyStackException
+		try {
+			recursiveWhere(currentCommand);
+		} catch(EmptyStackException e){
+			throw new SumError();
+		}
+	}
+
 	/******************************************************
 	 ************* RECURSIVE 'WHERE' OPERATOR *************
 	 *****************************************************/
@@ -87,25 +91,14 @@ public abstract class CMDWhere extends CMDType {
 			openBracketOp(currentCommand);
 		}
 		else if(stringMatcher(")", nextCommand)){
-			while ((!operatorStack.isEmpty()) && (!operatorStack.peek().equals("("))) {
-				String andOrOp = operatorStack.pop();
-				performStackOp(andOrOp);
-			} //pop the stack again to remove the open bracket
-			if(operatorStack.peek().equals("(")) {
-				operatorStack.pop();
-			}
-			recursiveWhere(currentCommand);
+			closeBracketOp(currentCommand);
 		}
 		else if(stringMatcher("AND", nextCommand) || stringMatcher("OR", nextCommand)) {
-			operatorStack.push(nextCommand);
-			recursiveWhere(currentCommand);
+			andOrOp(currentCommand, nextCommand);
 		}
 		//if command equals ";" we are done- we now need to clear the stack and execute the rest of the operations
 		else if(stringMatcher(";", nextCommand)){
-			String extraInstruction = tokeniser.nextToken();
-			if (isItNullEndTHROW(extraInstruction)) {
-				clearUpStack(currentCommand);
-			}
+			semicolonOp(currentCommand);
 		}
 		else{
 			throw new InvalidCommand(nextCommand, "WHERE CLAUSE", "AND, OR", ";");
@@ -118,29 +111,56 @@ public abstract class CMDWhere extends CMDType {
 		//we don't know yet whether this is an open bracket or part of a condition yet, so we can only use
 		//this information to conclude that the last "(" WAS an open bracket
 		if(stringMatcher("(", nextCommand)) {
-			operatorStack.push(nextCommand);
+			operatorStack.push("(");
 			recursiveWhere(currentCommand);
 		}
 		//we have found a condition and NOT an open bracket. If there is only a single bracket it doesn't 'count'-
 		// i.e it is considered part of the condition in this operation
 		else if(attributeCoordinate>=0){
-			//call getNewTokenSafe() to step past attribute name
-			getTokenSafe(DomainType.ATTRIBUTENAME);
-			//clear requested rows
-			requestedRows = new ArrayList<RequestedRow>();
-			executeCondition(attributeCoordinate);
-			nextCommand = getTokenSafe(DomainType.UNKNOWN);
-			if(nextCommand.equals(")")){
-				//make sure this is pushing the data and not a pointer to the data :/
-				rowStack.push(requestedRows);
-				recursiveWhere(currentCommand);
-			} else{
-				throw new InvalidCommand(nextCommand, "[condition]", ")", null);
-			}
+			conditionOp(currentCommand, attributeCoordinate);
 		}
 		else{
 			throw new InvalidCommand(nextCommand, "WHERE (", "(", "[condition]");
 		}
+	}
+
+	private void conditionOp(CMDWhere currentCommand, int attributeCoordinate) throws ParseExceptions, EmptyStackException{
+		//call getNewTokenSafe() to step past attribute name
+		getTokenSafe(DomainType.ATTRIBUTENAME);
+		//clear requested rows
+		requestedRows = new ArrayList<RequestedRow>();
+		executeCondition(attributeCoordinate);
+		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
+		if(nextCommand.equals(")")){
+			//make sure this is pushing the data and not a pointer to the data :/
+			rowStack.push(requestedRows);
+			recursiveWhere(currentCommand);
+		} else{
+			throw new InvalidCommand(nextCommand, "[condition]", ")", null);
+		}
+	}
+
+	private void closeBracketOp(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException {
+		while ((!operatorStack.isEmpty()) && (!operatorStack.peek().equals("("))) {
+			String andOrOp = operatorStack.pop();
+			performStackOp(andOrOp);
+		} //pop the stack again to remove the open bracket
+		if(operatorStack.peek().equals("(")) {
+			operatorStack.pop();
+		}
+		recursiveWhere(currentCommand);
+	}
+
+	private void semicolonOp(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
+		String extraInstruction = tokeniser.nextToken();
+		if (isItNullEndTHROW(extraInstruction)) {
+			clearUpStack(currentCommand);
+		}
+	}
+
+	private void andOrOp(CMDWhere currentCommand, String nextCommand) throws ParseExceptions, EmptyStackException{
+		operatorStack.push(nextCommand);
+		recursiveWhere(currentCommand);
 	}
 
 	private void performStackOp(String andOrOp) throws EmptyStackException{
@@ -228,23 +248,41 @@ public abstract class CMDWhere extends CMDType {
 	}
 
 	protected OperatorType returnOpType(String operator) throws ParseExceptions{
-		if(stringMatcher("==", operator)){
+		if(isOpTypeNum(operator)){
+			return OperatorType.NUMERICAL;
+		} else if(isOpTypeUniversal(operator)){
 			return OperatorType.UNIVERSAL;
-		} else if(stringMatcher(">", operator)){
-			return OperatorType.NUMERICAL;
-		} else if(stringMatcher("<", operator)){
-			return OperatorType.NUMERICAL;
-		} else if(stringMatcher(">=", operator)){
-			return OperatorType.NUMERICAL;
-		} else if(stringMatcher("<=", operator)){
-			return OperatorType.NUMERICAL;
-		} else if(stringMatcher("!=", operator)){
-			return OperatorType.UNIVERSAL;
-		} else if(stringMatcher("LIKE", operator)){
+		} else if(isOpTypeString(operator)){
 			return OperatorType.STRING;
 		} else{
 			throw new InvalidCommand(operator, "WHERE [attributename]", "[operator]", null);
 		}
+	}
+
+	private boolean isOpTypeNum(String operator){
+		if(stringMatcher(">", operator) ||
+				stringMatcher("<", operator) ||
+				stringMatcher(">=", operator) ||
+				stringMatcher("<=", operator)){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isOpTypeUniversal(String operator){
+		if(stringMatcher("==", operator)){
+			return true;
+		} else if(stringMatcher("!=", operator)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isOpTypeString(String operator){
+		if(stringMatcher("LIKE", operator)){
+			return true;
+		}
+		return false;
 	}
 
 	/******************************************************
@@ -271,21 +309,40 @@ public abstract class CMDWhere extends CMDType {
 	protected void assignByOperator(int i, String opCommand, float tableValue, float comparisonValue) {
 		switch(opCommand){
 			case ">":
-				if(tableValue > comparisonValue){
-					requestedRows.set(i, RequestedRow.TRUE);
-				} break;
+				setLessThan(i, tableValue, comparisonValue);
+				break;
 			case "<":
-				if(tableValue < comparisonValue){
-					requestedRows.set(i, RequestedRow.TRUE);
-				} break;
+				setMoreThan(i, tableValue, comparisonValue);
+				break;
 			case ">=":
-				if(tableValue >= comparisonValue){
-					requestedRows.set(i, RequestedRow.TRUE);
-				} break;
+				setLessThanEqual(i, tableValue, comparisonValue);
+				break;
 			default: //opCommand doesn't equal any of the above, it has to equal "<="
-				if(tableValue <= comparisonValue){
-					requestedRows.set(i, RequestedRow.TRUE);
-				}
+				setMoreThanEqual(i, tableValue, comparisonValue);
+		}
+	}
+
+	private void setLessThan(int i, float tableValue, float comparisonValue){
+		if(tableValue > comparisonValue){
+			requestedRows.set(i, RequestedRow.TRUE);
+		}
+	}
+
+	private void setMoreThan(int i, float tableValue, float comparisonValue){
+		if(tableValue < comparisonValue){
+			requestedRows.set(i, RequestedRow.TRUE);
+		}
+	}
+
+	private void setLessThanEqual(int i, float tableValue, float comparisonValue){
+		if(tableValue >= comparisonValue){
+			requestedRows.set(i, RequestedRow.TRUE);
+		}
+	}
+
+	private void setMoreThanEqual(int i, float tableValue, float comparisonValue){
+		if(tableValue <= comparisonValue){
+			requestedRows.set(i, RequestedRow.TRUE);
 		}
 	}
 

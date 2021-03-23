@@ -44,7 +44,6 @@
 // - check if insert into adds empty strings if user doesn't supply enough strings, or it just denies the request.
 
 	//TO DO SIMPLE/AESTHETIC :
-// - 	the string recognition methods could all be made into one
 // - 	separate more methods from their exception statements to allow testing
 //  - 	break up excessively large methods
 //  - 	unpick some of the weird things we've done with booleans?
