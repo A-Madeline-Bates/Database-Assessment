@@ -56,7 +56,6 @@
 //  - decide whether to implement 'if there is no databaseFiles, create one'
 
 //TO DO CMD CLASSES :
-//  - SPLIT cmdtype further down the line
 //  - maybe think about/ worry about empty cells?
 //  - CREATE shouldn't automatically set USE- change that.
 //  - sort out LIKE in SELECT
@@ -66,6 +65,7 @@
 //  - stop users updating/changing ID column
 //  - split into more classes/ decouple from model
 //  - break any cyclic dependency
+//  - finish unfinished CMDs
 
 //TO DO REGEX :
 //  - string literals need some refining in terms of what's allowed - fix that. ANYTHING APART FROM TABS AND SINGLE QUOTES ALLOWED

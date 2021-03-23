@@ -40,12 +40,10 @@ public class CMDAlter extends CMDType {
 		}
 	}
 
-	//check this works!
 	private void addColumn(String attributeName){
 		storageData.addColumn(attributeName);
 	}
 
-	//check this works!
 	private void dropColumn(int attributeCoordinate){
 		storageData.deleteColumn(attributeCoordinate);
 	}

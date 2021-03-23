@@ -46,25 +46,9 @@ public class DBServer
         //incomingCommand contains the message we're going to use.
         String incomingCommand = socketReader.readLine();
         DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
-
-        processParse(tokeniser);
+        processCommand(tokeniser);
+        //replace exceptionMessage with general message
         socketWriter.write(exceptionMessage);
-
-//        //this takes a copy of server so that we can execute our command
-//        //in order to execute a command we must appropriately manipulate our data,
-//        //store the result, and then print the appropriate message
-//        //perhaps we should get command.query to return a whole set of data (like DBModel)
-//        //so that a response can be set here
-//        commandClass.query(this);
-//
-//        //set an error and response Class in model which can be set in DBParse and reread here with
-//        //if(DBModelError.isError=true) then print "[ERROR] + DBModelError.getError"
-//        //else print "[OK] + DBModelResponse.getResponse()";
-//
-//        //DBStore(DBModelData, DBModelPath);
-//        //DBRespond(socketWriter, DBModelData, DBModelPath, DBModelResponse, DBModelError);
-//        //(Definitely work out if can just pass DBModel as one)
-
         //clear exception message
         this.exceptionMessage = "";
         //This is used for EOF
@@ -81,24 +65,29 @@ public class DBServer
         this.cmdFactory = new DBCommandFactory();
     }
 
-    private void processParse(DBTokeniser tokeniser) {
+    private void processCommand(DBTokeniser tokeniser) {
         try {
             //this instantiates the command class we are using based on incomingCommand
             CMDType commandClass = cmdFactory.createCMD(tokeniser);
-            //this is too many calls to commandClass- create a nice workaround
-            //we could put getters and setting is DBServer and do it the other way around?
-            //this gives the model to our class
-            commandClass.setModel(modelPath);
-            commandClass.setTokeniser(tokeniser);
-            commandClass.transformModel();
+            parseData(commandClass, tokeniser);
             modelData = commandClass.getStorageData();
             modelPath = commandClass.getStoragePath();
-            //this has to be within process parse because we want to skip DBStore if an exception is called.
-            //We need to create a fix for this.
-            new DBStore(modelData, modelPath);
+            execute(modelData, modelPath);
         } catch (ParseExceptions exception) {
             this.exceptionMessage = "[ERROR]\nCommand exception: " + exception;
         }
+    }
+
+    private void parseData(CMDType commandClass, DBTokeniser tokeniser) throws ParseExceptions{
+        commandClass.setModel(modelPath);
+        commandClass.setTokeniser(tokeniser);
+        commandClass.transformModel();
+    }
+
+    private void execute(DBModelData modelData, DBModelPath modelPath) throws ParseExceptions{
+        new DBStore(modelData, modelPath);
+//          could just put DBPrint in here and if there are no errors, it will print [OK]
+//          commandClass.getExitMessage();
     }
 
     public static void main(String args[])
