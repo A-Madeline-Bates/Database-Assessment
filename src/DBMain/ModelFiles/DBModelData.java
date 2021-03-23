@@ -4,13 +4,13 @@ import java.util.*;
 public class DBModelData extends DBModel {
 	//Should need a method to return column coordinate by name
 
-	public void setColumnDataFromLoad(String command) {
+	public void setColumnsFromFile(String command) {
 		columnNames.addAll(Arrays.asList(command.split("\\t")));
 		columnNames.removeAll(Arrays.asList("", null));
 	}
 
 	//This should only ever be called after clearing the model
-	public void setColumnDataFromSQL(ArrayList<String> newColNames) {
+	public void setColumnsFromSQL(ArrayList<String> newColNames) {
 		//adding an ID column
 		columnNames.add("ID");
 		columnNames.addAll(newColNames);
@@ -25,7 +25,7 @@ public class DBModelData extends DBModel {
 		return columnNames.size();
 	}
 
-	public void setRowsDataFromLoad(String command) {
+	public void setRowsFromFile(String command) {
 		//setDataArray() is called row by row, and we are exploiting
 		//this to initialise each row as we go
 		List<String> rowData = new ArrayList<>();
@@ -36,7 +36,7 @@ public class DBModelData extends DBModel {
 		row++;
 	}
 
-	public void setRowsDataFromSQL(ArrayList<String> newValues) {
+	public void setRowsFromSQL(ArrayList<String> newValues) {
 		List<String> rowData = new ArrayList<>();
 		tableData.add(rowData);
 		//setting an ID number for the row

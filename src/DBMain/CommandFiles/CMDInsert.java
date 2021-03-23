@@ -65,7 +65,7 @@ public class CMDInsert extends CMDType {
 			//we can now load the data into our 'storage' model- i.e the one that will be pushed to file
 			new DBLoad(storageData, databaseName, tableName);
 			storagePath.setFilename(tableName);
-			storageData.setRowsDataFromSQL(valueList);
+			storageData.setRowsFromSQL(valueList);
 		}
 	}
 

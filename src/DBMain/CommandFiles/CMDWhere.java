@@ -59,13 +59,6 @@ public abstract class CMDWhere extends CMDType {
 		return false;
 	}
 
-	protected boolean isItWhereThrow(String nextCommand, String prevCommand) throws ParseExceptions{
-		if (isItWhere(nextCommand)) {
-			return true;
-		}
-		throw new InvalidCommand(nextCommand, prevCommand, "WHERE", null) ;
-	}
-
 	protected void requestAllRows(){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			finalRows.add(RequestedRow.TRUE);
@@ -117,7 +110,7 @@ public abstract class CMDWhere extends CMDType {
 		else if(nextCommand.equals(")")){
 			while ((!operatorStack.isEmpty()) && (!operatorStack.peek().equals("("))) {
 				String andOrOp = operatorStack.pop();
-				performStackOperation(andOrOp);
+				performStackOp(andOrOp);
 			} //pop the stack again to remove the open bracket
 			if(operatorStack.peek().equals("(")) {
 				operatorStack.pop();
@@ -170,7 +163,7 @@ public abstract class CMDWhere extends CMDType {
 		}
 	}
 
-	private void performStackOperation(String andOrOp) throws EmptyStackException{
+	private void performStackOp(String andOrOp) throws EmptyStackException{
 		ArrayList<RequestedRow> rowsOne = rowStack.pop();
 		ArrayList<RequestedRow> rowsTwo = rowStack.pop();
 		if(andOrOp.equalsIgnoreCase("OR")){
@@ -189,7 +182,7 @@ public abstract class CMDWhere extends CMDType {
 				throw new SumError();
 			}
 			String andOrOp = operatorStack.pop();
-			performStackOperation(andOrOp);
+			performStackOp(andOrOp);
 		}
 		//pop what should hopefully be our final result from the stack
 		finalRows.addAll(rowStack.pop());
@@ -227,7 +220,7 @@ public abstract class CMDWhere extends CMDType {
 	protected void executeCondition(int attributeCoordinate) throws ParseExceptions {
 		String opCommand = getTokenSafe(DomainType.OPERATOR);
 		//find the type of our operator- if it's not valid, an exception will be thrown
-		OperatorType opType = returnOperatorType(opCommand);
+		OperatorType opType = returnOpType(opCommand);
 		splitByOpType(opType, opCommand, attributeCoordinate);
 	}
 
@@ -242,19 +235,19 @@ public abstract class CMDWhere extends CMDType {
 		switch(opType){
 			case NUMERICAL:
 				isItNumTHROW(valueCommand);
-				searchAttributeNum(attributeCoordinate, opCommand, valueCommand);
+				setNumRows(attributeCoordinate, opCommand, valueCommand);
 				break;
 			case STRING : //we are currently treating '==' and LIKE (i.e STRING and UNIVERSAL) as the same.
 				isItStringTHROW(valueCommand);
-				searchAttributeUniversal(attributeCoordinate, opCommand, valueCommand);
+				setUniveralRows(attributeCoordinate, opCommand, valueCommand);
 				break;
 			default: //default means the opType is universal, so we only need to know if it's a valid value
 				isItValidValue(valueCommand);
-				searchAttributeUniversal(attributeCoordinate, opCommand, valueCommand);
+				setUniveralRows(attributeCoordinate, opCommand, valueCommand);
 		}
 	}
 
-	protected OperatorType returnOperatorType(String operator) throws ParseExceptions{
+	protected OperatorType returnOpType(String operator) throws ParseExceptions{
 		if(operator.equals("==")){
 			return OperatorType.UNIVERSAL;
 		} else if(operator.equals(">")){
@@ -278,7 +271,7 @@ public abstract class CMDWhere extends CMDType {
 	 ************* NUMERICAL CONDITION METHODS ************
 	 *****************************************************/
 
-	protected void searchAttributeNum(int attributeCoordinate, String opCommand, String valueCommand){
+	protected void setNumRows(int attributeCoordinate, String opCommand, String valueCommand){
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
@@ -320,7 +313,7 @@ public abstract class CMDWhere extends CMDType {
 	 ********* STRING/UNIVERSAL CONDITION METHODS *********
 	 *****************************************************/
 
-	protected void searchAttributeUniversal(int attributeCoordinate, String opCommand, String valueCommand){
+	protected void setUniveralRows(int attributeCoordinate, String opCommand, String valueCommand){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			requestedRows.add(RequestedRow.FALSE);
 			if(opCommand.equals("==") || opCommand.equalsIgnoreCase("LIKE")){

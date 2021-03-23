@@ -18,12 +18,18 @@ public class CMDDelete extends CMDWhere {
 				setTemporaryPath(secondCommand);
 				setTemporaryData();
 				String thirdCommand = getTokenSafe(DomainType.WHERE);
-				if(isItWhereThrow(thirdCommand, "DELETE FROM [table]")) {
+				if(isItWhereTHROW(thirdCommand, "DELETE FROM [table]")) {
 					splitIfBrackets(this);
-					//processForcedWhere(this);
 				}
 			}
 		}
+	}
+
+	protected boolean isItWhereTHROW(String nextCommand, String prevCommand) throws ParseExceptions{
+		if (isItWhere(nextCommand)) {
+			return true;
+		}
+		throw new InvalidCommand(nextCommand, prevCommand, "WHERE", null) ;
 	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){

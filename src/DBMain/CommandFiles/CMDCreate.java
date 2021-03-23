@@ -86,7 +86,7 @@ public class CMDCreate extends CMDType {
 		//the storagePath and storageData model will be stored to file when DBStore is called.
 		storagePath.setDatabaseName(databaseName);
 		storagePath.setFilename(tableName);
-		storageData.setColumnDataFromSQL(attributeNames);
+		storageData.setColumnsFromSQL(attributeNames);
 	}
 
 	private void collectAttributes(String tableName) throws ParseExceptions{

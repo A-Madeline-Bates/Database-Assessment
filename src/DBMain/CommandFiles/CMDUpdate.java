@@ -15,9 +15,8 @@ public class CMDUpdate extends CMDWhere {
 			setTemporaryData();
 			String secondCommand = getTokenSafe(DomainType.SET);
 			if (isItSet(secondCommand)) {
-				collectNameValList();
+				processNameVals();
 				splitIfBrackets(this);
-				//processForcedWhere(this);
 			}
 		}
 	}
@@ -29,16 +28,16 @@ public class CMDUpdate extends CMDWhere {
 		throw new InvalidCommand(nextCommand, "UPDATE [tablename]", "SET", null);
 	}
 
-	private void collectNameValList() throws ParseExceptions {
-		initialiseColsArray();
+	private void processNameVals() throws ParseExceptions {
+		initColumnArray();
 		String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		int attributeCoordinate = findAttributeTHROW(attributeCommand);
-		processNameValPair(attributeCoordinate);
+		setNameVal(attributeCoordinate);
 		isItCommaSeparated(DomainType.ATTRIBUTENAME, "WHERE");
-		nameValsRecursive();
+		collectNameVals();
 	}
 
-	private void nameValsRecursive() throws ParseExceptions{
+	private void collectNameVals() throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		int attributeCoordinate = findAttribute(nextCommand);
 		//if it's a 'WHERE', leave recursive loop
@@ -47,16 +46,16 @@ public class CMDUpdate extends CMDWhere {
 		}
 		//attribute coordinate will be set to negative if it doesn't exist
 		else if(attributeCoordinate >= 0){
-			processNameValPair(attributeCoordinate);
+			setNameVal(attributeCoordinate);
 			isItCommaSeparated(DomainType.ATTRIBUTENAME, "WHERE");
-			nameValsRecursive();
+			collectNameVals();
 		}
 		else{
 			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename());
 		}
 	}
 
-	private void processNameValPair(int attributeCoordinate) throws ParseExceptions{
+	private void setNameVal(int attributeCoordinate) throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.OPERATOR);
 		if(isItEquals(nextCommand)) {
 			nextCommand = getTokenSafe(DomainType.VALUE);
@@ -71,7 +70,7 @@ public class CMDUpdate extends CMDWhere {
 	//creating an array to hold our name value pair data. We are initialising all cells to 'n/a' because that would
 	//not be a valid value in this context, and therefore there is no chance of it clashing with a string entered by the
 	//user.
-	private void initialiseColsArray(){
+	private void initColumnArray(){
 		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
 			updatedColumns.add("n/a");
 		}
