@@ -93,7 +93,7 @@ public abstract class CMDWhere extends CMDType {
 		} //attribute coordinate will be set to negative if attribute doesn't exist
 		else if(attributeCoordinate >= 0){
 			//call getNewTokenSafe so that executeCondition is looking at the correct token
-			getNewTokenSafe(DomainType.UNKNOWN);
+			getNewTokenSafe(DomainType.ATTRIBUTENAME);
 			executeCondition(attributeCoordinate);
 			//the first set of rows we find with WHERE we can consider all relevant
 			finalRows.addAll(requestedRows);

@@ -40,19 +40,9 @@
 
 
 
-
-
 	//THINGS TO CHECK :
-// - check whether we need to close files? readers/writers
-// - whether alphanum can contain special characters
-// - make sure there are no case (ie lower/upper) problems
 // - check if insert into adds empty strings if user doesn't supply enough strings, or it just denies the request.
-// - check everything is in camelcase
-// - are we passing things that are global to the class?
-// - is it a better idea to always create temporary data models to load to rather than
-//       having continuous data + clearing it? - turn make temp model into its own method
-// - got through every equals and make sure IgnoreCase is selected
-// - check domaintypes are correct
+// - 	check everything is in camelcase
 // - the string recognition methods could all be made into one
 
 	//TO DO :
@@ -83,4 +73,5 @@
 //  - make some of 'where' methods private
 //  - sort doesAttributeExist in WHERE !!
 //  - test the hello out of WHERE
+//  - fix values string literals
 

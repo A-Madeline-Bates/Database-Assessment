@@ -11,27 +11,24 @@ public class CMDInsert extends CMDType {
 	public void transformModel() throws ParseExceptions {
 		//divide word identifiers in 'isIt...' methods
 		String firstCommand = getNewTokenSafe(DomainType.INTO);
-		// !! maybe don't need areweinadatabase? If we are outside, file won't be found
-		if(areWeInADatabase()) {
-			if (firstCommand.equalsIgnoreCase("INTO")) {
-				String secondCommand = getNewTokenSafe(DomainType.TABLENAME);
-				if (doesTableExist(secondCommand)) {
-					String thirdCommand = getNewTokenSafe(DomainType.VALUES);
-					if (thirdCommand.equalsIgnoreCase("VALUES")) {
-						String fourthCommand = getNewTokenSafe(DomainType.BRACKET);
-						if (fourthCommand.equals("(")) {
-							//pass secondCommand on as it is our tableName
-							collectValues(secondCommand);
-						} else {
-							throw new InvalidCommand(fourthCommand, "VALUES", "(", null);
-						}
+		if (firstCommand.equalsIgnoreCase("INTO")) {
+			String secondCommand = getNewTokenSafe(DomainType.TABLENAME);
+			if (doesTableExist(secondCommand)) {
+				String thirdCommand = getNewTokenSafe(DomainType.VALUES);
+				if (thirdCommand.equalsIgnoreCase("VALUES")) {
+					String fourthCommand = getNewTokenSafe(DomainType.BRACKET);
+					if (fourthCommand.equals("(")) {
+						//pass secondCommand on as it is our tableName
+						collectValues(secondCommand);
 					} else {
-						throw new InvalidCommand(thirdCommand, "INSERT INTO [tablename]", "VALUES", null);
+						throw new InvalidCommand(fourthCommand, "VALUES", "(", null);
 					}
+				} else {
+					throw new InvalidCommand(thirdCommand, "INSERT INTO [tablename]", "VALUES", null);
 				}
-			} else {
-				throw new InvalidCommand(firstCommand, "INSERT", "INTO", null);
 			}
+		} else {
+			throw new InvalidCommand(firstCommand, "INSERT", "INTO", null);
 		}
 	}
 
