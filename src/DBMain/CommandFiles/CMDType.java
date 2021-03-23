@@ -146,6 +146,21 @@ public abstract class CMDType {
 		}
 	}
 
+
+	protected boolean isItFrom(String nextCommand){
+		if (nextCommand.equalsIgnoreCase("FROM")) {
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean isItFromTHROW(String nextCommand, String prevCommand) throws ParseExceptions{
+		if (isItFrom(nextCommand)) {
+			return true;
+		}
+		throw new InvalidCommand(nextCommand, prevCommand, "FROM", null);
+	}
+
 	protected boolean isItComma(String nextCommand) {
 		if (nextCommand.equals(",")) {
 			return true;
