@@ -60,7 +60,7 @@ public class DBModelData extends DBModel {
 	public void addColumn(String colName){
 		columnNames.add(colName);
 		for(int i=0; i<getRowNumber(); i++){
-			tableData.get(i).add("");
+			tableData.get(i).add("''");
 		}
 	}
 

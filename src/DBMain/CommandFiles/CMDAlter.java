@@ -12,6 +12,8 @@ public class CMDAlter extends CMDType {
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
 				//split based on whether we're doing an 'add' or 'drop' operation
+				new DBLoad(storageData, storagePath.getDatabaseName(), secondCommand);
+				storagePath.setFilename(secondCommand);
 				addDropSplit();
 			}
 		}
@@ -29,7 +31,7 @@ public class CMDAlter extends CMDType {
 		} else if(stringMatcher("DROP", nextCommand)){
 			//searching for preexisting attributes
 			String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-			int attributeCoordinate = findAttributeTHROW(attributeCommand);
+			int attributeCoordinate = findAttributeTHROW(attributeCommand, storagePath, storageData);
 			if(isItLineEndTHROW()) {
 				dropColumn(attributeCoordinate);
 			}

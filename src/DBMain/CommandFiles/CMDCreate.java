@@ -57,7 +57,7 @@ public class CMDCreate extends CMDType {
 
 	private void splitByBrackets(String tableName) throws ParseExceptions{
 		String thirdInstruction = getTokenSafe(DomainType.UNKNOWN);
-		if(isItSemicolonTHROW(thirdInstruction)) {
+		if(stringMatcher(";", thirdInstruction)) {
 			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 			String extraInstruction = tokeniser.nextToken();
 			if (isItNullEndTHROW(extraInstruction)) {

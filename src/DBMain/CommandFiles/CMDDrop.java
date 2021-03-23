@@ -46,7 +46,7 @@ public class CMDDrop extends CMDType {
 	}
 
 	private void processTable() throws ParseExceptions {
-		String nextCommand = getTokenSafe(DomainType.DATABASENAME);
+		String nextCommand = getTokenSafe(DomainType.TABLENAME);
 		if(doesTableExist(nextCommand)) {
 			if (isItLineEndTHROW()) {
 				//if filename in use is the one we're deleting, remove it

@@ -48,7 +48,7 @@ public class CMDSelect extends CMDWhere {
 	 *****************************************************/
 
 	private void processAttributes(String firstCommand) throws ParseExceptions{
-		int attributeCoordinate = findAttribute(firstCommand);
+		int attributeCoordinate = findAttribute(firstCommand, temporaryDataModel);
 		//check if it's a 'select all' asterisk
 		if(stringMatcher("*", firstCommand)){
 			String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
@@ -59,6 +59,7 @@ public class CMDSelect extends CMDWhere {
 		}
 		//check if it's a normal attribute that's present in our table. If so, recursively check for more attributes.
 		else if(attributeCoordinate >= 0){
+			requestedColumns.add(attributeCoordinate);
 			isItCommaSeparated(DomainType.ATTRIBUTENAME, "FROM");
 			collectAttributes();
 		}
@@ -70,7 +71,7 @@ public class CMDSelect extends CMDWhere {
 
 	private void collectAttributes() throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-		int attributeCoordinate = findAttribute(nextCommand);
+		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
 		//if it's a 'FROM', leave recursive loop
 		if (stringMatcher("FROM", nextCommand)) {
 			return;

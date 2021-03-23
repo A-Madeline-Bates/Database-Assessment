@@ -49,7 +49,7 @@ public abstract class CMDWhere extends CMDType {
 	//do not need to process the where clause recursively
 	protected void splitIfBrackets(CMDWhere currentCommand) throws ParseExceptions{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
-		int attributeCoordinate = findAttribute(nextCommand);
+		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
 		//if it's a '(', that indicates we'll be doing a recursive where operation
 		if (stringMatcher("(", nextCommand)) {
 			callComplexWhere(currentCommand);
@@ -104,7 +104,7 @@ public abstract class CMDWhere extends CMDType {
 
 	private void openBracketOp(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
-		int attributeCoordinate = findAttribute(nextCommand);
+		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
 		//we don't know yet whether this is an open bracket or part of a condition yet, so we can only use
 		//this information to conclude that the last "(" WAS an open bracket
 		if(stringMatcher("(", nextCommand)) {

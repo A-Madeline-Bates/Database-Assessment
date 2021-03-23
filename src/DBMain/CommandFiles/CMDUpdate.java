@@ -23,7 +23,7 @@ public class CMDUpdate extends CMDWhere {
 	private void processNameVals() throws ParseExceptions {
 		initColumnArray();
 		String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-		int attributeCoordinate = findAttributeTHROW(attributeCommand);
+		int attributeCoordinate = findAttributeTHROW(attributeCommand, temporaryPathModel, temporaryDataModel);
 		setNameVal(attributeCoordinate);
 		isItCommaSeparated(DomainType.ATTRIBUTENAME, "WHERE");
 		collectNameVals();
@@ -31,7 +31,7 @@ public class CMDUpdate extends CMDWhere {
 
 	private void collectNameVals() throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-		int attributeCoordinate = findAttribute(nextCommand);
+		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
 		//if it's a 'WHERE', leave recursive loop
 		if (stringMatcher("WHERE", nextCommand)) {
 			return;
