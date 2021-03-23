@@ -1,8 +1,6 @@
 package DBMain.CommandFiles;
 import DBMain.*;
-import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.DomainType;
-import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;
 import DBMain.ParseExceptions.RequestedRow;
 

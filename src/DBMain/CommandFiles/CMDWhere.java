@@ -1,7 +1,4 @@
 package DBMain.CommandFiles;
-
-import DBMain.DBLoad;
-import DBMain.ModelFiles.DBModelData;
 import DBMain.ParseExceptions.*;
 import java.util.*;
 
@@ -38,7 +35,7 @@ public abstract class CMDWhere extends CMDType {
 		}
 	}
 
-	protected void requestAllRows(){
+	private void requestAllRows(){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			finalRows.add(RequestedRow.TRUE);
 		}
@@ -192,7 +189,7 @@ public abstract class CMDWhere extends CMDType {
 		currentCommand.executeCMD(finalRows);
 	}
 
-	protected ArrayList<RequestedRow> computeAND(ArrayList<RequestedRow> rowsOne, ArrayList<RequestedRow> rowsTwo){
+	private ArrayList<RequestedRow> computeAND(ArrayList<RequestedRow> rowsOne, ArrayList<RequestedRow> rowsTwo){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {
 			if((rowsOne.get(i) == RequestedRow.TRUE) && (rowsTwo.get(i) == RequestedRow.TRUE)){
 				rowsOne.set(i, RequestedRow.TRUE);
@@ -204,7 +201,7 @@ public abstract class CMDWhere extends CMDType {
 		return rowsOne;
 	}
 
-	protected ArrayList<RequestedRow> computeOR(ArrayList<RequestedRow> rowsOne, ArrayList<RequestedRow> rowsTwo){
+	private ArrayList<RequestedRow> computeOR(ArrayList<RequestedRow> rowsOne, ArrayList<RequestedRow> rowsTwo){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {
 			if((rowsOne.get(i) == RequestedRow.TRUE) || (rowsTwo.get(i) == RequestedRow.TRUE)){
 				rowsOne.set(i, RequestedRow.TRUE);
@@ -217,7 +214,7 @@ public abstract class CMDWhere extends CMDType {
 	 ****************** CONDITION METHODS *****************
 	 *****************************************************/
 
-	protected void executeCondition(int attributeCoordinate) throws ParseExceptions {
+	private void executeCondition(int attributeCoordinate) throws ParseExceptions {
 		String opCommand = getTokenSafe(DomainType.OPERATOR);
 		//find the type of our operator- if it's not valid, an exception will be thrown
 		OperatorType opType = returnOpType(opCommand);
@@ -228,7 +225,7 @@ public abstract class CMDWhere extends CMDType {
 	 *********** SPLIT CONDITION BY OPERATOR TYPE **********
 	 *****************************************************/
 
-	protected void splitByOpType(OperatorType opType, String opCommand, int attributeCoordinate) throws ParseExceptions{
+	private void splitByOpType(OperatorType opType, String opCommand, int attributeCoordinate) throws ParseExceptions{
 		String valueCommand = getTokenSafe(DomainType.VALUE);
 		//this operation checks whether a value is valid for the operator (throwing an error if not). It then
 		//directs it to the appropriate method.
@@ -247,7 +244,7 @@ public abstract class CMDWhere extends CMDType {
 		}
 	}
 
-	protected OperatorType returnOpType(String operator) throws ParseExceptions{
+	private OperatorType returnOpType(String operator) throws ParseExceptions{
 		if(isOpTypeNum(operator)){
 			return OperatorType.NUMERICAL;
 		} else if(isOpTypeUniversal(operator)){
@@ -289,7 +286,7 @@ public abstract class CMDWhere extends CMDType {
 	 ************* NUMERICAL CONDITION METHODS ************
 	 *****************************************************/
 
-	protected void setNumRows(int attributeCoordinate, String opCommand, String valueCommand){
+	private void setNumRows(int attributeCoordinate, String opCommand, String valueCommand){
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
@@ -306,7 +303,7 @@ public abstract class CMDWhere extends CMDType {
 		}
 	}
 
-	protected void assignByOperator(int i, String opCommand, float tableValue, float comparisonValue) {
+	private void assignByOperator(int i, String opCommand, float tableValue, float comparisonValue) {
 		switch(opCommand){
 			case ">":
 				setLessThan(i, tableValue, comparisonValue);
@@ -350,7 +347,7 @@ public abstract class CMDWhere extends CMDType {
 	 ********* STRING/UNIVERSAL CONDITION METHODS *********
 	 *****************************************************/
 
-	protected void setUniveralRows(int attributeCoordinate, String opCommand, String valueCommand){
+	private void setUniveralRows(int attributeCoordinate, String opCommand, String valueCommand){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			requestedRows.add(RequestedRow.FALSE);
 			if(stringMatcher("==", opCommand) || stringMatcher("LIKE", opCommand)){

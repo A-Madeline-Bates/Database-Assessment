@@ -45,9 +45,7 @@
 
 	//TO DO SIMPLE/AESTHETIC :
 // - 	separate more methods from their exception statements to allow testing
-//  - 	break up excessively large methods
 //  - 	unpick some of the weird things we've done with booleans?
-//  - 	make some of 'where' methods private
 
 	//TO DO DB CLASSES :
 //	- find a fix to take dbstore out of parse try block
@@ -56,8 +54,6 @@
 //	- fix DBPrint
 //	- fix control structure in DBServer
 //  - decide whether to implement 'if there is no databaseFiles, create one'
-
-//  - make CMDCondition
 
 //TO DO CMD CLASSES :
 //  - SPLIT cmdtype further down the line

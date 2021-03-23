@@ -1,6 +1,5 @@
 package DBMain.CommandFiles;
 import DBMain.*;
-import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.*;
 
 import java.util.ArrayList;

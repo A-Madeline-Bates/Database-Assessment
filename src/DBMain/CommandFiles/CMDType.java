@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
-import java.util.regex.Pattern;
 
 public abstract class CMDType {
 	//these are the models that will get 'stored' by DBStore at the end of handleIncomingCommand
