@@ -42,36 +42,43 @@
 
 	//THINGS TO CHECK :
 // - check if insert into adds empty strings if user doesn't supply enough strings, or it just denies the request.
-// - 	check everything is in camelcase
-// - the string recognition methods could all be made into one
 
-	//TO DO :
-//  - separate more methods from their exception statements to allow testing
+	//TO DO SIMPLE/AESTHETIC :
+// - 	check everything is in camelcase
+// - 	the string recognition methods could all be made into one
+// - 	separate more methods from their exception statements to allow testing
+//  - 	break up excessively large methods
+//  - 	shorten method names - prioritise short method names over perfect ones
+//  - 	unpick some of the weird things we've done with booleans?
+//  - 	make some of 'where' methods private
+
+	//TO DO DB CLASSES :
 //	- find a fix to take dbstore out of parse try block
 //	- decouple DBStore from DBModel
 //	- sort exceptions in DBstore
 //	- fix DBPrint
 //	- fix control structure in DBServer
+//  - decide whether to implement 'if there is no databaseFiles, create one'
+
+//TO DO CMD CLASSES :
 //  - SPLIT cmdtype further down the line
-//  - investigate automated testing?
 //  - maybe think about/ worry about empty cells?
 //  - CREATE shouldn't automatically set USE- change that.
-//  - break up excessively large methods
-//  - string literals need some refining in terms of what's allowed - fix that. ANYTHING APART FROM TABS AND SINGLE QUOTES ALLOWED
-//  - shorten method names - prioritise short method names over perfect ones
-//  - make sure comma separation is completely secure
-//  - use methods in combination with one another- build a test strategy
-//  - unpick some of the weird things we've done with booleans?
-//  - add maths operators to tokeniser split
 //  - sort out LIKE in SELECT
-//  - move enum classes?
+//	- implement JOIN
 //  - consider fixing extra comma err on lists
 //  - fix program crashing when empty command is entered
 //  - stop users updating/changing ID column
-//  - fix WHERE bracket problem!
-//  - decide whether to implement 'if there is no databaseFiles, create one'
-//  - make some of 'where' methods private
-//  - sort doesAttributeExist in WHERE !!
-//  - test the hello out of WHERE
-//  - fix values string literals
+//  - split into more classes/ decouple from model
+//  - break any cyclic dependency
+
+//TO DO REGEX :
+//  - string literals need some refining in terms of what's allowed - fix that. ANYTHING APART FROM TABS AND SINGLE QUOTES ALLOWED
+//  - add maths operators to tokeniser split
+
+//TO DO TESTING/GENERAL :
+//  - investigate automated testing?
+//  - use methods in combination with one another- build a test strategy
+
+//  - look again at good practice code rules from reading week
 
