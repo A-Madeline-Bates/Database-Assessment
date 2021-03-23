@@ -93,13 +93,6 @@ public class CMDSelect extends CMDWhere {
 			requestedColumns.add(i);
 		}
 	}
-//
-//	private boolean isItAsterisk(String nextCommand){
-//		if (nextCommand.equals("*")) {
-//			return true;
-//		}
-//		return false;
-//	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){
 		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);

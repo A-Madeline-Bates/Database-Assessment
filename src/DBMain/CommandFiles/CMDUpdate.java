@@ -20,13 +20,6 @@ public class CMDUpdate extends CMDWhere {
 			}
 		}
 	}
-//
-//	private boolean isItSet(String nextCommand) throws ParseExceptions{
-//		if (nextCommand.equalsIgnoreCase("SET")) {
-//			return true;
-//		}
-//		throw new InvalidCommand(nextCommand, "UPDATE [tablename]", "SET", null);
-//	}
 
 	private void processNameVals() throws ParseExceptions {
 		initColumnArray();
@@ -75,13 +68,6 @@ public class CMDUpdate extends CMDWhere {
 			updatedColumns.add("n/a");
 		}
 	}
-//
-//	private boolean isItEquals(String nextCommand) throws ParseExceptions{
-//		if (nextCommand.equals("=")) {
-//			return true;
-//		}
-//		throw new InvalidCommand(nextCommand, "SET [attribute]", "=", null);
-//	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){
 		System.out.println("COLUMN:" + updatedColumns + "WHERE ROW:" + finalRows);

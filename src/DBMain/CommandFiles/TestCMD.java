@@ -11,7 +11,6 @@ public class TestCMD {
 		this.command = command;
 		testIsItFinalCommand();
 		testIsItAlphNumeric();
-		testIsItSemiColon();
 		isItValidValue();
 	}
 
@@ -29,12 +28,6 @@ public class TestCMD {
 		assert (!command.isItAlphNumeric("!"));
 		assert (!command.isItAlphNumeric(" "));
 		assert (!command.isItAlphNumeric("_"));
-	}
-
-	private void testIsItSemiColon() {
-		assert (command.isItSemicolon(";"));
-		assert (!command.isItSemicolon(":"));
-		assert (!command.isItSemicolon("this"));
 	}
 
 	private void isItValidValue() {

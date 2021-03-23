@@ -37,13 +37,6 @@ public abstract class CMDWhere extends CMDType {
 			throw new InvalidCommand(nextCommand, "FROM [tablename]", "WHERE", ";");
 		}
 	}
-//
-//	protected boolean isItWhere(String nextCommand){
-//		if (nextCommand.equalsIgnoreCase("WHERE")) {
-//			return true;
-//		}
-//		return false;
-//	}
 
 	protected void requestAllRows(){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){

@@ -24,13 +24,6 @@ public class CMDDelete extends CMDWhere {
 			}
 		}
 	}
-//
-//	protected boolean isItWhereTHROW(String nextCommand, String prevCommand) throws ParseExceptions{
-//		if (isItWhere(nextCommand)) {
-//			return true;
-//		}
-//		throw new InvalidCommand(nextCommand, prevCommand, "WHERE", null) ;
-//	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){
 		System.out.println("COLUMN:" + "[all]" + "WHERE ROW:" + finalRows);
