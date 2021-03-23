@@ -61,7 +61,7 @@ public class CMDInsert extends CMDType {
 		String databaseName = storagePath.getDatabaseName();
 		new DBLoad(temporaryDataModel, databaseName, tableName);
 		//columnsAvailable is total column number - 1 to accommodate for the ID column
-		if(isListSizeCorrect(temporaryDataModel.getColumnNumber() - 1)){
+		if(isSizeCorrect(temporaryDataModel.getColumnNumber() - 1)){
 			//we can now load the data into our 'storage' model- i.e the one that will be pushed to file
 			new DBLoad(storageData, databaseName, tableName);
 			storagePath.setFilename(tableName);
@@ -69,7 +69,7 @@ public class CMDInsert extends CMDType {
 		}
 	}
 
-	private boolean isListSizeCorrect(int columnsAvailable) throws ParseExceptions{
+	private boolean isSizeCorrect(int columnsAvailable) throws ParseExceptions{
 		if(valueList.size()==columnsAvailable){
 			return true;
 		}

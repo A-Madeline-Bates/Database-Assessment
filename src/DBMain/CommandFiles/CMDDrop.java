@@ -12,7 +12,7 @@ public class CMDDrop extends CMDType {
 	public void transformModel() throws ParseExceptions {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
 		if (firstInstruction.equalsIgnoreCase("DATABASE")) {
-			processDatabase();
+			processDB();
 		}
 		else if (firstInstruction.equalsIgnoreCase("TABLE")) {
 			processTable();
@@ -21,7 +21,7 @@ public class CMDDrop extends CMDType {
 		}
 	}
 
-	private void processDatabase() throws ParseExceptions{
+	private void processDB() throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.DATABASENAME);
 		if(doesDBExist(nextCommand)) {
 			if (isItLineEndTHROW()) {
@@ -31,16 +31,16 @@ public class CMDDrop extends CMDType {
 				}
 				String dbLocation = "databaseFiles" + File.separator + nextCommand;
 				File file = new File(dbLocation);
-				deleteDatabase(file);
+				deleteDB(file);
 			}
 		}
 	}
 
-	private void deleteDatabase(File file){
+	private void deleteDB(File file){
 		File[] fileList = file.listFiles();
 		if (fileList != null) {
 			for (File temp : fileList) {
-				deleteDatabase(temp);
+				deleteDB(temp);
 			}
 		}
 		file.delete();

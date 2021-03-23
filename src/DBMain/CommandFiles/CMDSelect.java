@@ -10,20 +10,18 @@ public class CMDSelect extends CMDWhere {
 
 	public void transformModel() throws ParseExceptions {
 		String firstCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-		if(canWeReadTable()){
-			if(doesWildAttributeExist(firstCommand)){
-				//calling getNewTokenSafe to step past the table name, which we've already processed
-				getTokenSafe(DomainType.TABLENAME);
-				processWhere(this);
-			}
-		}
+		findTable();
+		processAttributes(firstCommand);
+		//calling getNewTokenSafe to step past the table name, which we've already processed
+		getTokenSafe(DomainType.TABLENAME);
+		processWhere(this);
 	}
 
 	/******************************************************
 	 *************  METHOD TO IDENTIFY FILE  **************
 	 *****************************************************/
 
-	private boolean canWeReadTable() throws ParseExceptions {
+	private void findTable() throws ParseExceptions {
 		//we need to know table name before we can identify if our attribute is valid, so we start by 'peaking'
 		//forwards at it.
 		for(int i=1; ; i++) {
@@ -35,12 +33,11 @@ public class CMDSelect extends CMDWhere {
 				//doesTableExist will throw an error
 				String peakTwo = peakTokenSafe(i+1, DomainType.TABLENAME);
 				if (doesTableExist(peakTwo)) {
-					//nothing will be stored at the end of this command's execution, so rather than using our storage
+					// nothing will be stored at the end of this command's execution, so rather than using our storage
 					// models, we've instantiating temporary models which we can use without running the risk of
 					// creating messy data and it being stored. We will use these models for the rest of the operation.
 					setTemporaryPath(peakTwo);
 					setTemporaryData();
-					return true;
 				}
 			}
 		}
@@ -50,7 +47,8 @@ public class CMDSelect extends CMDWhere {
 	 ***  METHODS TO READ IN THE ATTRIBUTES FOR DISPLAY  ***
 	 *****************************************************/
 
-	private boolean doesWildAttributeExist(String firstCommand) throws ParseExceptions{
+	private void processAttributes(String firstCommand) throws ParseExceptions{
+		int attributeCoordinate = findAttribute(firstCommand);
 		//check if it's a 'select all' asterisk
 		if(isItAsterisk(firstCommand)){
 			String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
@@ -58,13 +56,11 @@ public class CMDSelect extends CMDWhere {
 			if (isItFromTHROW(nextCommand, "SELECT *")) {
 				requestAllColumns();
 			}
-			return true;
 		}
 		//check if it's a normal attribute that's present in our table. If so, recursively check for more attributes.
-		else if(doesAttributeExistSelect(firstCommand)){
+		else if(attributeCoordinate >= 0){
 			isItCommaSeparated(DomainType.ATTRIBUTENAME, "FROM");
-			doesAttrExistRecursive();
-			return true;
+			collectAttributes();
 		}
 		//throw error if it's neither
 		else{
@@ -72,35 +68,23 @@ public class CMDSelect extends CMDWhere {
 		}
 	}
 
-	private void doesAttrExistRecursive() throws ParseExceptions{
+	private void collectAttributes() throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
+		int attributeCoordinate = findAttribute(nextCommand);
 		//if it's a 'FROM', leave recursive loop
 		if (isItFrom(nextCommand)) {
 			return;
 		}
-		//if it fits the conditions to be a attribute, call doesAttrExistRecursive again
-		//doesAttrExistRecursive will automatically save the coordinate if it is valid
-		else if (doesAttributeExistSelect(nextCommand)){
+		else if (attributeCoordinate >= 0){
+			requestedColumns.add(attributeCoordinate);
 			if(isItCommaSeparated(DomainType.ATTRIBUTENAME, "FROM")) {
-				doesAttrExistRecursive();
+				collectAttributes();
 			}
 		}
 		//if it's not a value or a 'FROM', throw an error
 		else{
 			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename());
 		}
-	}
-
-	private boolean doesAttributeExistSelect(String nextCommand){
-		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
-			if(temporaryDataModel.getColumnData().get(i).equalsIgnoreCase(nextCommand)){
-				//if we get an attribute match, save the column coordinate where the match occurred
-				requestedColumns.add(i);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private void requestAllColumns(){
