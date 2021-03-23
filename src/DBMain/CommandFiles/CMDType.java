@@ -146,6 +146,26 @@ public abstract class CMDType {
 		}
 	}
 
+	protected boolean isItComma(String nextCommand) {
+		if (nextCommand.equals(",")) {
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean stringMatcher(String commandNeeded, String nextCommand){
+		if (nextCommand.equalsIgnoreCase(commandNeeded)) {
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean stringMatcherTHROW(String commandNeeded, String nextCommand, String prevCommand) throws ParseExceptions{
+		if (stringMatcher(commandNeeded, nextCommand)) {
+			return true;
+		}
+		throw new InvalidCommand(nextCommand, prevCommand, commandNeeded, null);
+	}
 
 	protected boolean isItFrom(String nextCommand){
 		if (nextCommand.equalsIgnoreCase("FROM")) {
@@ -161,12 +181,6 @@ public abstract class CMDType {
 		throw new InvalidCommand(nextCommand, prevCommand, "FROM", null);
 	}
 
-	protected boolean isItComma(String nextCommand) {
-		if (nextCommand.equals(",")) {
-			return true;
-		}
-		return false;
-	}
 
 	/******************************************************
 	 ******************** PATH TESTS ********************
