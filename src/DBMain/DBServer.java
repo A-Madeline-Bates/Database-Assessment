@@ -89,7 +89,7 @@ public class DBServer
             //we could put getters and setting is DBServer and do it the other way around?
             //this gives the model to our class
             commandClass.setModel(modelPath);
-            commandClass.setInstructionSet(tokeniser);
+            commandClass.setTokeniser(tokeniser);
             commandClass.transformModel();
             modelData = commandClass.getStorageData();
             modelPath = commandClass.getStoragePath();

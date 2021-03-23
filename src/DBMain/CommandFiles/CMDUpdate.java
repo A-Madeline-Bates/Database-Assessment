@@ -14,19 +14,19 @@ public class CMDUpdate extends CMDWhere {
 			setTemporaryPath(firstCommand);
 			setTemporaryData();
 			String secondCommand = getTokenSafe(DomainType.SET);
-			if (isItSet(secondCommand)) {
+			if (stringMatcherTHROW("SET", secondCommand, "UPDATE [table]")) {
 				processNameVals();
 				splitIfBrackets(this);
 			}
 		}
 	}
-
-	private boolean isItSet(String nextCommand) throws ParseExceptions{
-		if (nextCommand.equalsIgnoreCase("SET")) {
-			return true;
-		}
-		throw new InvalidCommand(nextCommand, "UPDATE [tablename]", "SET", null);
-	}
+//
+//	private boolean isItSet(String nextCommand) throws ParseExceptions{
+//		if (nextCommand.equalsIgnoreCase("SET")) {
+//			return true;
+//		}
+//		throw new InvalidCommand(nextCommand, "UPDATE [tablename]", "SET", null);
+//	}
 
 	private void processNameVals() throws ParseExceptions {
 		initColumnArray();
@@ -41,7 +41,7 @@ public class CMDUpdate extends CMDWhere {
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		int attributeCoordinate = findAttribute(nextCommand);
 		//if it's a 'WHERE', leave recursive loop
-		if (isItWhere(nextCommand)) {
+		if (stringMatcher("WHERE", nextCommand)) {
 			return;
 		}
 		//attribute coordinate will be set to negative if it doesn't exist
@@ -57,7 +57,7 @@ public class CMDUpdate extends CMDWhere {
 
 	private void setNameVal(int attributeCoordinate) throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.OPERATOR);
-		if(isItEquals(nextCommand)) {
+		if(stringMatcherTHROW("=", nextCommand, "SET [attribute]")) {
 			nextCommand = getTokenSafe(DomainType.VALUE);
 			if (isItValidValue(nextCommand)) {
 				//updatedColumns mimics what we want our table to do- cells in the updatedColumns array correspond
@@ -75,13 +75,13 @@ public class CMDUpdate extends CMDWhere {
 			updatedColumns.add("n/a");
 		}
 	}
-
-	private boolean isItEquals(String nextCommand) throws ParseExceptions{
-		if (nextCommand.equals("=")) {
-			return true;
-		}
-		throw new InvalidCommand(nextCommand, "SET [attribute]", "=", null);
-	}
+//
+//	private boolean isItEquals(String nextCommand) throws ParseExceptions{
+//		if (nextCommand.equals("=")) {
+//			return true;
+//		}
+//		throw new InvalidCommand(nextCommand, "SET [attribute]", "=", null);
+//	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){
 		System.out.println("COLUMN:" + updatedColumns + "WHERE ROW:" + finalRows);

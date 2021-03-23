@@ -13,20 +13,6 @@ public abstract class CMDWhere extends CMDType {
 
 	protected abstract void executeCMD(ArrayList<RequestedRow> finalRows);
 
-
-	/******************************************************
-	 ***************** LOAD TEMPORARY MODEL ****************
-	 *****************************************************/
-
-	protected void setTemporaryData() {
-		new DBLoad(temporaryDataModel, storagePath.getDatabaseName(), temporaryPathModel.getFilename());
-	}
-
-	protected void setTemporaryPath(String fileName) {
-		temporaryPathModel.setFilename(fileName);
-		temporaryPathModel.setDatabaseName(storagePath.getDatabaseName());
-	}
-
 	/******************************************************
 	 ****** METHOD TO END STRING OR TRIGGER 'WHERE' ******
 	 *****************************************************/
@@ -34,7 +20,7 @@ public abstract class CMDWhere extends CMDType {
 	protected void processWhere(CMDWhere currentCommand) throws ParseExceptions {
 		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		//if there is no WHERE condition, exit and prepare our print statement
-		if(isItSemicolon(nextCommand)) {
+		if(stringMatcher(";", nextCommand)) {
 			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 			String extraInstruction = tokeniser.nextToken();
 			if (isItNullEndTHROW(extraInstruction)) {
@@ -44,20 +30,20 @@ public abstract class CMDWhere extends CMDType {
 			}
 		}
 		//if WHERE is called, call our recursive where operation
-		else if(isItWhere(nextCommand)){
+		else if(stringMatcher("WHERE", nextCommand)){
 			splitIfBrackets(currentCommand);
 		}
 		else{
 			throw new InvalidCommand(nextCommand, "FROM [tablename]", "WHERE", ";");
 		}
 	}
-
-	protected boolean isItWhere(String nextCommand){
-		if (nextCommand.equalsIgnoreCase("WHERE")) {
-			return true;
-		}
-		return false;
-	}
+//
+//	protected boolean isItWhere(String nextCommand){
+//		if (nextCommand.equalsIgnoreCase("WHERE")) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	protected void requestAllRows(){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
@@ -75,7 +61,7 @@ public abstract class CMDWhere extends CMDType {
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
 		int attributeCoordinate = findAttribute(nextCommand);
 		//if it's a '(', that indicates we'll be doing a recursive where operation
-		if (nextCommand.equals("(")) {
+		if (stringMatcher("(", nextCommand)) {
 			//we use stacks a lot in these operations. If they are ever used while empty, throw EmptyStackException
 			try {
 				recursiveWhere(currentCommand);
@@ -104,10 +90,10 @@ public abstract class CMDWhere extends CMDType {
 
 	private void recursiveWhere(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
 		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
-		if(nextCommand.equals("(")){
+		if(stringMatcher("(", nextCommand)){
 			openBracketOp(currentCommand);
 		}
-		else if(nextCommand.equals(")")){
+		else if(stringMatcher(")", nextCommand)){
 			while ((!operatorStack.isEmpty()) && (!operatorStack.peek().equals("("))) {
 				String andOrOp = operatorStack.pop();
 				performStackOp(andOrOp);
@@ -117,11 +103,12 @@ public abstract class CMDWhere extends CMDType {
 			}
 			recursiveWhere(currentCommand);
 		}
-		else if(nextCommand.equalsIgnoreCase("AND") || nextCommand.equalsIgnoreCase("OR")) {
+		else if(stringMatcher("AND", nextCommand) || stringMatcher("OR", nextCommand)) {
 			operatorStack.push(nextCommand);
 			recursiveWhere(currentCommand);
-		} //if command equals ";" we are done- we now need to clear the stack and execute the rest of the operations
-		else if(nextCommand.equals(";")){
+		}
+		//if command equals ";" we are done- we now need to clear the stack and execute the rest of the operations
+		else if(stringMatcher(";", nextCommand)){
 			String extraInstruction = tokeniser.nextToken();
 			if (isItNullEndTHROW(extraInstruction)) {
 				clearUpStack(currentCommand);
@@ -137,7 +124,7 @@ public abstract class CMDWhere extends CMDType {
 		int attributeCoordinate = findAttribute(nextCommand);
 		//we don't know yet whether this is an open bracket or part of a condition yet, so we can only use
 		//this information to conclude that the last "(" WAS an open bracket
-		if(nextCommand.equals("(")) {
+		if(stringMatcher("(", nextCommand)) {
 			operatorStack.push(nextCommand);
 			recursiveWhere(currentCommand);
 		}
@@ -166,7 +153,7 @@ public abstract class CMDWhere extends CMDType {
 	private void performStackOp(String andOrOp) throws EmptyStackException{
 		ArrayList<RequestedRow> rowsOne = rowStack.pop();
 		ArrayList<RequestedRow> rowsTwo = rowStack.pop();
-		if(andOrOp.equalsIgnoreCase("OR")){
+		if(stringMatcher("OR", andOrOp)){
 			ArrayList<RequestedRow> rowsResult = computeOR(rowsOne, rowsTwo);
 			rowStack.push(rowsResult);
 		} //if andOrOp isn't "OR" it has to be "AND"
@@ -248,19 +235,19 @@ public abstract class CMDWhere extends CMDType {
 	}
 
 	protected OperatorType returnOpType(String operator) throws ParseExceptions{
-		if(operator.equals("==")){
+		if(stringMatcher("==", operator)){
 			return OperatorType.UNIVERSAL;
-		} else if(operator.equals(">")){
+		} else if(stringMatcher(">", operator)){
 			return OperatorType.NUMERICAL;
-		} else if(operator.equals("<")){
+		} else if(stringMatcher("<", operator)){
 			return OperatorType.NUMERICAL;
-		} else if(operator.equals(">=")){
+		} else if(stringMatcher(">=", operator)){
 			return OperatorType.NUMERICAL;
-		} else if(operator.equals("<=")){
+		} else if(stringMatcher("<=", operator)){
 			return OperatorType.NUMERICAL;
-		} else if(operator.equals("!=")){
+		} else if(stringMatcher("!=", operator)){
 			return OperatorType.UNIVERSAL;
-		} else if(operator.equalsIgnoreCase("LIKE")){
+		} else if(stringMatcher("LIKE", operator)){
 			return OperatorType.STRING;
 		} else{
 			throw new InvalidCommand(operator, "WHERE [attributename]", "[operator]", null);
@@ -316,12 +303,12 @@ public abstract class CMDWhere extends CMDType {
 	protected void setUniveralRows(int attributeCoordinate, String opCommand, String valueCommand){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			requestedRows.add(RequestedRow.FALSE);
-			if(opCommand.equals("==") || opCommand.equalsIgnoreCase("LIKE")){
+			if(stringMatcher("==", opCommand) || stringMatcher("LIKE", opCommand)){
 				if (temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.set(i, RequestedRow.TRUE);
 				}
 			}
-			//if opCommand doesn't equal "==" it has to equal "!="
+			//if opCommand doesn't equal "==" or "LIKE" it has to equal "!="
 			else {
 				if (!temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.set(i, RequestedRow.TRUE);

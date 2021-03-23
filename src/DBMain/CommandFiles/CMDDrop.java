@@ -11,13 +11,13 @@ public class CMDDrop extends CMDType {
 
 	public void transformModel() throws ParseExceptions {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
-		if (firstInstruction.equalsIgnoreCase("DATABASE")) {
+		if (stringMatcher("DATABASE", firstInstruction)) {
 			processDB();
 		}
-		else if (firstInstruction.equalsIgnoreCase("TABLE")) {
+		else if (stringMatcher("TABLE", firstInstruction)) {
 			processTable();
 		} else {
-			throw new InvalidCommand(firstInstruction, "CREATE", "DATABASE", "TABLE");
+			throw new InvalidCommand(firstInstruction, "DROP", "DATABASE", "TABLE");
 		}
 	}
 
@@ -26,7 +26,7 @@ public class CMDDrop extends CMDType {
 		if(doesDBExist(nextCommand)) {
 			if (isItLineEndTHROW()) {
 				//if database in use is the one we're deleting, remove it
-				if(nextCommand == storagePath.getDatabaseName()) {
+				if(nextCommand.equals(storagePath.getDatabaseName())) {
 					clearFilePath();
 				}
 				String dbLocation = "databaseFiles" + File.separator + nextCommand;
@@ -62,7 +62,7 @@ public class CMDDrop extends CMDType {
 		}
 	}
 
-		public String query(DBServer server){
+	public String query(DBServer server){
 		return "Drop";
 	}
 }

@@ -28,7 +28,7 @@ public class CMDSelect extends CMDWhere {
 			//we search the command line for FROM- if we hit the end of the line without finding it,
 			//peakTokenSafe will throw an error
 			String peakOne = peakTokenSafe(i, DomainType.FROM);
-			if (isItFrom(peakOne)) {
+			if (stringMatcher("FROM", peakOne)) {
 				//if we find FROM, check if the next command is a valid table name. If it isn't,
 				//doesTableExist will throw an error
 				String peakTwo = peakTokenSafe(i+1, DomainType.TABLENAME);
@@ -50,10 +50,10 @@ public class CMDSelect extends CMDWhere {
 	private void processAttributes(String firstCommand) throws ParseExceptions{
 		int attributeCoordinate = findAttribute(firstCommand);
 		//check if it's a 'select all' asterisk
-		if(isItAsterisk(firstCommand)){
+		if(stringMatcher("*", firstCommand)){
 			String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 			//check that it's an Asterisk followed immediately by a FROM
-			if (isItFromTHROW(nextCommand, "SELECT *")) {
+			if (stringMatcherTHROW("FROM", nextCommand, "SELECT *")) {
 				requestAllColumns();
 			}
 		}
@@ -72,7 +72,7 @@ public class CMDSelect extends CMDWhere {
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		int attributeCoordinate = findAttribute(nextCommand);
 		//if it's a 'FROM', leave recursive loop
-		if (isItFrom(nextCommand)) {
+		if (stringMatcher("FROM", nextCommand)) {
 			return;
 		}
 		else if (attributeCoordinate >= 0){
@@ -93,13 +93,13 @@ public class CMDSelect extends CMDWhere {
 			requestedColumns.add(i);
 		}
 	}
-
-	private boolean isItAsterisk(String nextCommand){
-		if (nextCommand.equals("*")) {
-			return true;
-		}
-		return false;
-	}
+//
+//	private boolean isItAsterisk(String nextCommand){
+//		if (nextCommand.equals("*")) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){
 		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);

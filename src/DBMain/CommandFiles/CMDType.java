@@ -46,11 +46,25 @@ public abstract class CMDType {
 
 	public abstract void transformModel() throws ParseExceptions;
 
+
+	/******************************************************
+	 ***************** LOAD TEMPORARY MODEL ****************
+	 *****************************************************/
+
+	protected void setTemporaryData() {
+		new DBLoad(temporaryDataModel, storagePath.getDatabaseName(), temporaryPathModel.getFilename());
+	}
+
+	protected void setTemporaryPath(String fileName) {
+		temporaryPathModel.setFilename(fileName);
+		temporaryPathModel.setDatabaseName(storagePath.getDatabaseName());
+	}
+
 	/******************************************************
 	 ****************** SET TOKENISER ********************
 	 *****************************************************/
 
-	public void setInstructionSet(DBTokeniser tokeniser) {
+	public void setTokeniser(DBTokeniser tokeniser) {
 		this.tokeniser = tokeniser;
 	}
 
@@ -116,15 +130,15 @@ public abstract class CMDType {
 		throw new ExtraCommandGiven(extraCommand);
 	}
 
-	protected boolean isItSemicolon(String nextCommand) {
-		if (nextCommand.equals(";")) {
-			return true;
-		}
-		return false;
-	}
+//	protected boolean isItSemicolon(String nextCommand) {
+//		if (nextCommand.equals(";")) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	protected boolean isItSemicolonTHROW(String nextCommand) throws ParseExceptions {
-		if (isItSemicolon(nextCommand)) {
+		if (stringMatcher(";", nextCommand)) {
 			return true;
 		}
 		throw new MissingSemiColon(nextCommand);
@@ -133,7 +147,7 @@ public abstract class CMDType {
 	protected boolean isItCommaSeparated(DomainType domain, String exitToken) throws ParseExceptions {
 		String nextCommand = peakTokenSafe(1, DomainType.COMMA);
 		//is the next instruction a comma
-		if (isItComma(nextCommand)) {
+		if (stringMatcher(",", nextCommand)) {
 			//call nextToken so that our array position steps forward by one
 			tokeniser.nextToken();
 			return true;
@@ -145,13 +159,13 @@ public abstract class CMDType {
 			throw new NotCommaSeparated(domain);
 		}
 	}
-
-	protected boolean isItComma(String nextCommand) {
-		if (nextCommand.equals(",")) {
-			return true;
-		}
-		return false;
-	}
+//
+//	protected boolean isItComma(String nextCommand) {
+//		if (nextCommand.equals(",")) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	protected boolean stringMatcher(String commandNeeded, String nextCommand){
 		if (nextCommand.equalsIgnoreCase(commandNeeded)) {
@@ -166,20 +180,20 @@ public abstract class CMDType {
 		}
 		throw new InvalidCommand(nextCommand, prevCommand, commandNeeded, null);
 	}
-
-	protected boolean isItFrom(String nextCommand){
-		if (nextCommand.equalsIgnoreCase("FROM")) {
-			return true;
-		}
-		return false;
-	}
-
-	protected boolean isItFromTHROW(String nextCommand, String prevCommand) throws ParseExceptions{
-		if (isItFrom(nextCommand)) {
-			return true;
-		}
-		throw new InvalidCommand(nextCommand, prevCommand, "FROM", null);
-	}
+//
+//	protected boolean isItFrom(String nextCommand){
+//		if (nextCommand.equalsIgnoreCase("FROM")) {
+//			return true;
+//		}
+//		return false;
+//	}
+//
+//	protected boolean isItFromTHROW(String nextCommand, String prevCommand) throws ParseExceptions{
+//		if (isItFrom(nextCommand)) {
+//			return true;
+//		}
+//		throw new InvalidCommand(nextCommand, prevCommand, "FROM", null);
+//	}
 
 
 	/******************************************************

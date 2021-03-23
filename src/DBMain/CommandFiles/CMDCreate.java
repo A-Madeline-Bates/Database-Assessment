@@ -13,10 +13,10 @@ public class CMDCreate extends CMDType {
 
 	public void transformModel() throws ParseExceptions {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
-		if (firstInstruction.equalsIgnoreCase("DATABASE")) {
+		if (stringMatcher("DATABASE", firstInstruction)) {
 			processDatabase();
 		}
-		else if (firstInstruction.equalsIgnoreCase("TABLE")) {
+		else if (stringMatcher("TABLE", firstInstruction)) {
 			processTable();
 		} else {
 			throw new InvalidCommand(firstInstruction, "CREATE", "DATABASE", "TABLE");
@@ -51,7 +51,7 @@ public class CMDCreate extends CMDType {
 		if(areWeInDB()) {
 			if (isItAlphNumTHROW(secondInstruction, DomainType.TABLENAME)) {
 				String thirdInstruction = getTokenSafe(DomainType.UNKNOWN);
-				if(isItSemicolon(thirdInstruction)) {
+				if(isItSemicolonTHROW(thirdInstruction)) {
 					//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 					String extraInstruction = tokeniser.nextToken();
 					if (isItNullEndTHROW(extraInstruction)) {
@@ -59,7 +59,7 @@ public class CMDCreate extends CMDType {
 						createTable(secondInstruction);
 					}
 				}
-				else if(thirdInstruction.equals("(")){
+				else if(stringMatcher("(", thirdInstruction)){
 					collectAttributes(secondInstruction);
 				}
 				else{
@@ -92,7 +92,7 @@ public class CMDCreate extends CMDType {
 	private void collectAttributes(String tableName) throws ParseExceptions{
 		String nextInstruction = getTokenSafe(DomainType.ATTRIBUTENAME);
 		//if it's a ')', leave recursive loop and create table
-		if (nextInstruction.equals(")")) {
+		if (stringMatcher(")", nextInstruction)) {
 			if(isItLineEndTHROW()) {
 				createTable(tableName);
 			}

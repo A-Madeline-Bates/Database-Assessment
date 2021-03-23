@@ -12,25 +12,25 @@ public class CMDDelete extends CMDWhere {
 
 	public void transformModel() throws ParseExceptions {
 		String firstCommand = getTokenSafe(DomainType.FROM);
-		if(isItFromTHROW(firstCommand, "DELETE")){
+		if(stringMatcherTHROW("FROM", firstCommand, "DELETE")){
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
 				setTemporaryPath(secondCommand);
 				setTemporaryData();
 				String thirdCommand = getTokenSafe(DomainType.WHERE);
-				if(isItWhereTHROW(thirdCommand, "DELETE FROM [table]")) {
+				if(stringMatcherTHROW("WHERE", thirdCommand, "DELETE FROM [table]")) {
 					splitIfBrackets(this);
 				}
 			}
 		}
 	}
-
-	protected boolean isItWhereTHROW(String nextCommand, String prevCommand) throws ParseExceptions{
-		if (isItWhere(nextCommand)) {
-			return true;
-		}
-		throw new InvalidCommand(nextCommand, prevCommand, "WHERE", null) ;
-	}
+//
+//	protected boolean isItWhereTHROW(String nextCommand, String prevCommand) throws ParseExceptions{
+//		if (isItWhere(nextCommand)) {
+//			return true;
+//		}
+//		throw new InvalidCommand(nextCommand, prevCommand, "WHERE", null) ;
+//	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){
 		System.out.println("COLUMN:" + "[all]" + "WHERE ROW:" + finalRows);

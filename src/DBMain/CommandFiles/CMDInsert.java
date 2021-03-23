@@ -9,33 +9,26 @@ public class CMDInsert extends CMDType {
 	private ArrayList<String> valueList = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions {
-		//divide word identifiers in 'isIt...' methods
 		String firstCommand = getTokenSafe(DomainType.INTO);
-		if (firstCommand.equalsIgnoreCase("INTO")) {
+		if (stringMatcherTHROW("INTO", firstCommand, "INSERT")) {
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
 				String thirdCommand = getTokenSafe(DomainType.VALUES);
-				if (thirdCommand.equalsIgnoreCase("VALUES")) {
+				if (stringMatcherTHROW("VALUES", thirdCommand, "INSERT INTO [table]")) {
 					String fourthCommand = getTokenSafe(DomainType.BRACKET);
-					if (fourthCommand.equals("(")) {
+					if (stringMatcherTHROW("(", fourthCommand, "INSERT INTO [table] VALUES")) {
 						//pass secondCommand on as it is our tableName
 						collectValues(secondCommand);
-					} else {
-						throw new InvalidCommand(fourthCommand, "VALUES", "(", null);
 					}
-				} else {
-					throw new InvalidCommand(thirdCommand, "INSERT INTO [tablename]", "VALUES", null);
 				}
 			}
-		} else {
-			throw new InvalidCommand(firstCommand, "INSERT", "INTO", null);
 		}
 	}
 
 	private void collectValues(String tableName) throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.VALUE);
 		//if it's a ')', leave recursive loop and update table
-		if (nextCommand.equals(")")) {
+		if (stringMatcher(")", nextCommand)) {
 			if(isItLineEndTHROW()) {
 				updateTable(tableName);
 			}
