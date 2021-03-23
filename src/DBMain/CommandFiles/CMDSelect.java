@@ -9,11 +9,11 @@ public class CMDSelect extends CMDWhere {
 	private ArrayList<Integer> requestedColumns = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions {
-		String firstCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
+		String firstCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		if(canWeReadTable()){
 			if(doesWildAttributeExist(firstCommand)){
 				//calling getNewTokenSafe to step past the table name, which we've already processed
-				getNewTokenSafe(DomainType.TABLENAME);
+				getTokenSafe(DomainType.TABLENAME);
 				processWhere(this);
 			}
 		}
@@ -53,7 +53,7 @@ public class CMDSelect extends CMDWhere {
 	private boolean doesWildAttributeExist(String firstCommand) throws ParseExceptions{
 		//check if it's a 'select all' asterisk
 		if(isItAsterisk(firstCommand)){
-			String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
+			String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 			//check that it's an Asterisk followed immediately by a FROM
 			if (isItFromTHROW(nextCommand, "SELECT *")) {
 				requestAllColumns();
@@ -73,7 +73,7 @@ public class CMDSelect extends CMDWhere {
 	}
 
 	private void doesAttrExistRecursive() throws ParseExceptions{
-		String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
+		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		//if it's a 'FROM', leave recursive loop
 		if (isItFrom(nextCommand)) {
 			return;

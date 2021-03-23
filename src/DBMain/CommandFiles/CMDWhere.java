@@ -32,12 +32,12 @@ public abstract class CMDWhere extends CMDType {
 	 *****************************************************/
 
 	protected void processWhere(CMDWhere currentCommand) throws ParseExceptions {
-		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
+		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		//if there is no WHERE condition, exit and prepare our print statement
-		if(isThisSemicolon(nextCommand)) {
+		if(isItSemicolon(nextCommand)) {
 			//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 			String extraInstruction = tokeniser.nextToken();
-			if (isThisCommandEndTHROW(extraInstruction)) {
+			if (isItNullEndTHROW(extraInstruction)) {
 				//we want all rows, so set them all
 				requestAllRows();
 				currentCommand.executeCMD(finalRows);
@@ -80,25 +80,24 @@ public abstract class CMDWhere extends CMDType {
 	//do not need to process the where clause recursively
 	protected void splitIfBrackets(CMDWhere currentCommand) throws ParseExceptions{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
-		int attributeCoordinate = doesAttributeExist(nextCommand);
+		int attributeCoordinate = findAttribute(nextCommand);
 		//if it's a '(', that indicates we'll be doing a recursive where operation
 		if (nextCommand.equals("(")) {
 			//we use stacks a lot in these operations. If they are ever used while empty, throw EmptyStackException
 			try {
 				recursiveWhere(currentCommand);
 			} catch(EmptyStackException e){
-				System.out.println("stack is empty");
 				throw new SumError();
 			}
 		} //attribute coordinate will be set to negative if attribute doesn't exist
 		else if(attributeCoordinate >= 0){
 			//call getNewTokenSafe so that executeCondition is looking at the correct token
-			getNewTokenSafe(DomainType.ATTRIBUTENAME);
+			getTokenSafe(DomainType.ATTRIBUTENAME);
 			executeCondition(attributeCoordinate);
 			//the first set of rows we find with WHERE we can consider all relevant
 			finalRows.addAll(requestedRows);
 			//because there are no brackets we can expect the where clause to end here.
-			isThisCommandLineEnd();
+			isItLineEndTHROW();
 			currentCommand.executeCMD(finalRows);
 		}
 		else{
@@ -111,7 +110,7 @@ public abstract class CMDWhere extends CMDType {
 	 *****************************************************/
 
 	private void recursiveWhere(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
-		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
+		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		if(nextCommand.equals("(")){
 			openBracketOp(currentCommand);
 		}
@@ -131,7 +130,7 @@ public abstract class CMDWhere extends CMDType {
 		} //if command equals ";" we are done- we now need to clear the stack and execute the rest of the operations
 		else if(nextCommand.equals(";")){
 			String extraInstruction = tokeniser.nextToken();
-			if (isThisCommandEndTHROW(extraInstruction)) {
+			if (isItNullEndTHROW(extraInstruction)) {
 				clearUpStack(currentCommand);
 			}
 		}
@@ -142,7 +141,7 @@ public abstract class CMDWhere extends CMDType {
 
 	private void openBracketOp(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
-		int attributeCoordinate = doesAttributeExist(nextCommand);
+		int attributeCoordinate = findAttribute(nextCommand);
 		//we don't know yet whether this is an open bracket or part of a condition yet, so we can only use
 		//this information to conclude that the last "(" WAS an open bracket
 		if(nextCommand.equals("(")) {
@@ -153,11 +152,11 @@ public abstract class CMDWhere extends CMDType {
 		// i.e it is considered part of the condition in this operation
 		else if(attributeCoordinate>=0){
 			//call getNewTokenSafe() to step past attribute name
-			getNewTokenSafe(DomainType.ATTRIBUTENAME);
+			getTokenSafe(DomainType.ATTRIBUTENAME);
 			//clear requested rows
 			requestedRows = new ArrayList<RequestedRow>();
 			executeCondition(attributeCoordinate);
-			nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
+			nextCommand = getTokenSafe(DomainType.UNKNOWN);
 			if(nextCommand.equals(")")){
 				//make sure this is pushing the data and not a pointer to the data :/
 				rowStack.push(requestedRows);
@@ -187,7 +186,6 @@ public abstract class CMDWhere extends CMDType {
 	private void clearUpStack(CMDWhere currentCommand) throws ParseExceptions, EmptyStackException{
 		while(!operatorStack.isEmpty()) {
 			if (operatorStack.peek().equals("(")) {
-				System.out.println("extra (");
 				throw new SumError();
 			}
 			String andOrOp = operatorStack.pop();
@@ -196,7 +194,6 @@ public abstract class CMDWhere extends CMDType {
 		//pop what should hopefully be our final result from the stack
 		finalRows.addAll(rowStack.pop());
 		if(!rowStack.isEmpty()){
-			System.out.println("stack isn't empty");
 			throw new SumError();
 		}
 		currentCommand.executeCMD(finalRows);
@@ -228,7 +225,7 @@ public abstract class CMDWhere extends CMDType {
 	 *****************************************************/
 
 	protected void executeCondition(int attributeCoordinate) throws ParseExceptions {
-		String opCommand = getNewTokenSafe(DomainType.OPERATOR);
+		String opCommand = getTokenSafe(DomainType.OPERATOR);
 		//find the type of our operator- if it's not valid, an exception will be thrown
 		OperatorType opType = returnOperatorType(opCommand);
 		splitByOpType(opType, opCommand, attributeCoordinate);
@@ -239,16 +236,16 @@ public abstract class CMDWhere extends CMDType {
 	 *****************************************************/
 
 	protected void splitByOpType(OperatorType opType, String opCommand, int attributeCoordinate) throws ParseExceptions{
-		String valueCommand = getNewTokenSafe(DomainType.VALUE);
+		String valueCommand = getTokenSafe(DomainType.VALUE);
 		//this operation checks whether a value is valid for the operator (throwing an error if not). It then
 		//directs it to the appropriate method.
 		switch(opType){
 			case NUMERICAL:
-				isItNumLiteralTHROW(valueCommand);
+				isItNumTHROW(valueCommand);
 				searchAttributeNum(attributeCoordinate, opCommand, valueCommand);
 				break;
 			case STRING : //we are currently treating '==' and LIKE (i.e STRING and UNIVERSAL) as the same.
-				isItStringLiteralTHROW(valueCommand);
+				isItStringTHROW(valueCommand);
 				searchAttributeUniversal(attributeCoordinate, opCommand, valueCommand);
 				break;
 			default: //default means the opType is universal, so we only need to know if it's a valid value

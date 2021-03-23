@@ -45,10 +45,11 @@
 
 	//TO DO SIMPLE/AESTHETIC :
 // - 	check everything is in camelcase
+//  - 	shorten method names - prioritise short method names over perfect ones
+
 // - 	the string recognition methods could all be made into one
 // - 	separate more methods from their exception statements to allow testing
 //  - 	break up excessively large methods
-//  - 	shorten method names - prioritise short method names over perfect ones
 //  - 	unpick some of the weird things we've done with booleans?
 //  - 	make some of 'where' methods private
 
@@ -59,6 +60,8 @@
 //	- fix DBPrint
 //	- fix control structure in DBServer
 //  - decide whether to implement 'if there is no databaseFiles, create one'
+
+//  - make CMDCondition
 
 //TO DO CMD CLASSES :
 //  - SPLIT cmdtype further down the line

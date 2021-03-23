@@ -8,9 +8,9 @@ import DBMain.ParseExceptions.ParseExceptions;
 public class CMDAlter extends CMDType {
 
 	public void transformModel() throws ParseExceptions {
-		String firstCommand = getNewTokenSafe(DomainType.TABLE);
+		String firstCommand = getTokenSafe(DomainType.TABLE);
 		if (firstCommand.equalsIgnoreCase("TABLE")) {
-			String secondCommand = getNewTokenSafe(DomainType.TABLENAME);
+			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
 				//split based on whether we're doing an 'add' or 'drop' operation
 				addDropSplit();
@@ -21,19 +21,19 @@ public class CMDAlter extends CMDType {
 	}
 
 	private void addDropSplit() throws ParseExceptions{
-		String nextCommand = getNewTokenSafe(DomainType.UNKNOWN);
+		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		if(nextCommand.equalsIgnoreCase("ADD")){
 			//finding if the attribute name would be valid
-			String newAttributeName = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-			isNameAlphNumTHROW(newAttributeName, DomainType.ATTRIBUTENAME);
-			if(isThisCommandLineEnd()){
+			String newAttributeName = getTokenSafe(DomainType.ATTRIBUTENAME);
+			isItAlphNumTHROW(newAttributeName, DomainType.ATTRIBUTENAME);
+			if(isItLineEndTHROW()){
 				addColumn(newAttributeName);
 			}
 		} else if(nextCommand.equalsIgnoreCase("DROP")){
 			//searching for preexisting attributes
-			String attributeCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-			int attributeCoordinate = doesAttributeExistTHROW(attributeCommand);
-			if(isThisCommandLineEnd()) {
+			String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
+			int attributeCoordinate = findAttributeTHROW(attributeCommand);
+			if(isItLineEndTHROW()) {
 				dropColumn(attributeCoordinate);
 			}
 		} else{

@@ -12,7 +12,7 @@ public class CMDCreate extends CMDType {
 	}
 
 	public void transformModel() throws ParseExceptions {
-		String firstInstruction = getNewTokenSafe(DomainType.UNKNOWN);
+		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
 		if (firstInstruction.equalsIgnoreCase("DATABASE")) {
 			processDatabase();
 		}
@@ -24,9 +24,9 @@ public class CMDCreate extends CMDType {
 	}
 
 	private void processDatabase() throws ParseExceptions{
-		String secondInstruction = getNewTokenSafe(DomainType.DATABASENAME);
-		if(isNameAlphNumTHROW(secondInstruction, DomainType.DATABASENAME)) {
-			if(isThisCommandLineEnd()) {
+		String secondInstruction = getTokenSafe(DomainType.DATABASENAME);
+		if(isItAlphNumTHROW(secondInstruction, DomainType.DATABASENAME)) {
+			if(isItLineEndTHROW()) {
 				createDatabase(secondInstruction.toUpperCase());
 			}
 		}
@@ -47,14 +47,14 @@ public class CMDCreate extends CMDType {
 	}
 
 	private void processTable() throws ParseExceptions {
-		String secondInstruction = getNewTokenSafe(DomainType.TABLENAME);
-		if(areWeInADatabase()) {
-			if (isNameAlphNumTHROW(secondInstruction, DomainType.TABLENAME)) {
-				String thirdInstruction = getNewTokenSafe(DomainType.UNKNOWN);
-				if(isThisSemicolon(thirdInstruction)) {
+		String secondInstruction = getTokenSafe(DomainType.TABLENAME);
+		if(areWeInDB()) {
+			if (isItAlphNumTHROW(secondInstruction, DomainType.TABLENAME)) {
+				String thirdInstruction = getTokenSafe(DomainType.UNKNOWN);
+				if(isItSemicolon(thirdInstruction)) {
 					//We are using a normal tokeniser.nextToken() here because we are expecting a NULL
 					String extraInstruction = tokeniser.nextToken();
-					if (isThisCommandEndTHROW(extraInstruction)) {
+					if (isItNullEndTHROW(extraInstruction)) {
 						//pass secondCommand on as it is our tableName
 						createTable(secondInstruction);
 					}
@@ -90,15 +90,15 @@ public class CMDCreate extends CMDType {
 	}
 
 	private void collectAttributes(String tableName) throws ParseExceptions{
-		String nextInstruction = getNewTokenSafe(DomainType.ATTRIBUTENAME);
+		String nextInstruction = getTokenSafe(DomainType.ATTRIBUTENAME);
 		//if it's a ')', leave recursive loop and create table
 		if (nextInstruction.equals(")")) {
-			if(isThisCommandLineEnd()) {
+			if(isItLineEndTHROW()) {
 				createTable(tableName);
 			}
 		}
 		//if it fits the conditions for an attribute name, save it to our list and call collectAttributes again
-		else if (isNameAlphNumeric(nextInstruction)){
+		else if (isItAlphNumeric(nextInstruction)){
 			attributeNames.add(nextInstruction);
 			if(isItCommaSeparated(DomainType.ATTRIBUTENAME, ")")) {
 				collectAttributes(tableName);
@@ -108,6 +108,15 @@ public class CMDCreate extends CMDType {
 		else{
 			throw new InvalidCommand(nextInstruction, "CREATE [table name] (",
 					"[attributename])", ");");
+		}
+	}
+
+
+	protected boolean areWeInDB() throws ParseExceptions {
+		if (storagePath.getDatabaseName() != null) {
+			return true;
+		} else {
+			throw new WorkingOutsideDatabase();
 		}
 	}
 }

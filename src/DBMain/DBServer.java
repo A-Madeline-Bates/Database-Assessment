@@ -91,8 +91,8 @@ public class DBServer
             commandClass.setModel(modelPath);
             commandClass.setInstructionSet(tokeniser);
             commandClass.transformModel();
-            modelData = commandClass.getDataForStorage();
-            modelPath = commandClass.getPathForStorage();
+            modelData = commandClass.getStorageData();
+            modelPath = commandClass.getStoragePath();
             //this has to be within process parse because we want to skip DBStore if an exception is called.
             //We need to create a fix for this.
             new DBStore(modelData, modelPath);

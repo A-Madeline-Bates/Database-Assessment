@@ -9,11 +9,11 @@ public class CMDUpdate extends CMDWhere {
 	private ArrayList<String> updatedColumns = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions {
-		String firstCommand = getNewTokenSafe(DomainType.TABLENAME);
+		String firstCommand = getTokenSafe(DomainType.TABLENAME);
 		if (doesTableExist(firstCommand)) {
 			setTemporaryPath(firstCommand);
 			setTemporaryData();
-			String secondCommand = getNewTokenSafe(DomainType.SET);
+			String secondCommand = getTokenSafe(DomainType.SET);
 			if (isItSet(secondCommand)) {
 				collectNameValList();
 				splitIfBrackets(this);
@@ -31,19 +31,16 @@ public class CMDUpdate extends CMDWhere {
 
 	private void collectNameValList() throws ParseExceptions {
 		initialiseColsArray();
-		String attributeCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-		int attributeCoordinate = doesAttributeExist(attributeCommand);
-		//this is a bit of a clunky solution- may need fixing
-		if(attributeCoordinate >= 0) {
-			processNameValPair(attributeCoordinate);
-			isItCommaSeparated(DomainType.ATTRIBUTENAME, "WHERE");
-			nameValsRecursive();
-		}
+		String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
+		int attributeCoordinate = findAttributeTHROW(attributeCommand);
+		processNameValPair(attributeCoordinate);
+		isItCommaSeparated(DomainType.ATTRIBUTENAME, "WHERE");
+		nameValsRecursive();
 	}
 
 	private void nameValsRecursive() throws ParseExceptions{
-		String nextCommand = getNewTokenSafe(DomainType.ATTRIBUTENAME);
-		int attributeCoordinate = doesAttributeExist(nextCommand);
+		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
+		int attributeCoordinate = findAttribute(nextCommand);
 		//if it's a 'WHERE', leave recursive loop
 		if (isItWhere(nextCommand)) {
 			return;
@@ -60,9 +57,9 @@ public class CMDUpdate extends CMDWhere {
 	}
 
 	private void processNameValPair(int attributeCoordinate) throws ParseExceptions{
-		String nextCommand = getNewTokenSafe(DomainType.OPERATOR);
+		String nextCommand = getTokenSafe(DomainType.OPERATOR);
 		if(isItEquals(nextCommand)) {
-			nextCommand = getNewTokenSafe(DomainType.VALUE);
+			nextCommand = getTokenSafe(DomainType.VALUE);
 			if (isItValidValue(nextCommand)) {
 				//updatedColumns mimics what we want our table to do- cells in the updatedColumns array correspond
 				//to columns of our table

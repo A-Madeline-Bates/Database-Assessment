@@ -10,13 +10,13 @@ public class CMDInsert extends CMDType {
 
 	public void transformModel() throws ParseExceptions {
 		//divide word identifiers in 'isIt...' methods
-		String firstCommand = getNewTokenSafe(DomainType.INTO);
+		String firstCommand = getTokenSafe(DomainType.INTO);
 		if (firstCommand.equalsIgnoreCase("INTO")) {
-			String secondCommand = getNewTokenSafe(DomainType.TABLENAME);
+			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
-				String thirdCommand = getNewTokenSafe(DomainType.VALUES);
+				String thirdCommand = getTokenSafe(DomainType.VALUES);
 				if (thirdCommand.equalsIgnoreCase("VALUES")) {
-					String fourthCommand = getNewTokenSafe(DomainType.BRACKET);
+					String fourthCommand = getTokenSafe(DomainType.BRACKET);
 					if (fourthCommand.equals("(")) {
 						//pass secondCommand on as it is our tableName
 						collectValues(secondCommand);
@@ -33,10 +33,10 @@ public class CMDInsert extends CMDType {
 	}
 
 	private void collectValues(String tableName) throws ParseExceptions{
-		String nextCommand = getNewTokenSafe(DomainType.VALUE);
+		String nextCommand = getTokenSafe(DomainType.VALUE);
 		//if it's a ')', leave recursive loop and update table
 		if (nextCommand.equals(")")) {
-			if(isThisCommandLineEnd()) {
+			if(isItLineEndTHROW()) {
 				updateTable(tableName);
 			}
 		}

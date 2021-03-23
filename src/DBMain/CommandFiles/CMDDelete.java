@@ -11,13 +11,13 @@ import java.util.ArrayList;
 public class CMDDelete extends CMDWhere {
 
 	public void transformModel() throws ParseExceptions {
-		String firstCommand = getNewTokenSafe(DomainType.FROM);
+		String firstCommand = getTokenSafe(DomainType.FROM);
 		if(isItFromTHROW(firstCommand, "DELETE")){
-			String secondCommand = getNewTokenSafe(DomainType.TABLENAME);
+			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
 				setTemporaryPath(secondCommand);
 				setTemporaryData();
-				String thirdCommand = getNewTokenSafe(DomainType.WHERE);
+				String thirdCommand = getTokenSafe(DomainType.WHERE);
 				if(isItWhereThrow(thirdCommand, "DELETE FROM [table]")) {
 					splitIfBrackets(this);
 					//processForcedWhere(this);

@@ -10,7 +10,7 @@ import java.io.File;
 public class CMDDrop extends CMDType {
 
 	public void transformModel() throws ParseExceptions {
-		String firstInstruction = getNewTokenSafe(DomainType.UNKNOWN);
+		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
 		if (firstInstruction.equalsIgnoreCase("DATABASE")) {
 			processDatabase();
 		}
@@ -22,9 +22,9 @@ public class CMDDrop extends CMDType {
 	}
 
 	private void processDatabase() throws ParseExceptions{
-		String nextCommand = getNewTokenSafe(DomainType.DATABASENAME);
-		if(isDBValid(nextCommand)) {
-			if (isThisCommandLineEnd()) {
+		String nextCommand = getTokenSafe(DomainType.DATABASENAME);
+		if(doesDBExist(nextCommand)) {
+			if (isItLineEndTHROW()) {
 				//if database in use is the one we're deleting, remove it
 				if(nextCommand == storagePath.getDatabaseName()) {
 					clearFilePath();
@@ -47,9 +47,9 @@ public class CMDDrop extends CMDType {
 	}
 
 	private void processTable() throws ParseExceptions {
-		String nextCommand = getNewTokenSafe(DomainType.DATABASENAME);
+		String nextCommand = getTokenSafe(DomainType.DATABASENAME);
 		if(doesTableExist(nextCommand)) {
-			if (isThisCommandLineEnd()) {
+			if (isItLineEndTHROW()) {
 				//if filename in use is the one we're deleting, remove it
 				if (nextCommand == storagePath.getFilename()) {
 					storagePath.setFilename(null);
