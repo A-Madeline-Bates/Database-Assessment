@@ -1,4 +1,5 @@
 package DBMain.CommandFiles;
+import DBMain.DBLoad;
 import DBMain.ParseExceptions.*;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ public class CMDUpdate extends CMDWhere {
 		if (doesTableExist(firstCommand)) {
 			setTemporaryPath(firstCommand);
 			setTemporaryData();
+			new DBLoad(storageData, temporaryPathModel.getDatabaseName(), firstCommand);
 			String secondCommand = getTokenSafe(DomainType.SET);
 			if (stringMatcherTHROW("SET", secondCommand, "UPDATE [table]")) {
 				processNameVals();
@@ -69,7 +71,22 @@ public class CMDUpdate extends CMDWhere {
 	}
 
 	protected void returnToCMD(ArrayList<RequestedCell> finalRows){
+		editTableValues(finalRows);
+		//using storagePath.setFilename to indicate that we want to store changes
+		storagePath.setFilename(temporaryPathModel.getFilename());
 		setExitMessage();
 		System.out.println("COLUMN:" + updatedColumns + "WHERE ROW:" + finalRows);
+	}
+
+	private void editTableValues(ArrayList<RequestedCell> finalRows){
+		for (int i = 0; i < storageData.getRowNumber(); i++) {
+			if(finalRows.get(i).equals(RequestedCell.TRUE)) {
+				for (int j = 0; j < storageData.getColumnNumber(); j++) {
+					if(!updatedColumns.get(j).equals("n/a")) {
+						storageData.setCell(i, j, updatedColumns.get(j));
+					}
+				}
+			}
+		}
 	}
 }

@@ -77,3 +77,4 @@
 //  - use methods in combination with one another- build a test strategy
 
 //  - delete testing classes before submitting
+//  - check all intellij warnings
