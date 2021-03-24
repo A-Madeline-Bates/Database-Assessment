@@ -44,7 +44,9 @@ public abstract class CMDType {
 
 	public abstract void transformModel() throws ParseExceptions;
 
-	public abstract void setExitMessage();
+	protected void setExitMessage(){
+		this.exitMessage = "";
+	}
 
 	public String getExitMessage(){
 		return exitMessage;

@@ -11,9 +11,11 @@ public class CMDCreate extends CMDType {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
 		if (stringMatcher("DATABASE", firstInstruction)) {
 			processDatabase();
+			setExitMessage();
 		}
 		else if (stringMatcher("TABLE", firstInstruction)) {
 			processTable();
+			setExitMessage();
 		} else {
 			throw new InvalidCommand(firstInstruction, "CREATE", "DATABASE", "TABLE");
 		}
@@ -118,9 +120,5 @@ public class CMDCreate extends CMDType {
 		} else {
 			throw new WorkingOutsideDatabase();
 		}
-	}
-
-	public void setExitMessage(){
-
 	}
 }

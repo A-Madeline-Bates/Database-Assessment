@@ -18,6 +18,7 @@ public class CMDInsert extends CMDType {
 					if (stringMatcherTHROW("(", fourthCommand, "INSERT INTO [table] VALUES")) {
 						//pass secondCommand on as it is our tableName
 						collectValues(secondCommand);
+						setExitMessage();
 					}
 				}
 			}
@@ -68,9 +69,5 @@ public class CMDInsert extends CMDType {
 		else {
 			throw new WrongNoValues(valueList.size(), columnsAvailable);
 		}
-	}
-
-	public void setExitMessage(){
-
 	}
 }

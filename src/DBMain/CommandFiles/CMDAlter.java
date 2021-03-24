@@ -15,6 +15,7 @@ public class CMDAlter extends CMDType {
 				new DBLoad(storageData, storagePath.getDatabaseName(), secondCommand);
 				storagePath.setFilename(secondCommand);
 				addDropSplit();
+				setExitMessage();
 			}
 		}
 	}
@@ -46,9 +47,5 @@ public class CMDAlter extends CMDType {
 
 	private void dropColumn(int attributeCoordinate){
 		storageData.deleteColumn(attributeCoordinate);
-	}
-
-	public void setExitMessage(){
-
 	}
 }

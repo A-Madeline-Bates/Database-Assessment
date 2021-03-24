@@ -12,9 +12,11 @@ public class CMDDrop extends CMDType {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
 		if (stringMatcher("DATABASE", firstInstruction)) {
 			processDB();
+			setExitMessage();
 		}
 		else if (stringMatcher("TABLE", firstInstruction)) {
 			processTable();
+			setExitMessage();
 		} else {
 			throw new InvalidCommand(firstInstruction, "DROP", "DATABASE", "TABLE");
 		}
@@ -59,9 +61,5 @@ public class CMDDrop extends CMDType {
 				file.delete();
 			}
 		}
-	}
-
-	public void setExitMessage(){
-
 	}
 }

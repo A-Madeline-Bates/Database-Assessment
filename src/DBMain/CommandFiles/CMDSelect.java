@@ -1,19 +1,25 @@
 package DBMain.CommandFiles;
-import DBMain.*;
 import DBMain.ParseExceptions.*;
 
 import java.util.ArrayList;
 
 public class CMDSelect extends CMDWhere {
-	private ArrayList<Integer> requestedColumns = new ArrayList<>();
+	private ArrayList<RequestedCell> requestedColumns = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions {
 		String firstCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		findTable();
+		initRequestedCols();
 		processAttributes(firstCommand);
 		//calling getNewTokenSafe to step past the table name, which we've already processed
 		getTokenSafe(DomainType.TABLENAME);
 		processWhere(this);
+	}
+
+	private void initRequestedCols(){
+		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
+			requestedColumns.add(RequestedCell.FALSE);
+		}
 	}
 
 	/******************************************************
@@ -59,7 +65,7 @@ public class CMDSelect extends CMDWhere {
 		}
 		//check if it's a normal attribute that's present in our table. If so, recursively check for more attributes.
 		else if(attributeCoordinate >= 0){
-			requestedColumns.add(attributeCoordinate);
+			requestedColumns.set(attributeCoordinate, RequestedCell.TRUE);
 			isItCommaSeparated(DomainType.ATTRIBUTENAME, "FROM");
 			collectAttributes();
 		}
@@ -77,7 +83,7 @@ public class CMDSelect extends CMDWhere {
 			return;
 		}
 		else if (attributeCoordinate >= 0){
-			requestedColumns.add(attributeCoordinate);
+			requestedColumns.set(attributeCoordinate, RequestedCell.TRUE);
 			if(isItCommaSeparated(DomainType.ATTRIBUTENAME, "FROM")) {
 				collectAttributes();
 			}
@@ -91,16 +97,34 @@ public class CMDSelect extends CMDWhere {
 	private void requestAllColumns(){
 		//iterate through the columns of our table until we find a match
 		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
-			requestedColumns.add(i);
+			requestedColumns.set(i, RequestedCell.TRUE);
 		}
 	}
 
-	protected void executeCMD(ArrayList<RequestedRow> finalRows){
-
+	protected void executeCMD(ArrayList<RequestedCell> finalRows){
+		setExitMessage(finalRows);
 		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);
+		System.out.print(exitMessage);
 	}
 
-	public void setExitMessage(){
-
+	//this is overriding the blank exitMessage method
+	public void setExitMessage(ArrayList<RequestedCell> finalRows){
+		for (int k = 0; k < temporaryDataModel.getColumnNumber(); k++) {
+			if (requestedColumns.get(k).equals(RequestedCell.TRUE)) {
+				exitMessage = exitMessage + temporaryDataModel.getColumnAttribute(k);
+			}
+		}
+		exitMessage = exitMessage + "\n";
+		for (int i = 0; i < temporaryDataModel.getRowNumber(); i++) {
+			if(finalRows.get(i).equals(RequestedCell.TRUE)) {
+				for (int j = 0; j < temporaryDataModel.getColumnNumber(); j++) {
+					if(requestedColumns.get(i).equals(RequestedCell.TRUE)) {
+						exitMessage = exitMessage + temporaryDataModel.getCell(i, j) + "\t\t";
+					}
+				}
+				//Write a new line for every new row
+				exitMessage = exitMessage + "\n";
+			}
+		}
 	}
 }

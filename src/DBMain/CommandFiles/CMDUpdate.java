@@ -1,5 +1,4 @@
 package DBMain.CommandFiles;
-import DBMain.*;
 import DBMain.ParseExceptions.*;
 
 import java.util.ArrayList;
@@ -68,11 +67,8 @@ public class CMDUpdate extends CMDWhere {
 		}
 	}
 
-	protected void executeCMD(ArrayList<RequestedRow> finalRows){
+	protected void executeCMD(ArrayList<RequestedCell> finalRows){
+		setExitMessage();
 		System.out.println("COLUMN:" + updatedColumns + "WHERE ROW:" + finalRows);
-	}
-
-	public void setExitMessage(){
-
 	}
 }

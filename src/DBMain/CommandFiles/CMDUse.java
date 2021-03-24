@@ -10,11 +10,8 @@ public class CMDUse extends CMDType {
 			if(isItLineEndTHROW()) {
 				clearFilePath();
 				storagePath.setDatabaseName(firstCommand.toUpperCase());
+				setExitMessage();
 			}
 		}
-	}
-
-	public void setExitMessage(){
-
 	}
 }

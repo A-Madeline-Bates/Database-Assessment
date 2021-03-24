@@ -25,6 +25,10 @@ public class DBModelData extends DBModel {
 		return columnNames.size();
 	}
 
+	public String getColumnAttribute(int i) {
+		return columnNames.get(i);
+	}
+
 	public void setRowsFromFile(String command) {
 		//setDataArray() is called row by row, and we are exploiting
 		//this to initialise each row as we go

@@ -3,12 +3,12 @@ import DBMain.ParseExceptions.*;
 import java.util.*;
 
 public abstract class CMDWhere extends CMDType {
-	private ArrayList<RequestedRow> requestedRows = new ArrayList<>();
-	private ArrayList<RequestedRow> finalRows = new ArrayList<>();
-	private Stack<ArrayList<RequestedRow>> rowStack = new Stack<>();
+	private ArrayList<RequestedCell> requestedRows = new ArrayList<>();
+	private ArrayList<RequestedCell> finalRows = new ArrayList<>();
+	private Stack<ArrayList<RequestedCell>> rowStack = new Stack<>();
 	private Stack<String> operatorStack = new Stack<>();
 
-	protected abstract void executeCMD(ArrayList<RequestedRow> finalRows);
+	protected abstract void executeCMD(ArrayList<RequestedCell> finalRows);
 
 	/******************************************************
 	 ****** METHOD TO END STRING OR TRIGGER 'WHERE' ******
@@ -37,7 +37,7 @@ public abstract class CMDWhere extends CMDType {
 
 	private void requestAllRows(){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
-			finalRows.add(RequestedRow.TRUE);
+			finalRows.add(RequestedCell.TRUE);
 		}
 	}
 
@@ -125,7 +125,7 @@ public abstract class CMDWhere extends CMDType {
 		//call getNewTokenSafe() to step past attribute name
 		getTokenSafe(DomainType.ATTRIBUTENAME);
 		//clear requested rows
-		requestedRows = new ArrayList<RequestedRow>();
+		requestedRows = new ArrayList<RequestedCell>();
 		executeCondition(attributeCoordinate);
 		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		if(nextCommand.equals(")")){
@@ -161,14 +161,14 @@ public abstract class CMDWhere extends CMDType {
 	}
 
 	private void performStackOp(String andOrOp) throws EmptyStackException{
-		ArrayList<RequestedRow> rowsOne = rowStack.pop();
-		ArrayList<RequestedRow> rowsTwo = rowStack.pop();
+		ArrayList<RequestedCell> rowsOne = rowStack.pop();
+		ArrayList<RequestedCell> rowsTwo = rowStack.pop();
 		if(stringMatcher("OR", andOrOp)){
-			ArrayList<RequestedRow> rowsResult = computeOR(rowsOne, rowsTwo);
+			ArrayList<RequestedCell> rowsResult = computeOR(rowsOne, rowsTwo);
 			rowStack.push(rowsResult);
 		} //if andOrOp isn't "OR" it has to be "AND"
 		else{
-			ArrayList<RequestedRow> rowsResult = computeAND(rowsOne, rowsTwo);
+			ArrayList<RequestedCell> rowsResult = computeAND(rowsOne, rowsTwo);
 			rowStack.push(rowsResult);
 		}
 	}
@@ -189,22 +189,22 @@ public abstract class CMDWhere extends CMDType {
 		currentCommand.executeCMD(finalRows);
 	}
 
-	private ArrayList<RequestedRow> computeAND(ArrayList<RequestedRow> rowsOne, ArrayList<RequestedRow> rowsTwo){
+	private ArrayList<RequestedCell> computeAND(ArrayList<RequestedCell> rowsOne, ArrayList<RequestedCell> rowsTwo){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {
-			if((rowsOne.get(i) == RequestedRow.TRUE) && (rowsTwo.get(i) == RequestedRow.TRUE)){
-				rowsOne.set(i, RequestedRow.TRUE);
+			if((rowsOne.get(i) == RequestedCell.TRUE) && (rowsTwo.get(i) == RequestedCell.TRUE)){
+				rowsOne.set(i, RequestedCell.TRUE);
 			}
 			else{
-				rowsOne.set(i, RequestedRow.FALSE);
+				rowsOne.set(i, RequestedCell.FALSE);
 			}
 		}
 		return rowsOne;
 	}
 
-	private ArrayList<RequestedRow> computeOR(ArrayList<RequestedRow> rowsOne, ArrayList<RequestedRow> rowsTwo){
+	private ArrayList<RequestedCell> computeOR(ArrayList<RequestedCell> rowsOne, ArrayList<RequestedCell> rowsTwo){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {
-			if((rowsOne.get(i) == RequestedRow.TRUE) || (rowsTwo.get(i) == RequestedRow.TRUE)){
-				rowsOne.set(i, RequestedRow.TRUE);
+			if((rowsOne.get(i) == RequestedCell.TRUE) || (rowsTwo.get(i) == RequestedCell.TRUE)){
+				rowsOne.set(i, RequestedCell.TRUE);
 			}
 		}
 		return rowsOne;
@@ -290,9 +290,9 @@ public abstract class CMDWhere extends CMDType {
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
-			//create a cell for each row and set RequestedRow to false. If the cell does fit the criteria, it will be
+			//create a cell for each row and set RequestedCell to false. If the cell does fit the criteria, it will be
 			//set to true later in this loop.
-			requestedRows.add(RequestedRow.FALSE);
+			requestedRows.add(RequestedCell.FALSE);
 			//if the operation was caught by NumberFormatException our cell value is not a valid number, and so we
 			//want to jump to catch + don't want assignByOperator to consider it
 			try{
@@ -321,25 +321,25 @@ public abstract class CMDWhere extends CMDType {
 
 	private void setLessThan(int i, float tableValue, float comparisonValue){
 		if(tableValue > comparisonValue){
-			requestedRows.set(i, RequestedRow.TRUE);
+			requestedRows.set(i, RequestedCell.TRUE);
 		}
 	}
 
 	private void setMoreThan(int i, float tableValue, float comparisonValue){
 		if(tableValue < comparisonValue){
-			requestedRows.set(i, RequestedRow.TRUE);
+			requestedRows.set(i, RequestedCell.TRUE);
 		}
 	}
 
 	private void setLessThanEqual(int i, float tableValue, float comparisonValue){
 		if(tableValue >= comparisonValue){
-			requestedRows.set(i, RequestedRow.TRUE);
+			requestedRows.set(i, RequestedCell.TRUE);
 		}
 	}
 
 	private void setMoreThanEqual(int i, float tableValue, float comparisonValue){
 		if(tableValue <= comparisonValue){
-			requestedRows.set(i, RequestedRow.TRUE);
+			requestedRows.set(i, RequestedCell.TRUE);
 		}
 	}
 
@@ -349,16 +349,16 @@ public abstract class CMDWhere extends CMDType {
 
 	private void setUniveralRows(int attributeCoordinate, String opCommand, String valueCommand){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
-			requestedRows.add(RequestedRow.FALSE);
+			requestedRows.add(RequestedCell.FALSE);
 			if(stringMatcher("==", opCommand) || stringMatcher("LIKE", opCommand)){
 				if (temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
-					requestedRows.set(i, RequestedRow.TRUE);
+					requestedRows.set(i, RequestedCell.TRUE);
 				}
 			}
 			//if opCommand doesn't equal "==" or "LIKE" it has to equal "!="
 			else {
 				if (!temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
-					requestedRows.set(i, RequestedRow.TRUE);
+					requestedRows.set(i, RequestedCell.TRUE);
 				}
 			}
 		}

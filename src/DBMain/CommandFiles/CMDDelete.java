@@ -1,8 +1,7 @@
 package DBMain.CommandFiles;
-import DBMain.*;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
-import DBMain.ParseExceptions.RequestedRow;
+import DBMain.ParseExceptions.RequestedCell;
 
 import java.util.ArrayList;
 
@@ -23,11 +22,8 @@ public class CMDDelete extends CMDWhere {
 		}
 	}
 
-	protected void executeCMD(ArrayList<RequestedRow> finalRows){
+	protected void executeCMD(ArrayList<RequestedCell> finalRows){
 		System.out.println("COLUMN:" + "[all]" + "WHERE ROW:" + finalRows);
-	}
-
-	public void setExitMessage(){
-
+		setExitMessage();
 	}
 }
