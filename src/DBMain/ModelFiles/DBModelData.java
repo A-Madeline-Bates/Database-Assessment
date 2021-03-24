@@ -74,4 +74,8 @@ public class DBModelData extends DBModel {
 			tableData.get(i).remove(colNum);
 		}
 	}
+
+	public void deleteRow(int rowNum){
+		tableData.remove(rowNum);
+	}
 }

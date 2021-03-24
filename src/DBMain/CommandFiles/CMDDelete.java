@@ -1,4 +1,7 @@
 package DBMain.CommandFiles;
+import DBMain.DBLoad;
+import DBMain.ModelFiles.DBModelData;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
 import DBMain.ParseExceptions.RequestedCell;
@@ -15,6 +18,7 @@ public class CMDDelete extends CMDWhere {
 			if (doesTableExist(secondCommand)) {
 				setTemporaryPath(secondCommand);
 				setTemporaryData();
+				new DBLoad(storageData, temporaryPathModel.getDatabaseName(), secondCommand);
 				String thirdCommand = getTokenSafe(DomainType.WHERE);
 				if(stringMatcherTHROW("WHERE", thirdCommand, "DELETE FROM [table]")) {
 					splitIfBrackets(this);
@@ -24,7 +28,18 @@ public class CMDDelete extends CMDWhere {
 	}
 
 	protected void returnToCMD(ArrayList<RequestedCell> finalRows){
-		System.out.println("COLUMN:" + "[all]" + "WHERE ROW:" + finalRows);
+		removeRows(finalRows);
+		//using storagePath.setFilename to indicate that we want to store changes
+		storagePath.setFilename(temporaryPathModel.getFilename());
 		setExitMessage();
+	}
+
+	//we have to iterate downwards otherwise the row numbers won't correspond to those held by finalRows
+	private void removeRows(ArrayList<RequestedCell> finalRows){
+		for (int i = (storageData.getRowNumber() - 1); i >= 0; i--) {
+			if (finalRows.get(i).equals(RequestedCell.TRUE)) {
+				storageData.deleteRow(i);
+			}
+		}
 	}
 }
