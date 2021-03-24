@@ -7,6 +7,15 @@ public class DBCommandFactory {
 
 	public CMDType createCMD(DBTokeniser tokeniser) throws ParseExceptions{
 		String nextToken = tokeniser.nextToken();
+		if(nextToken == null){
+			throw new CommandMissing(DomainType.FIRSTCOMMAND);
+		}
+		else{
+			return commandSwitch(nextToken);
+		}
+	}
+
+	private CMDType commandSwitch(String nextToken) throws ParseExceptions{
 		switch (nextToken.toUpperCase()) {
 			case "USE":
 				return new CMDUse();
