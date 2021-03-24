@@ -8,7 +8,7 @@ public abstract class CMDWhere extends CMDType {
 	private Stack<ArrayList<RequestedCell>> rowStack = new Stack<>();
 	private Stack<String> operatorStack = new Stack<>();
 
-	protected abstract void executeCMD(ArrayList<RequestedCell> finalRows);
+	protected abstract void returnToCMD(ArrayList<RequestedCell> finalRows);
 
 	/******************************************************
 	 ****** METHOD TO END STRING OR TRIGGER 'WHERE' ******
@@ -23,7 +23,7 @@ public abstract class CMDWhere extends CMDType {
 			if (isItNullEndTHROW(extraInstruction)) {
 				//we want all rows, so set them all
 				requestAllRows();
-				currentCommand.executeCMD(finalRows);
+				currentCommand.returnToCMD(finalRows);
 			}
 		}
 		//if WHERE is called, call our recursive where operation
@@ -62,7 +62,7 @@ public abstract class CMDWhere extends CMDType {
 			finalRows.addAll(requestedRows);
 			//because there are no brackets we can expect the where clause to end here.
 			isItLineEndTHROW();
-			currentCommand.executeCMD(finalRows);
+			currentCommand.returnToCMD(finalRows);
 		}
 		else{
 			throw new InvalidCommand(nextCommand, "WHERE", "[attribute name]", "(");
@@ -186,7 +186,7 @@ public abstract class CMDWhere extends CMDType {
 		if(!rowStack.isEmpty()){
 			throw new SumError();
 		}
-		currentCommand.executeCMD(finalRows);
+		currentCommand.returnToCMD(finalRows);
 	}
 
 	private ArrayList<RequestedCell> computeAND(ArrayList<RequestedCell> rowsOne, ArrayList<RequestedCell> rowsTwo){

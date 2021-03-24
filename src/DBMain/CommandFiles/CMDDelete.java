@@ -22,7 +22,7 @@ public class CMDDelete extends CMDWhere {
 		}
 	}
 
-	protected void executeCMD(ArrayList<RequestedCell> finalRows){
+	protected void returnToCMD(ArrayList<RequestedCell> finalRows){
 		System.out.println("COLUMN:" + "[all]" + "WHERE ROW:" + finalRows);
 		setExitMessage();
 	}

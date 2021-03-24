@@ -101,24 +101,34 @@ public class CMDSelect extends CMDWhere {
 		}
 	}
 
-	protected void executeCMD(ArrayList<RequestedCell> finalRows){
+	protected void returnToCMD(ArrayList<RequestedCell> finalRows){
 		setExitMessage(finalRows);
-		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);
-		System.out.print(exitMessage);
 	}
 
 	//this is overriding the blank exitMessage method
 	public void setExitMessage(ArrayList<RequestedCell> finalRows){
+		setColumnsMessage();
+		exitMessage = exitMessage + "\n";
+		setRowsMessage(finalRows);
+	}
+
+	private void setColumnsMessage(){
 		for (int k = 0; k < temporaryDataModel.getColumnNumber(); k++) {
 			if (requestedColumns.get(k).equals(RequestedCell.TRUE)) {
-				exitMessage = exitMessage + temporaryDataModel.getColumnAttribute(k);
+				if(exitMessage == null){
+					exitMessage = temporaryDataModel.getColumnAttribute(k) + "\t\t";
+				} else {
+					exitMessage = exitMessage + temporaryDataModel.getColumnAttribute(k) + "\t\t";
+				}
 			}
 		}
-		exitMessage = exitMessage + "\n";
+	}
+
+	private void setRowsMessage(ArrayList<RequestedCell> finalRows){
 		for (int i = 0; i < temporaryDataModel.getRowNumber(); i++) {
 			if(finalRows.get(i).equals(RequestedCell.TRUE)) {
 				for (int j = 0; j < temporaryDataModel.getColumnNumber(); j++) {
-					if(requestedColumns.get(i).equals(RequestedCell.TRUE)) {
+					if(requestedColumns.get(j).equals(RequestedCell.TRUE)) {
 						exitMessage = exitMessage + temporaryDataModel.getCell(i, j) + "\t\t";
 					}
 				}

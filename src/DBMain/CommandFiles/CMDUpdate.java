@@ -67,7 +67,7 @@ public class CMDUpdate extends CMDWhere {
 		}
 	}
 
-	protected void executeCMD(ArrayList<RequestedCell> finalRows){
+	protected void returnToCMD(ArrayList<RequestedCell> finalRows){
 		setExitMessage();
 		System.out.println("COLUMN:" + updatedColumns + "WHERE ROW:" + finalRows);
 	}

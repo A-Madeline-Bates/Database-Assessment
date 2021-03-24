@@ -12,7 +12,7 @@ public class DBServer
     DBModelData modelData;
     DBModelPath modelPath;
     DBCommandFactory cmdFactory;
-    String exceptionMessage = "";
+    String exitMessage = "";
 
     public DBServer(int portNumber)
     {
@@ -48,9 +48,9 @@ public class DBServer
         DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
         processCommand(tokeniser);
         //replace exceptionMessage with general message
-        socketWriter.write(exceptionMessage);
+        socketWriter.write(exitMessage);
         //clear exception message
-        this.exceptionMessage = "";
+        this.exitMessage = "";
         //This is used for EOF
         socketWriter.write("\n" + ((char)4) + "\n");
         socketWriter.flush();
@@ -72,9 +72,11 @@ public class DBServer
             parseData(commandClass, tokeniser);
             modelData = commandClass.getStorageData();
             modelPath = commandClass.getStoragePath();
-            execute(modelData, modelPath);
+            execute(commandClass, modelData, modelPath);
         } catch (ParseExceptions exception) {
-            this.exceptionMessage = "[ERROR]\nCommand exception: " + exception;
+            this.exitMessage = "[ERROR]\nCommand exception: " + exception;
+        }  catch (IOException ioException) {
+            this.exitMessage = "[ERROR]\nCommand exception: " + ioException;
         }
     }
 
@@ -84,10 +86,9 @@ public class DBServer
         commandClass.transformModel();
     }
 
-    private void execute(DBModelData modelData, DBModelPath modelPath) throws ParseExceptions{
+    private void execute(CMDType commandClass, DBModelData modelData, DBModelPath modelPath) throws ParseExceptions{
         new DBStore(modelData, modelPath);
-//          could just put DBPrint in here and if there are no errors, it will print [OK]
-//          commandClass.getExitMessage();
+        exitMessage = "[OK]\n" + commandClass.getExitMessage();
     }
 
     public static void main(String args[])
