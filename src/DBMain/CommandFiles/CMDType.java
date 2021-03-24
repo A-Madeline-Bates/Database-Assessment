@@ -15,10 +15,9 @@ public abstract class CMDType {
 	//storing the data you're working on (or wiping a file)
 	protected DBModelData temporaryDataModel = new DBModelData();
 	protected DBModelPath temporaryPathModel = new DBModelPath();
+	String exitMessage;
 
 	protected DBTokeniser tokeniser;
-
-	public abstract String query(DBServer server);
 
 	/******************************************************
 	 *************** MODEL ALTERING METHODS ***************
@@ -45,6 +44,11 @@ public abstract class CMDType {
 
 	public abstract void transformModel() throws ParseExceptions;
 
+	public abstract void setExitMessage();
+
+	public String getExitMessage(){
+		return exitMessage;
+	}
 
 	/******************************************************
 	 ***************** LOAD TEMPORARY MODEL ****************

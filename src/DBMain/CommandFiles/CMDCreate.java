@@ -7,10 +7,6 @@ import java.util.ArrayList;
 public class CMDCreate extends CMDType {
 	private ArrayList<String> attributeNames = new ArrayList<>();
 
-	public String query(DBServer server){
-		return "Create";
-	}
-
 	public void transformModel() throws ParseExceptions {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
 		if (stringMatcher("DATABASE", firstInstruction)) {
@@ -122,5 +118,9 @@ public class CMDCreate extends CMDType {
 		} else {
 			throw new WorkingOutsideDatabase();
 		}
+	}
+
+	public void setExitMessage(){
+
 	}
 }

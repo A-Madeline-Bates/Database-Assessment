@@ -27,7 +27,7 @@ public class CMDDelete extends CMDWhere {
 		System.out.println("COLUMN:" + "[all]" + "WHERE ROW:" + finalRows);
 	}
 
-	public String query(DBServer server){
-		return "Delete";
+	public void setExitMessage(){
+
 	}
 }

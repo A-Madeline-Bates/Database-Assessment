@@ -72,7 +72,7 @@ public class CMDUpdate extends CMDWhere {
 		System.out.println("COLUMN:" + updatedColumns + "WHERE ROW:" + finalRows);
 	}
 
-	public String query(DBServer server){
-		return "Updater";
+	public void setExitMessage(){
+
 	}
 }

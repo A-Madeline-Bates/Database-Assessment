@@ -48,7 +48,7 @@ public class CMDAlter extends CMDType {
 		storageData.deleteColumn(attributeCoordinate);
 	}
 
-	public String query(DBServer server){
-		return "Alter";
+	public void setExitMessage(){
+
 	}
 }

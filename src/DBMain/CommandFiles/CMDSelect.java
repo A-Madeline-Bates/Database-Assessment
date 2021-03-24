@@ -96,10 +96,11 @@ public class CMDSelect extends CMDWhere {
 	}
 
 	protected void executeCMD(ArrayList<RequestedRow> finalRows){
+
 		System.out.println("COLUMN:" + requestedColumns + "WHERE ROW:" + finalRows);
 	}
 
-	public String query(DBServer server){
-		return "Select";
+	public void setExitMessage(){
+
 	}
 }
