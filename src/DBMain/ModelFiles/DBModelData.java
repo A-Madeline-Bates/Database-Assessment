@@ -44,7 +44,7 @@ public class DBModelData extends DBModel {
 		List<String> rowData = new ArrayList<>();
 		tableData.add(rowData);
 		//setting an ID number for the row
-		String idNo = String.valueOf(getRowNumber() - 1);
+		String idNo = String.valueOf(getRowNumber());
 		tableData.get(getRowNumber() - 1).add(idNo);
 		tableData.get(getRowNumber() - 1).addAll(newValues);
 	}

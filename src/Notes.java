@@ -44,7 +44,7 @@
 // - check if insert into adds empty strings if user doesn't supply enough strings, or it just denies the request.
 
 	//TO DO SIMPLE/AESTHETIC :
-// - 	separate more methods from their exception statements to allow testing
+//  -	separate more methods from their exception statements to allow testing
 //  - 	unpick some of the weird things we've done with booleans?
 
 	//TO DO DB CLASSES :
@@ -53,12 +53,10 @@
 //  - clean up CMDfactory?
 
 //TO DO CMD CLASSES :
-//  - maybe think about/ worry about empty cells?
 //  - CREATE shouldn't automatically set USE- change that.
 //  - sort out LIKE in SELECT
 //	- implement JOIN
 //  - consider fixing extra comma err on lists
-//  - stop users updating/changing ID column
 //  - split into more classes/ decouple from model
 //  - break any cyclic dependency
 //  - decouple!!
@@ -66,6 +64,10 @@
 //TO DO TESTING/GENERAL :
 //  - investigate automated testing?
 //  - use methods in combination with one another- build a test strategy
+
+//  - there is a problem with drop database !! will only delete if we are in a different database
+//  		(immediately reinstated by store?)
+//  - trying to filter by something of the wrong type is an error
 
 //  - delete testing classes before submitting
 //  - check all intellij warnings
