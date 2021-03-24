@@ -58,16 +58,10 @@
 //  - sort out LIKE in SELECT
 //	- implement JOIN
 //  - consider fixing extra comma err on lists
-//  - fix program crashing when empty command is entered
 //  - stop users updating/changing ID column
 //  - split into more classes/ decouple from model
 //  - break any cyclic dependency
-//  - finish unfinished CMDs
 //  - decouple!!
-
-//TO DO REGEX :
-//  - string literals need some refining in terms of what's allowed - fix that. ANYTHING APART FROM TABS AND SINGLE QUOTES ALLOWED
-//  - add maths operators to tokeniser split
 
 //TO DO TESTING/GENERAL :
 //  - investigate automated testing?

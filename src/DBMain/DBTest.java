@@ -171,6 +171,18 @@ public class DBTest {
         assert (testT7.nextToken().equals(")"));
         assert (testT7.nextToken().equals(";"));
         assert (testT7.nextToken() == null);
+        DBTokeniser testT8 = new DBTokeniser("== = <= < >= > != ! '==' *");
+        assert (testT8.nextToken().equals("=="));
+        assert (testT8.nextToken().equals("="));
+        assert (testT8.nextToken().equals("<="));
+        assert (testT8.nextToken().equals("<"));
+        assert (testT8.nextToken().equals(">="));
+        assert (testT8.nextToken().equals(">"));
+        assert (testT8.nextToken().equals("!="));
+        assert (testT8.nextToken().equals("!"));
+        assert (testT8.nextToken().equals("'=='"));
+        assert (testT8.nextToken().equals("*"));
+        assert (testT8.nextToken() == null);
     }
 
 //    private void testParse(DBCommandFactory testParser){

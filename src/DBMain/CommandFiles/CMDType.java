@@ -46,11 +46,11 @@ public abstract class CMDType {
 
 	public abstract void transformModel() throws ParseExceptions, IOException;
 
-	protected void setExitMessage(){
+	protected void setExitMessage() {
 		this.exitMessage = "";
 	}
 
-	public String getExitMessage(){
+	public String getExitMessage() {
 		return exitMessage;
 	}
 
@@ -58,7 +58,7 @@ public abstract class CMDType {
 	 ***************** LOAD TEMPORARY MODEL ****************
 	 *****************************************************/
 
-	protected void setTemporaryData() throws IOException{
+	protected void setTemporaryData() throws IOException {
 		new DBLoad(temporaryDataModel, storagePath.getDatabaseName(), temporaryPathModel.getFilename());
 	}
 
@@ -160,14 +160,14 @@ public abstract class CMDType {
 		}
 	}
 
-	protected boolean stringMatcher(String commandNeeded, String nextCommand){
+	protected boolean stringMatcher(String commandNeeded, String nextCommand) {
 		if (nextCommand.equalsIgnoreCase(commandNeeded)) {
 			return true;
 		}
 		return false;
 	}
 
-	protected boolean stringMatcherTHROW(String commandNeeded, String nextCommand, String prevCommand) throws ParseExceptions{
+	protected boolean stringMatcherTHROW(String commandNeeded, String nextCommand, String prevCommand) throws ParseExceptions {
 		if (stringMatcher(commandNeeded, nextCommand)) {
 			return true;
 		}
@@ -281,6 +281,17 @@ public abstract class CMDType {
 			return attributeCoordinate;
 		} else {
 			throw new DoesNotExistAttribute(nextCommand, path.getFilename());
+		}
+	}
+
+
+	/******************************************************
+ 	*************** PREVENT EDITING ID COL **************
+ 	*****************************************************/
+
+	protected void protectIDCol(int colNum) throws ParseExceptions{
+		if(colNum == 0){
+			throw new EditingID();
 		}
 	}
 }

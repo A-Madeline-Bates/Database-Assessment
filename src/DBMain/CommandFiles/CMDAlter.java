@@ -35,6 +35,7 @@ public class CMDAlter extends CMDType {
 			//searching for preexisting attributes
 			String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 			int attributeCoordinate = findAttributeTHROW(attributeCommand, storagePath, storageData);
+			protectIDCol(attributeCoordinate);
 			if(isItLineEndTHROW()) {
 				dropColumn(attributeCoordinate);
 			}

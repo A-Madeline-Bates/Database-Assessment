@@ -8,7 +8,7 @@ public abstract class CMDWhere extends CMDType {
 	private Stack<ArrayList<RequestedCell>> rowStack = new Stack<>();
 	private Stack<String> operatorStack = new Stack<>();
 
-	protected abstract void returnToCMD(ArrayList<RequestedCell> finalRows);
+	protected abstract void returnToCMD(ArrayList<RequestedCell> finalRows) throws ParseExceptions;
 
 	/******************************************************
 	 ****** METHOD TO END STRING OR TRIGGER 'WHERE' ******

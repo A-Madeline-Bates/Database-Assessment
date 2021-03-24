@@ -70,18 +70,19 @@ public class CMDUpdate extends CMDWhere {
 		}
 	}
 
-	protected void returnToCMD(ArrayList<RequestedCell> finalRows){
+	protected void returnToCMD(ArrayList<RequestedCell> finalRows) throws ParseExceptions{
 		editTableValues(finalRows);
 		//using storagePath.setFilename to indicate that we want to store changes
 		storagePath.setFilename(temporaryPathModel.getFilename());
 		setExitMessage();
 	}
 
-	private void editTableValues(ArrayList<RequestedCell> finalRows){
+	private void editTableValues(ArrayList<RequestedCell> finalRows) throws ParseExceptions{
 		for (int i = 0; i < storageData.getRowNumber(); i++) {
 			if(finalRows.get(i).equals(RequestedCell.TRUE)) {
 				for (int j = 0; j < storageData.getColumnNumber(); j++) {
 					if(!updatedColumns.get(j).equals("n/a")) {
+						protectIDCol(j);
 						storageData.setCell(i, j, updatedColumns.get(j));
 					}
 				}
