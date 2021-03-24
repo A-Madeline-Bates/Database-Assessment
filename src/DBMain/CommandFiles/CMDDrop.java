@@ -5,10 +5,11 @@ import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;
 
 import java.io.File;
+import java.io.IOException;
 
 public class CMDDrop extends CMDType {
 
-	public void transformModel() throws ParseExceptions {
+	public void transformModel() throws ParseExceptions, IOException {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
 		if (stringMatcher("DATABASE", firstInstruction)) {
 			processDB();

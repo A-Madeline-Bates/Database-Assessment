@@ -7,7 +7,7 @@ public class DBLoad {
     String databaseName;
     String tableName;
 
-    public DBLoad(DBModelData modelData, String databaseName, String tableName){
+    public DBLoad(DBModelData modelData, String databaseName, String tableName) throws IOException{
         this.modelData = modelData;
         this.databaseName = databaseName;
         this.tableName = tableName;

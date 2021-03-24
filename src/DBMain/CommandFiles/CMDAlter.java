@@ -4,9 +4,11 @@ import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;
 
+import java.io.IOException;
+
 public class CMDAlter extends CMDType {
 
-	public void transformModel() throws ParseExceptions {
+	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLE);
 		if (stringMatcherTHROW("TABLE", firstCommand, "ALTER")) {
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class CMDCreate extends CMDType {
 	private ArrayList<String> attributeNames = new ArrayList<>();
 
-	public void transformModel() throws ParseExceptions {
+	public void transformModel() throws ParseExceptions, IOException {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
 		if (stringMatcher("DATABASE", firstInstruction)) {
 			processDatabase();

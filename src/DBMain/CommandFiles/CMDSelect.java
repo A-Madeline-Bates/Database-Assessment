@@ -1,12 +1,13 @@
 package DBMain.CommandFiles;
 import DBMain.ParseExceptions.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDSelect extends CMDWhere {
 	private ArrayList<RequestedCell> requestedColumns = new ArrayList<>();
 
-	public void transformModel() throws ParseExceptions {
+	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		findTable();
 		initRequestedCols();
@@ -26,7 +27,7 @@ public class CMDSelect extends CMDWhere {
 	 *************  METHOD TO IDENTIFY FILE  **************
 	 *****************************************************/
 
-	private void findTable() throws ParseExceptions {
+	private void findTable() throws ParseExceptions, IOException {
 		//we need to know table name before we can identify if our attribute is valid, so we start by 'peaking'
 		//forwards at it.
 		for(int i=1; ; i++) {

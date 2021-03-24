@@ -2,12 +2,13 @@ package DBMain.CommandFiles;
 import DBMain.*;
 import DBMain.ParseExceptions.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDInsert extends CMDType {
 	private ArrayList<String> valueList = new ArrayList<>();
 
-	public void transformModel() throws ParseExceptions {
+	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.INTO);
 		if (stringMatcherTHROW("INTO", firstCommand, "INSERT")) {
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);
@@ -25,7 +26,7 @@ public class CMDInsert extends CMDType {
 		}
 	}
 
-	private void collectValues(String tableName) throws ParseExceptions{
+	private void collectValues(String tableName) throws ParseExceptions, IOException{
 		String nextCommand = getTokenSafe(DomainType.VALUE);
 		//if it's a ')', leave recursive loop and update table
 		if (stringMatcher(")", nextCommand)) {
@@ -47,7 +48,7 @@ public class CMDInsert extends CMDType {
 		}
 	}
 
-	private void updateTable(String tableName) throws ParseExceptions{
+	private void updateTable(String tableName) throws ParseExceptions, IOException{
 
 		//load data into a temporary instance of DBModel so that we can find out if the user is trying to
 		//load too many values into our table before they do it.

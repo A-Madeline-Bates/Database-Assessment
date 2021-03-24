@@ -7,7 +7,7 @@ public class DBStore {
     DBModelData modelData;
     DBModelPath modelPath;
 
-    public DBStore(DBModelData modelData, DBModelPath modelPath){
+    public DBStore(DBModelData modelData, DBModelPath modelPath) throws IOException{
         this.modelData = modelData;
         this.modelPath  = modelPath;
 
@@ -35,22 +35,13 @@ public class DBStore {
         }
     }
 
-    private void processFile(){
+    private void processFile() throws IOException{
         File currentFile = new File(getFilePath());
-        try{
-            createFile(currentFile);
-            writeToFile(currentFile);
-        }
-        catch(IOException exception) {
-            System.out.println("IOException trying to store file " + modelPath.getFilename());
-        }
+        createFile(currentFile);
+        writeToFile(currentFile);
     }
 
     private void createFile(File currentFile) throws IOException{
-        if(currentFile.exists()){
-            //we need to overwrite files to update them
-            System.out.println("file overwrite");
-        }
         currentFile.createNewFile();
     }
 

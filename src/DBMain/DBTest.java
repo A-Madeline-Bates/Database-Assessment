@@ -17,7 +17,7 @@ public class DBTest {
         testColumnArr(testDataModel);
         testGetRowCol(testDataModel);
         DBModelData testDataModel2 = new DBModelData();
-        testLoadAndStore(testDataModel2, testPathModel);
+//        testLoadAndStore(testDataModel2, testPathModel);
         testTokeniser();
         DBCommandFactory testParser = new DBCommandFactory();
 //        testParse(testParser);
@@ -102,17 +102,17 @@ public class DBTest {
         testDataModel.setRowsFromFile("test\ttest\ttest");
         assert (testDataModel.getRowNumber() == 10);
     }
-
-    private void testLoadAndStore(DBModelData testDataModel, DBModelPath testDataPath) {
-        new DBLoad(testDataModel, "testFiles", "test2.txt");
-        assert (testDataModel.getRowNumber() == 5);
-        assert (testDataModel.getColumnNumber() == 3);
-        testDataPath.setFilename("test2.txt");
-        testDataPath.setDatabaseName("testFiles");
-        assert (testDataPath.getFilename().equals("test2.txt"));
-        assert (testDataPath.getDatabaseName().equals("testFiles"));
-//        new DBStore (testDataModel, testDataPath);
-    }
+//
+//    private void testLoadAndStore(DBModelData testDataModel, DBModelPath testDataPath) {
+//        new DBLoad(testDataModel, "testFiles", "test2.txt");
+//        assert (testDataModel.getRowNumber() == 5);
+//        assert (testDataModel.getColumnNumber() == 3);
+//        testDataPath.setFilename("test2.txt");
+//        testDataPath.setDatabaseName("testFiles");
+//        assert (testDataPath.getFilename().equals("test2.txt"));
+//        assert (testDataPath.getDatabaseName().equals("testFiles"));
+////        new DBStore (testDataModel, testDataPath);
+//    }
 
     private void testTokeniser() {
         DBTokeniser testT1 = new DBTokeniser("hello world");

@@ -2,6 +2,8 @@ package DBMain.CommandFiles;
 import DBMain.*;
 import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.*;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,7 +44,7 @@ public abstract class CMDType {
 		this.storageData = new DBModelData();
 	}
 
-	public abstract void transformModel() throws ParseExceptions;
+	public abstract void transformModel() throws ParseExceptions, IOException;
 
 	protected void setExitMessage(){
 		this.exitMessage = "";
@@ -56,7 +58,7 @@ public abstract class CMDType {
 	 ***************** LOAD TEMPORARY MODEL ****************
 	 *****************************************************/
 
-	protected void setTemporaryData() {
+	protected void setTemporaryData() throws IOException{
 		new DBLoad(temporaryDataModel, storagePath.getDatabaseName(), temporaryPathModel.getFilename());
 	}
 

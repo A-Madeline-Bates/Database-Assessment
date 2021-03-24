@@ -76,17 +76,17 @@ public class DBServer
         } catch (ParseExceptions exception) {
             this.exitMessage = "[ERROR]\nCommand exception: " + exception;
         }  catch (IOException ioException) {
-            this.exitMessage = "[ERROR]\nCommand exception: " + ioException;
+            this.exitMessage = "[ERROR]\nIOException trying to use file " + modelPath.getFilename();
         }
     }
 
-    private void parseData(CMDType commandClass, DBTokeniser tokeniser) throws ParseExceptions{
+    private void parseData(CMDType commandClass, DBTokeniser tokeniser) throws ParseExceptions, IOException{
         commandClass.setModel(modelPath);
         commandClass.setTokeniser(tokeniser);
         commandClass.transformModel();
     }
 
-    private void execute(CMDType commandClass, DBModelData modelData, DBModelPath modelPath) throws ParseExceptions{
+    private void execute(CMDType commandClass, DBModelData modelData, DBModelPath modelPath) throws ParseExceptions, IOException{
         new DBStore(modelData, modelPath);
         exitMessage = "[OK]\n" + commandClass.getExitMessage();
     }

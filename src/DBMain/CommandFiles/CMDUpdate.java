@@ -1,12 +1,13 @@
 package DBMain.CommandFiles;
 import DBMain.ParseExceptions.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDUpdate extends CMDWhere {
 	private ArrayList<String> updatedColumns = new ArrayList<>();
 
-	public void transformModel() throws ParseExceptions {
+	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);
 		if (doesTableExist(firstCommand)) {
 			setTemporaryPath(firstCommand);
