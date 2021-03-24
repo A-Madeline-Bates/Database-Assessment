@@ -48,10 +48,7 @@
 //  - 	unpick some of the weird things we've done with booleans?
 
 	//TO DO DB CLASSES :
-//	- find a fix to take dbstore out of parse try block
 //	- decouple DBStore from DBModel
-//	- sort exceptions in DBstore
-//	- fix DBPrint
 //  - decide whether to implement 'if there is no databaseFiles, create one'
 //  - clean up CMDfactory?
 

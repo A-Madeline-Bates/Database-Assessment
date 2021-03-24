@@ -113,7 +113,6 @@ public class CMDCreate extends CMDType {
 		}
 	}
 
-
 	protected boolean areWeInDB() throws ParseExceptions {
 		if (storagePath.getDatabaseName() != null) {
 			return true;

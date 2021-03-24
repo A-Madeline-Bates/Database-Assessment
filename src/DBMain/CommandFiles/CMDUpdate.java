@@ -75,7 +75,6 @@ public class CMDUpdate extends CMDWhere {
 		//using storagePath.setFilename to indicate that we want to store changes
 		storagePath.setFilename(temporaryPathModel.getFilename());
 		setExitMessage();
-		System.out.println("COLUMN:" + updatedColumns + "WHERE ROW:" + finalRows);
 	}
 
 	private void editTableValues(ArrayList<RequestedCell> finalRows){
