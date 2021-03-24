@@ -1,14 +1,20 @@
 package DBMain;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.*;
+
 
 public class DBTokeniser {
 	final ArrayList<String> TokenList = new ArrayList<>();
 	private int ArrayPosition = 0;
 
 	public DBTokeniser(String incomingCommand){
-		//This splits the string and turns it into tokens with no white space and keeps punctuation
-		TokenList.addAll(Arrays.asList(incomingCommand.split("\\s+|(?=[;,()])|(?<=[;,()])")));
+		Pattern pattern = Pattern.compile("('.*?')|[;,)(=<>*!]|[a-zA-Z0-9]*");
+		Matcher matcher = pattern.matcher(incomingCommand);
+		while(matcher.find()){
+			//This splits the string and turns it into tokens with no white space and keeps punctuation
+			TokenList.add(matcher.group());
+		}
 		TokenList.removeAll(Arrays.asList("", null));
 	}
 

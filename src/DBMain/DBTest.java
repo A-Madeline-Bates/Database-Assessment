@@ -116,6 +116,7 @@ public class DBTest {
 
     private void testTokeniser() {
         DBTokeniser testT1 = new DBTokeniser("hello world");
+//        System.out.println("*" + testT1.nextToken());
         assert (testT1.nextToken().equals("hello"));
         assert (testT1.nextToken().equals("world"));
         assert (testT1.nextToken() == null);
@@ -124,11 +125,19 @@ public class DBTest {
         assert (testT2.nextToken().equals("2"));
         assert (testT2.nextToken().equals("3"));
         assert (testT2.nextToken() == null);
-        DBTokeniser testT3 = new DBTokeniser("1     2. 4");
+        DBTokeniser testT3 = new DBTokeniser("1     2 4");
         assert (testT3.nextToken().equals("1"));
-        assert (testT3.nextToken().equals("2."));
+        assert (testT3.nextToken().equals("2"));
         assert (testT3.nextToken().equals("4"));
         assert (testT3.nextToken() == null);
+        DBTokeniser testT6 = new DBTokeniser(";() 'hello there', ';(),'");
+        assert (testT6.nextToken().equals(";"));
+        assert (testT6.nextToken().equals("("));
+        assert (testT6.nextToken().equals(")"));
+        assert (testT6.nextToken().equals("'hello there'"));
+        assert (testT6.nextToken().equals(","));
+        assert (testT6.nextToken().equals("';(),'"));
+        assert (testT6.nextToken() == null);
         DBTokeniser testT5 = new DBTokeniser("VALUES (hello, true, false);");
         assert (testT5.nextToken().equals("VALUES"));
         assert (testT5.nextToken().equals("("));
@@ -151,17 +160,17 @@ public class DBTest {
         assert (testT4.nextToken().equals(")"));
         assert (testT4.nextToken().equals(";"));
         assert (testT4.nextToken() == null);
-        DBTokeniser testT6 = new DBTokeniser("VALUES('hello',true,false);");
-        assert (testT6.nextToken().equals("VALUES"));
-        assert (testT6.nextToken().equals("("));
-        assert (testT6.nextToken().equals("'hello'"));
-        assert (testT6.nextToken().equals(","));
-        assert (testT6.nextToken().equals("true"));
-        assert (testT6.nextToken().equals(","));
-        assert (testT6.nextToken().equals("false"));
-        assert (testT6.nextToken().equals(")"));
-        assert (testT6.nextToken().equals(";"));
-        assert (testT6.nextToken() == null);
+        DBTokeniser testT7 = new DBTokeniser("VALUES('hello',true,false);");
+        assert (testT7.nextToken().equals("VALUES"));
+        assert (testT7.nextToken().equals("("));
+        assert (testT7.nextToken().equals("'hello'"));
+        assert (testT7.nextToken().equals(","));
+        assert (testT7.nextToken().equals("true"));
+        assert (testT7.nextToken().equals(","));
+        assert (testT7.nextToken().equals("false"));
+        assert (testT7.nextToken().equals(")"));
+        assert (testT7.nextToken().equals(";"));
+        assert (testT7.nextToken() == null);
     }
 
 //    private void testParse(DBCommandFactory testParser){
