@@ -381,11 +381,20 @@ public abstract class CMDWhere extends CMDType {
 	}
 
 	private boolean isItSimilar(String currentValue, String comparisonValue){
-		//we will judge two strings to be similar if they share 60% of the same characters or if the comparison value
+		//trim the quote marks from the strings
+		currentValue = currentValue.substring(1, currentValue.length() - 1);
+		comparisonValue = comparisonValue.substring(1, comparisonValue.length() - 1);		//we will judge two strings to be similar if they share 60% of the same characters or if the comparison value
 		//is contained within our current value
-		if(currentValue.contains(comparisonValue)){
+		if(currentValue.toLowerCase().contains(comparisonValue.toLowerCase()) ||
+				(isCountEnough(currentValue, comparisonValue))){
 			return true;
 		}
+		else {
+			return false;
+		}
+	}
+
+	private boolean isCountEnough(String currentValue, String comparisonValue){
 		int matchThreshold = (int) (currentValue.length() * 0.6);
 		int matches = countSameChars(currentValue, comparisonValue);
 		if(matches >= matchThreshold){
