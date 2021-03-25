@@ -234,9 +234,9 @@ public abstract class CMDWhere extends CMDType {
 				isItNumTHROW(valueCommand);
 				setNumRows(attributeCoordinate, opCommand, valueCommand);
 				break;
-			case STRING : //we are currently treating '==' and LIKE (i.e STRING and UNIVERSAL) as the same.
+			case STRING :
 				isItStringTHROW(valueCommand);
-				setUniveralRows(attributeCoordinate, opCommand, valueCommand);
+				setStringRows(attributeCoordinate, valueCommand);
 				break;
 			default: //default means the opType is universal, so we only need to know if it's a valid value
 				isItValidValue(valueCommand);
@@ -352,17 +352,58 @@ public abstract class CMDWhere extends CMDType {
 	private void setUniveralRows(int attributeCoordinate, String opCommand, String valueCommand){
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			requestedRows.add(RequestedCell.FALSE);
-			if(stringMatcher("==", opCommand) || stringMatcher("LIKE", opCommand)){
+			if(stringMatcher("==", opCommand)){
 				if (temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.set(i, RequestedCell.TRUE);
 				}
 			}
-			//if opCommand doesn't equal "==" or "LIKE" it has to equal "!="
+			//if opCommand doesn't equal "==" it has to equal "!="
 			else {
 				if (!temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.set(i, RequestedCell.TRUE);
 				}
 			}
 		}
+	}
+
+	private void setStringRows(int attributeCoordinate, String valueCommand) throws ParseExceptions{
+		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
+			//if we're not looking at a string, throw an exception
+			String currentValue = temporaryDataModel.getCell(i, attributeCoordinate);
+			if(!isItString(currentValue)){
+				throw new OperatorDataMismatch(currentValue, OperatorType.STRING);
+			}
+			requestedRows.add(RequestedCell.FALSE);
+			if (isItSimilar(currentValue, valueCommand)) {
+				requestedRows.set(i, RequestedCell.TRUE);
+			}
+		}
+	}
+
+	private boolean isItSimilar(String currentValue, String comparisonValue){
+		//we will judge two strings to be similar if they share 60% of the same characters or if the comparison value
+		//is contained within our current value
+		if(currentValue.contains(comparisonValue)){
+			return true;
+		}
+		int matchThreshold = (int) (currentValue.length() * 0.6);
+		int matches = countSameChars(currentValue, comparisonValue);
+		if(matches >= matchThreshold){
+			return true;
+		}
+		return false;
+	}
+
+	private int countSameChars(String currentValue, String comparisonValue){
+		int matches = 0;
+		for(int i=0; i<currentValue.length(); i++){
+			for(int j=0; j<comparisonValue.length(); j++){
+				if(String.valueOf(currentValue.charAt(i)).equals(String.valueOf(comparisonValue.charAt(j)))){
+					matches++;
+					break;
+				}
+			}
+		}
+		return matches;
 	}
 }
