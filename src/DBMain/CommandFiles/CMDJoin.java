@@ -11,9 +11,10 @@ import java.io.IOException;
 public class CMDJoin extends CMDType {
 	//this is a second 'temporary' version of the model that can be used to check data without running the risk of
 	//storing the data you're working on (or wiping a file)
-	protected DBModelData temporaryDataModel2 = new DBModelData();
-	protected DBModelPath temporaryPathModel2 = new DBModelPath();
-
+	private DBModelData temporaryDataModel2 = new DBModelData();
+	private DBModelPath temporaryPathModel2 = new DBModelPath();
+	//a separate model to create our 'join' table
+	private DBModelData joinModel = new DBModelData();
 
 //	The JOIN query should perform an inner join on the two specified tables
 // You need not store the combined table on the filesystem, but just return the complete table to the user
@@ -87,11 +88,11 @@ public class CMDJoin extends CMDType {
 		//take first id
 		//check against every value in corresponding id table
 		//if it appears multiple times, record that
-		//so for every row in table, record which rows in corresponding table should be printed
-		//create join table model
+			//maybe we don't need this interim step
+		//continue for all rows
 		//create a 2d array, with 1 cell for each column. If cell !=n/a, add the appropriate row from table 1 and
 		//appropriate row from table 2 together into our join model (i.e a loop in a loop)
-		//then just return the data in the join model
+		//then just return the data in the join model for printing
 	}
 
 
