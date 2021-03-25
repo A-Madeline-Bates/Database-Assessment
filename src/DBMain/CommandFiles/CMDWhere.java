@@ -286,7 +286,7 @@ public abstract class CMDWhere extends CMDType {
 	 ************* NUMERICAL CONDITION METHODS ************
 	 *****************************************************/
 
-	private void setNumRows(int attributeCoordinate, String opCommand, String valueCommand){
+	private void setNumRows(int attributeCoordinate, String opCommand, String valueCommand) throws ParseExceptions{
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
@@ -299,7 +299,9 @@ public abstract class CMDWhere extends CMDType {
 				//consider every cell in our attribute's column
 				float tableValue = Float.parseFloat(temporaryDataModel.getCell(i, attributeCoordinate));
 				assignByOperator(i, opCommand, tableValue, comparisonValue);
-			} catch(NumberFormatException n){}
+			} catch(NumberFormatException n){
+				throw new OperatorDataMismatch(temporaryDataModel.getCell(i, attributeCoordinate), OperatorType.NUMERICAL);
+			}
 		}
 	}
 

@@ -56,7 +56,6 @@
 //TO DO CMD CLASSES :
 //  - CREATE shouldn't automatically set USE- change that.
 //  - sort out LIKE in SELECT
-//	- implement JOIN
 //  - consider fixing extra comma err on lists
 //  - split into more classes/ decouple from model
 //  - break any cyclic dependency
@@ -67,8 +66,6 @@
 //  - investigate automated testing?
 //  - use methods in combination with one another- build a test strategy
 
-//  - there is a problem with drop database !! will only delete if we are in a different database
-//  		(immediately reinstated by store?)
 //  - trying to filter by something of the wrong type is an error
 
 //  - delete testing classes before submitting

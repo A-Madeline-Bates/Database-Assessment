@@ -41,7 +41,7 @@ public abstract class CMDType {
 	}
 
 	protected void clearFilePath() {
-		this.storageData = new DBModelData();
+		this.storagePath = new DBModelPath();
 	}
 
 	public abstract void transformModel() throws ParseExceptions, IOException;

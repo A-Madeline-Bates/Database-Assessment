@@ -27,10 +27,7 @@ public class CMDDrop extends CMDType {
 		String nextCommand = getTokenSafe(DomainType.DATABASENAME);
 		if(doesDBExist(nextCommand)) {
 			if (isItLineEndTHROW()) {
-				//if database in use is the one we're deleting, remove it
-				if(nextCommand.equals(storagePath.getDatabaseName())) {
-					clearFilePath();
-				}
+				clearFilePath();
 				String dbLocation = "databaseFiles" + File.separator + nextCommand;
 				File file = new File(dbLocation);
 				deleteDB(file);
