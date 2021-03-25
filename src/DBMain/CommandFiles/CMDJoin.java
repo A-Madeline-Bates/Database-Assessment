@@ -88,34 +88,29 @@ public class CMDJoin extends CMDType {
 
 	//whichTable identifies which table the first match belongs to
 	private void processMatches(int whichTable, int firstMatch, int secondMatch){
-		//take first id
-		//check against every value in corresponding id table
-		//if it appears multiple times, record that
-			//maybe we don't need this interim step
-		//continue for all rows
-		//create a 2d array, with 1 cell for each column. If cell !=n/a, add the appropriate row from table 1 and
-		//appropriate row from table 2 together into our join model (i.e a loop in a loop)
-		//then just return the data in the join model for printing
-
 		//if whichTable == 0, then firstMatch corresponds to the table in temporaryDataModel- which is what we want to
 		//use for the primary column. If whichTable == 1, secondMatch corresponds to the table in temporaryDataModel
-		int primaryColumn, secondaryMatch;
-		if(whichTable == 0){
+		int primaryColumn, secondaryColumn;
+		if(whichTable == 1){
 			primaryColumn = firstMatch;
-			secondaryMatch = secondMatch;
+			secondaryColumn = secondMatch;
 		} else{
 			primaryColumn = secondMatch;
-			secondaryMatch = firstMatch;
+			secondaryColumn = firstMatch;
 		}
+		fillJoin(primaryColumn, secondaryColumn);
+	}
+
+	private void fillJoin(int primaryColumn, int secondaryColumn){
 		//first table row will have an ID set, but not the second
 		joinModel.setColumnsFromSQL(temporaryDataModel.getColumnData());
 		joinModel.setColumnsSQLNoID(temporaryDataModel2.getColumnData());
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			for(int j=0; j<temporaryDataModel2.getRowNumber(); j++){
-				if(temporaryDataModel.getCell(i, primaryColumn).equals(temporaryDataModel2.getCell(j, secondaryMatch))){
+				if(temporaryDataModel.getCell(i, primaryColumn).equals(temporaryDataModel2.getCell(j, secondaryColumn))){
 					ArrayList<String> joinRow = new ArrayList<>();
-					joinRow.addAll(temporaryDataModel.getRowsData().get(i));
-					joinRow.addAll(temporaryDataModel2.getRowsData().get(j));
+					joinRow.addAll(temporaryDataModel.getSingleRow(i));
+					joinRow.addAll(temporaryDataModel2.getSingleRow(j));
 					//this will set one ID column for our joinRow
 					joinModel.setRowsFromSQL(joinRow);
 				}
@@ -124,12 +119,24 @@ public class CMDJoin extends CMDType {
 	}
 
 	public void setExitMessage(){
+		setColumnsMessage();
+		exitMessage = exitMessage + "\n";
 		for (int i = 0; i < joinModel.getRowNumber(); i++) {
 			for (int j = 0; j < joinModel.getColumnNumber(); j++) {
-				exitMessage = exitMessage + joinModel.getCell(i, j) + "\t\t";
+				exitMessage = exitMessage + joinModel.getCell(i, j) + "\t";
 			}
 			//Write a new line for every new row
 			exitMessage = exitMessage + "\n";
+		}
+	}
+
+	private void setColumnsMessage(){
+		for (int k = 0; k < joinModel.getColumnNumber(); k++) {
+			if(exitMessage == null){
+				exitMessage = joinModel.getColumnAttribute(k) + "\t";
+			} else {
+				exitMessage = exitMessage + joinModel.getColumnAttribute(k) + "\t";
+			}
 		}
 	}
 }

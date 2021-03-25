@@ -230,7 +230,7 @@ public class DBTest {
         testRow.add("b");
         testRow.add("c");
         testDataModel5.setRowsFromSQL(testRow);
-        assert (testDataModel5.getRowsData().get(0).get(0).equals("0"));
+        assert (testDataModel5.getRowsData().get(0).get(0).equals("1"));
         assert (testDataModel5.getRowsData().get(0).get(1).equals("a"));
         assert (testDataModel5.getRowsData().get(0).get(2).equals("b"));
         assert (testDataModel5.getRowsData().get(0).get(3).equals("c"));
@@ -240,7 +240,7 @@ public class DBTest {
         testRow2.add("e");
         testRow2.add("f");
         testDataModel5.setRowsFromSQL(testRow2);
-        assert (testDataModel5.getRowsData().get(1).get(0).equals("1"));
+        assert (testDataModel5.getRowsData().get(1).get(0).equals("2"));
         assert (testDataModel5.getRowsData().get(1).get(1).equals("d"));
         assert (testDataModel5.getRowsData().get(1).get(2).equals("e"));
         assert (testDataModel5.getRowsData().get(1).get(3).equals("f"));
@@ -250,7 +250,7 @@ public class DBTest {
         testRow3.add("h");
         testRow3.add("i");
         testDataModel5.setRowsFromSQL(testRow3);
-        assert (testDataModel5.getRowsData().get(2).get(0).equals("2"));
+        assert (testDataModel5.getRowsData().get(2).get(0).equals("3"));
         assert (testDataModel5.getRowsData().get(2).get(1).equals("g"));
         assert (testDataModel5.getRowsData().get(2).get(2).equals("h"));
         assert (testDataModel5.getRowsData().get(2).get(3).equals("i"));

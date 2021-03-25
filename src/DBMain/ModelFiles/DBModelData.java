@@ -57,6 +57,10 @@ public class DBModelData extends DBModel {
 		return tableData;
 	}
 
+	public List<String> getSingleRow(int i){
+		return tableData.get(i);
+	}
+
 	public int getRowNumber() {
 		return tableData.size();
 	}

@@ -33,8 +33,8 @@ public class DBCommandFactory {
 				return new CMDDelete();
 			case "DROP":
 				return new CMDDrop();
-//			case "JOIN":
-//				return new CMDJoin();
+			case "JOIN":
+				return new CMDJoin();
 			default:
 				throw new InvalidFirstCommand(nextToken);
 		}

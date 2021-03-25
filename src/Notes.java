@@ -46,6 +46,7 @@
 	//TO DO SIMPLE/AESTHETIC :
 //  -	separate more methods from their exception statements to allow testing
 //  - 	unpick some of the weird things we've done with booleans?
+//  -   remove quote marks in print?
 
 	//TO DO DB CLASSES :
 //	- decouple DBStore from DBModel
@@ -60,6 +61,7 @@
 //  - split into more classes/ decouple from model
 //  - break any cyclic dependency
 //  - decouple!!
+//  - two tables could have the same ID if it's done be row no!
 
 //TO DO TESTING/GENERAL :
 //  - investigate automated testing?
