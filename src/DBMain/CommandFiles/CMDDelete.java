@@ -16,8 +16,7 @@ public class CMDDelete extends CMDWhere {
 		if(stringMatcherTHROW("FROM", firstCommand, "DELETE")){
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
-				setTemporaryPath(secondCommand);
-				setTemporaryData();
+				setTemporaryModel(secondCommand, temporaryPathModel, temporaryDataModel);
 				new DBLoad(storageData, temporaryPathModel.getDatabaseName(), secondCommand);
 				String thirdCommand = getTokenSafe(DomainType.WHERE);
 				if(stringMatcherTHROW("WHERE", thirdCommand, "DELETE FROM [table]")) {

@@ -57,14 +57,15 @@ public abstract class CMDType {
 	/******************************************************
 	 ***************** LOAD TEMPORARY MODEL ****************
 	 *****************************************************/
+//
+//	protected void setTemporaryData(DBModelPath data) throws IOException {
+//		new DBLoad(data, storagePath.getDatabaseName(), data.getFilename());
+//	}
 
-	protected void setTemporaryData() throws IOException {
-		new DBLoad(temporaryDataModel, storagePath.getDatabaseName(), temporaryPathModel.getFilename());
-	}
-
-	protected void setTemporaryPath(String fileName) {
-		temporaryPathModel.setFilename(fileName);
-		temporaryPathModel.setDatabaseName(storagePath.getDatabaseName());
+	protected void setTemporaryModel(String fileName, DBModelPath tempPath, DBModelData tempData) throws IOException {
+		tempPath.setFilename(fileName);
+		tempPath.setDatabaseName(storagePath.getDatabaseName());
+		new DBLoad(tempData, storagePath.getDatabaseName(), fileName);
 	}
 
 	/******************************************************

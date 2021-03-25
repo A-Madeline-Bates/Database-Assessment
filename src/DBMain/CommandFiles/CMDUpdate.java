@@ -11,8 +11,7 @@ public class CMDUpdate extends CMDWhere {
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);
 		if (doesTableExist(firstCommand)) {
-			setTemporaryPath(firstCommand);
-			setTemporaryData();
+			setTemporaryModel(firstCommand, temporaryPathModel,temporaryDataModel);
 			new DBLoad(storageData, temporaryPathModel.getDatabaseName(), firstCommand);
 			String secondCommand = getTokenSafe(DomainType.SET);
 			if (stringMatcherTHROW("SET", secondCommand, "UPDATE [table]")) {

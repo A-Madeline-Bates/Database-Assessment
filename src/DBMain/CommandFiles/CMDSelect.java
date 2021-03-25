@@ -42,8 +42,7 @@ public class CMDSelect extends CMDWhere {
 					// nothing will be stored at the end of this command's execution, so rather than using our storage
 					// models, we've instantiating temporary models which we can use without running the risk of
 					// creating messy data and it being stored. We will use these models for the rest of the operation.
-					setTemporaryPath(peakTwo);
-					setTemporaryData();
+					setTemporaryModel(peakTwo, temporaryPathModel, temporaryDataModel);
 					return;
 				}
 			}
