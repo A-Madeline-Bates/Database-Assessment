@@ -16,6 +16,10 @@ public class DBModelData extends DBModel {
 		columnNames.addAll(newColNames);
 	}
 
+	public void setColumnsSQLNoID(ArrayList<String> newColNames) {
+		columnNames.addAll(newColNames);
+	}
+
 	public ArrayList<String> getColumnData() {
 		return columnNames;
 	}
