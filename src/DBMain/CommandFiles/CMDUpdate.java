@@ -44,7 +44,7 @@ public class CMDUpdate extends CMDWhere {
 			collectNameVals();
 		}
 		else{
-			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename());
+			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename(), null);
 		}
 	}
 

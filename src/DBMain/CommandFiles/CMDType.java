@@ -281,7 +281,7 @@ public abstract class CMDType {
 		if (attributeCoordinate >= 0) {
 			return attributeCoordinate;
 		} else {
-			throw new DoesNotExistAttribute(nextCommand, path.getFilename());
+			throw new DoesNotExistAttribute(nextCommand, path.getFilename(), null);
 		}
 	}
 

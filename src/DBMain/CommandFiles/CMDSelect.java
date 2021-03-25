@@ -71,7 +71,7 @@ public class CMDSelect extends CMDWhere {
 		}
 		//throw error if it's neither
 		else{
-			throw new DoesNotExistAttribute(firstCommand, temporaryPathModel.getFilename());
+			throw new DoesNotExistAttribute(firstCommand, temporaryPathModel.getFilename(), null);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class CMDSelect extends CMDWhere {
 		}
 		//if it's not a value or a 'FROM', throw an error
 		else{
-			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename());
+			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename(), null);
 		}
 	}
 
