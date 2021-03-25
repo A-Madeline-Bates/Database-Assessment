@@ -1,5 +1,4 @@
 package DBMain.CommandFiles;
-import DBMain.*;
 import DBMain.ParseExceptions.*;
 
 import java.io.IOException;

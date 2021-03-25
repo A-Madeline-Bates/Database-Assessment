@@ -1,11 +1,9 @@
 package DBMain.CommandFiles;
-import DBMain.*;
 import DBMain.ModelFiles.DBModelData;
 import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.DoesNotExistAttribute;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
-import DBMain.ParseExceptions.RequestedCell;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,10 +11,10 @@ import java.util.ArrayList;
 public class CMDJoin extends CMDType {
 	//this is a second 'temporary' version of the model that can be used to check data without running the risk of
 	//storing the data you're working on (or wiping a file)
-	private DBModelData temporaryDataModel2 = new DBModelData();
-	private DBModelPath temporaryPathModel2 = new DBModelPath();
+	final DBModelData temporaryDataModel2 = new DBModelData();
+	final DBModelPath temporaryPathModel2 = new DBModelPath();
 	//a separate model to create our 'join' table
-	private DBModelData joinModel = new DBModelData();
+	final DBModelData joinModel = new DBModelData();
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);
@@ -64,15 +62,15 @@ public class CMDJoin extends CMDType {
 		String nextCommand = getTokenSafe(DomainType.AND);
 		if(stringMatcherTHROW("AND", nextCommand, "ON [attribute]")) {
 			nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
+			int secondMatch;
 			//if our first match was in table 1, search table 2 for the next attribute
 			if (whichTable == 1) {
-				int secondMatch = findAttributeTHROW(nextCommand, temporaryPathModel2, temporaryDataModel2);
-				processMatches(whichTable, firstMatch, secondMatch);
+				secondMatch = findAttributeTHROW(nextCommand, temporaryPathModel2, temporaryDataModel2);
 			} //if our first match wasn't in table 1, it must be table 2- look in table 1 for next attribute.
 			else {
-				int secondMatch = findAttributeTHROW(nextCommand, temporaryPathModel, temporaryDataModel);
-				processMatches(whichTable, firstMatch, secondMatch);
+				secondMatch = findAttributeTHROW(nextCommand, temporaryPathModel, temporaryDataModel);
 			}
+			processMatches(whichTable, firstMatch, secondMatch);
 		}
 	}
 

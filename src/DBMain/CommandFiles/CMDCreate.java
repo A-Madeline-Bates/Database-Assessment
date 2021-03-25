@@ -1,11 +1,10 @@
 package DBMain.CommandFiles;
-import DBMain.*;
 import DBMain.ParseExceptions.*;
 import java.io.*;
 import java.util.ArrayList;
 
 public class CMDCreate extends CMDType {
-	private ArrayList<String> attributeNames = new ArrayList<>();
+	final ArrayList<String> attributeNames = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);

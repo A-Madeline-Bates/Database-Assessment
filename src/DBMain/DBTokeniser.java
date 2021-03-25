@@ -35,8 +35,7 @@ public class DBTokeniser {
 		//ArrayPosition is always one ahead of us, so we have to rewind it to see our current position.
 		int basePosition = ArrayPosition-1;
 		if((basePosition + lookForward) < TokenList.size()){
-			String Token = TokenList.get(basePosition + lookForward);
-			return Token;
+			return TokenList.get(basePosition + lookForward);
 		}
 		else{
 			return null;

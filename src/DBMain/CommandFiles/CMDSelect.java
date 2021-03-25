@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDSelect extends CMDWhere {
-	private ArrayList<RequestedCell> requestedColumns = new ArrayList<>();
+	final ArrayList<RequestedCell> requestedColumns = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.ATTRIBUTENAME);

@@ -4,9 +4,9 @@ import java.util.*;
 
 public abstract class CMDWhere extends CMDType {
 	private ArrayList<RequestedCell> requestedRows = new ArrayList<>();
-	private ArrayList<RequestedCell> finalRows = new ArrayList<>();
-	private Stack<ArrayList<RequestedCell>> rowStack = new Stack<>();
-	private Stack<String> operatorStack = new Stack<>();
+	final ArrayList<RequestedCell> finalRows = new ArrayList<>();
+	final Stack<ArrayList<RequestedCell>> rowStack = new Stack<>();
+	final Stack<String> operatorStack = new Stack<>();
 
 	protected abstract void returnToCMD(ArrayList<RequestedCell> finalRows) throws ParseExceptions;
 

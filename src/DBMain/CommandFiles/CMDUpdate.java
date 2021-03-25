@@ -1,12 +1,11 @@
 package DBMain.CommandFiles;
 import DBMain.DBLoad;
 import DBMain.ParseExceptions.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDUpdate extends CMDWhere {
-	private ArrayList<String> updatedColumns = new ArrayList<>();
+	final ArrayList<String> updatedColumns = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDInsert extends CMDType {
-	private ArrayList<String> valueList = new ArrayList<>();
+	final ArrayList<String> valueList = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.INTO);
