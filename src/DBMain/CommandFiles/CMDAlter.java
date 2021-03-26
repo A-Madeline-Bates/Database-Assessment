@@ -1,5 +1,5 @@
 package DBMain.CommandFiles;
-import DBMain.*;
+import DBMain.DBLoad.DBLoad;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;

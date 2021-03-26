@@ -1,5 +1,5 @@
 package DBMain.CommandFiles;
-import DBMain.DBLoad;
+import DBMain.DBLoad.DBLoad;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
 import DBMain.ParseExceptions.RequestedCell;

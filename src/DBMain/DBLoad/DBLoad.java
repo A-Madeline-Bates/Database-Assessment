@@ -1,4 +1,4 @@
-package DBMain;
+package DBMain.DBLoad;
 import DBMain.ModelFiles.*;
 import java.io.*;
 

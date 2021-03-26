@@ -1,5 +1,6 @@
 package DBMain;
 import DBMain.CommandFiles.*;
+import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ParseExceptions.*;
 
 public class DBCommandFactory {

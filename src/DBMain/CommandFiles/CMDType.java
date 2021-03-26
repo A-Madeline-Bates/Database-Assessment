@@ -1,13 +1,9 @@
 package DBMain.CommandFiles;
-import DBMain.*;
+import DBMain.DBLoad.DBLoad;
+import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.*;
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.io.File;
 
 public abstract class CMDType {
 	//these are the models that will get 'stored' by DBStore at the end of handleIncomingCommand

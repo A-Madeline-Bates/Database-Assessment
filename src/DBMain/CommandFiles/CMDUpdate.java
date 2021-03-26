@@ -1,5 +1,5 @@
 package DBMain.CommandFiles;
-import DBMain.DBLoad;
+import DBMain.DBLoad.DBLoad;
 import DBMain.ParseExceptions.*;
 import java.io.IOException;
 import java.util.ArrayList;

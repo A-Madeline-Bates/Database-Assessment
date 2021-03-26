@@ -46,9 +46,6 @@
 
 //  - extra JOIN features
 //  - use methods in combination with one another- build a test strategy
-//  - delete testing classes before submitting
-
-//  - check all intellij warnings
 
 //  - clean up CMDfactory?
 //  - consider fixing extra comma err on lists

@@ -1,4 +1,5 @@
 package DBMain;
+import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.*;
 import DBMain.CommandFiles.*;
@@ -57,8 +58,6 @@ public class DBServer
     }
 
     private void buildDatabase(){
-        //creating a test instance
-        new DBTest();
         //creating classes that we don't want to re-instantiate with every new incoming command
         this.model = new DBModel();
         this.modelPath = new DBModelPath();

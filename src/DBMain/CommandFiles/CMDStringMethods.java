@@ -1,7 +1,4 @@
 package DBMain.CommandFiles;
-
-import DBMain.ModelFiles.DBModelData;
-import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
 
 import java.io.File;
