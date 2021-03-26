@@ -63,6 +63,15 @@ public class DBServer
         this.model = new DBModel();
         this.modelPath = new DBModelPath();
         this.cmdFactory = new DBCommandFactory();
+        testDBFiles();
+    }
+
+    private void testDBFiles(){
+        File newFolder = new File("databaseFiles");
+        //if database doesn't exist then create it.
+        if(!newFolder.exists()){
+            newFolder.mkdirs();
+        }
     }
 
     private void processCommand(DBTokeniser tokeniser) {
