@@ -8,7 +8,7 @@ import DBMain.ParseExceptions.ParseExceptions;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CMDJoin extends CMDType {
+public class CMDJoin extends CMDAttributeSearch {
 	//this is a second 'temporary' version of the model that can be used to check data without running the risk of
 	//storing the data you're working on (or wiping a file)
 	final DBModelData temporaryDataModel2 = new DBModelData();

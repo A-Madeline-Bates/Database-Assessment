@@ -3,7 +3,7 @@ import DBMain.ParseExceptions.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class CMDCreate extends CMDType {
+public class CMDCreate extends CMDStringMethods {
 	final ArrayList<String> attributeNames = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions, IOException {

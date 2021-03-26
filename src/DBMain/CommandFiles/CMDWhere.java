@@ -2,7 +2,7 @@ package DBMain.CommandFiles;
 import DBMain.ParseExceptions.*;
 import java.util.*;
 
-public abstract class CMDWhere extends CMDType {
+public abstract class CMDWhere extends CMDAttributeSearch {
 	private ArrayList<RequestedCell> requestedRows = new ArrayList<>();
 	final ArrayList<RequestedCell> finalRows = new ArrayList<>();
 	final Stack<ArrayList<RequestedCell>> rowStack = new Stack<>();

@@ -22,7 +22,7 @@ public class DBTest {
 //        testParse(testParser);
         CMDType command = new CMDUse();
         //This calls the separate test file within DBMain.CommandFiles
-        new TestCMD(command);
+//        new TestCMD(command);
         testIDCol();
         testIDRow();
     }

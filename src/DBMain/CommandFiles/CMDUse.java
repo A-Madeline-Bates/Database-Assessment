@@ -3,7 +3,7 @@ import DBMain.ParseExceptions.*;
 
 import java.io.IOException;
 
-public class CMDUse extends CMDType {
+public class CMDUse extends CMDStringMethods {
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.DATABASENAME);
