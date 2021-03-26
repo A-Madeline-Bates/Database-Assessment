@@ -9,10 +9,6 @@ public abstract class CMDType {
 	//these are the models that will get 'stored' by DBStore at the end of handleIncomingCommand
 	protected DBModelData storageData;
 	protected DBModelPath storagePath;
-	//these are 'temporary' versions of the model that can be used to check data without running the risk of
-	//storing the data you're working on (or wiping a file)
-	final DBModelData temporaryDataModel = new DBModelData();
-	final DBModelPath temporaryPathModel = new DBModelPath();
 	protected String exitMessage;
 
 	protected DBTokeniser tokeniser;
@@ -36,10 +32,6 @@ public abstract class CMDType {
 		return storagePath;
 	}
 
-	protected void clearFilePath() {
-		this.storagePath = new DBModelPath();
-	}
-
 	public abstract void transformModel() throws ParseExceptions, IOException;
 
 	protected void setExitMessage() {
@@ -48,16 +40,6 @@ public abstract class CMDType {
 
 	public String getExitMessage() {
 		return exitMessage;
-	}
-
-	/******************************************************
-	 ***************** LOAD TEMPORARY MODEL ****************
-	 *****************************************************/
-
-	protected void setTemporaryModel(String fileName, DBModelPath tempPath, DBModelData tempData) throws IOException {
-		tempPath.setFilename(fileName);
-		tempPath.setDatabaseName(storagePath.getDatabaseName());
-		new DBLoad(tempData, storagePath.getDatabaseName(), fileName);
 	}
 
 	/******************************************************

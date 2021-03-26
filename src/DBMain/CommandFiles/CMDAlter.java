@@ -6,7 +6,7 @@ import DBMain.ParseExceptions.ParseExceptions;
 
 import java.io.IOException;
 
-public class CMDAlter extends CMDAttributeSearch {
+public class CMDAlter extends AttributeSearch {
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLE);

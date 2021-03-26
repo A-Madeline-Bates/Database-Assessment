@@ -5,7 +5,7 @@ import DBMain.ParseExceptions.InvalidValueType;
 import DBMain.ParseExceptions.OperatorType;
 import DBMain.ParseExceptions.ParseExceptions;
 
-public abstract class CMDValidValue extends CMDStringMethods{
+public abstract class ValidValues extends TemporaryModel {
 
 	/******************************************************
 	 ******************* VALID VALUE TEST *****************

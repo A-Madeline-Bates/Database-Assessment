@@ -4,14 +4,14 @@ import DBMain.ParseExceptions.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CMDUpdate extends CMDWhere {
+public class CMDUpdate extends ProcessWhere {
 	final ArrayList<String> updatedColumns = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);
 		if (doesTableExist(firstCommand)) {
-			setTemporaryModel(firstCommand, temporaryPathModel,temporaryDataModel);
-			new DBLoad(storageData, temporaryPathModel.getDatabaseName(), firstCommand);
+			setTemporaryModel(firstCommand, temporaryPathModel, temporaryDataModel);
+			new DBLoad(storageData, storagePath.getDatabaseName(), firstCommand);
 			String secondCommand = getTokenSafe(DomainType.SET);
 			if (stringMatcherTHROW("SET", secondCommand, "UPDATE [table]")) {
 				processNameVals();

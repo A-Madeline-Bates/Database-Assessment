@@ -4,7 +4,7 @@ import DBMain.ParseExceptions.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CMDSelect extends CMDWhere {
+public class CMDSelect extends ProcessWhere {
 	final ArrayList<RequestedCell> requestedColumns = new ArrayList<>();
 
 	public void transformModel() throws ParseExceptions, IOException {

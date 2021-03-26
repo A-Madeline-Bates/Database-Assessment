@@ -7,7 +7,7 @@ import DBMain.ParseExceptions.RequestedCell;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CMDDelete extends CMDWhere {
+public class CMDDelete extends ProcessWhere {
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.FROM);

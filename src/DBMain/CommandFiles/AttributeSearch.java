@@ -4,7 +4,7 @@ import DBMain.ModelFiles.DBModelData;
 import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
 
-public abstract class CMDAttributeSearch extends CMDValidValue {
+public abstract class AttributeSearch extends ValidValues {
 
 	/******************************************************
 	 ****************** ATTRIBUTE METHODS ****************

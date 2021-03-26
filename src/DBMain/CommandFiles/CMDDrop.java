@@ -6,7 +6,7 @@ import DBMain.ParseExceptions.ParseExceptions;
 import java.io.File;
 import java.io.IOException;
 
-public class CMDDrop extends CMDStringMethods {
+public class CMDDrop extends FilesControl {
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);

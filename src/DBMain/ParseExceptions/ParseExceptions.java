@@ -1,5 +1,7 @@
 package DBMain.ParseExceptions;
 
-public class ParseExceptions extends Exception{
+public abstract class ParseExceptions extends Exception{
 	protected String token;
+
+	public abstract String toString();
 }

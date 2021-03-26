@@ -1,12 +1,11 @@
 package DBMain.CommandFiles;
 import DBMain.ParseExceptions.*;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public abstract class CMDStringMethods extends CMDType {
+public abstract class StringMethods extends CMDType {
 
 	/******************************************************
 	 ******************** TOKEN METHODS *******************
@@ -114,16 +113,6 @@ public abstract class CMDStringMethods extends CMDType {
 	/******************************************************
 	 ******************** PATH TESTS ********************
 	 *****************************************************/
-
-	protected boolean doesDBExist(String dbName) throws ParseExceptions {
-		String location = "databaseFiles" + File.separator + dbName;
-		Path path = Paths.get(location);
-		if (Files.exists(path) && Files.isDirectory(path)) {
-			return true;
-		} else {
-			throw new DoesNotExistDB(dbName);
-		}
-	}
 
 	protected boolean doesTableExist(String tableName) throws ParseExceptions {
 		String currentDatabase = storagePath.getDatabaseName();
