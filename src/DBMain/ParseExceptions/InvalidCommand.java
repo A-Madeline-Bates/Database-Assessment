@@ -1,9 +1,9 @@
 package DBMain.ParseExceptions;
 
 public class InvalidCommand extends ParseExceptions{
-	String previousCommand;
-	String optionOne;
-	String optionTwo;
+	final String previousCommand;
+	final String optionOne;
+	final String optionTwo;
 
 	public InvalidCommand(String token, String previousCommand, String optionOne, String optionTwo){
 		this.token = token;

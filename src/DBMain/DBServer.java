@@ -8,11 +8,11 @@ import java.net.*;
 
 public class DBServer
 {
-    DBModel model;
-    DBModelData modelData;
-    DBModelPath modelPath;
-    DBCommandFactory cmdFactory;
-    String exitMessage = "";
+    private DBModel model;
+    private DBModelData modelData;
+    private DBModelPath modelPath;
+    private DBCommandFactory cmdFactory;
+    private String exitMessage = "";
 
     public DBServer(int portNumber)
     {

@@ -1,7 +1,8 @@
 package DBMain.ParseExceptions;
 
 public class InvalidValueType extends ParseExceptions{
-	OperatorType opType;
+	final OperatorType opType;
+
 	public InvalidValueType(String token, OperatorType opType){
 		this.token = token;
 		this.opType = opType;

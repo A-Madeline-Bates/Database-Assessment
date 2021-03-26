@@ -44,14 +44,13 @@
 	//TO DO :
 //	- decouple
 
-//  - decide whether to implement 'if there is no databaseFiles, create one'
 //  - extra JOIN features
 //  - use methods in combination with one another- build a test strategy
 //  - delete testing classes before submitting
+
 //  - check all intellij warnings
 
 //  - clean up CMDfactory?
-//  - CREATE shouldn't automatically set USE- change that.
 //  - consider fixing extra comma err on lists
 //  -   remove quote marks in print?
 

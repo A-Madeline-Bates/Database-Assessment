@@ -1,8 +1,9 @@
 package DBMain.ParseExceptions;
 
 public class OperatorDataMismatch extends ParseExceptions{
-	OperatorType opType;
-	String value;
+	final OperatorType opType;
+	final String value;
+
 	public OperatorDataMismatch(String value, OperatorType opType) {
 		this.value = value;
 		this.opType = opType;

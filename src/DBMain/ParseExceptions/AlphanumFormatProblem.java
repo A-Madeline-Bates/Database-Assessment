@@ -1,7 +1,7 @@
 package DBMain.ParseExceptions;
 
 public class AlphanumFormatProblem extends ParseExceptions{
-	DomainType domain;
+	final DomainType domain;
 
 	public AlphanumFormatProblem(String token, DomainType domain){
 		this.domain = domain;

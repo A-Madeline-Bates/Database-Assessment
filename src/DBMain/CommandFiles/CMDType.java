@@ -15,9 +15,9 @@ public abstract class CMDType {
 	protected DBModelPath storagePath;
 	//these are 'temporary' versions of the model that can be used to check data without running the risk of
 	//storing the data you're working on (or wiping a file)
-	protected DBModelData temporaryDataModel = new DBModelData();
-	protected DBModelPath temporaryPathModel = new DBModelPath();
-	String exitMessage;
+	final DBModelData temporaryDataModel = new DBModelData();
+	final DBModelPath temporaryPathModel = new DBModelPath();
+	protected String exitMessage;
 
 	protected DBTokeniser tokeniser;
 
@@ -57,10 +57,6 @@ public abstract class CMDType {
 	/******************************************************
 	 ***************** LOAD TEMPORARY MODEL ****************
 	 *****************************************************/
-//
-//	protected void setTemporaryData(DBModelPath data) throws IOException {
-//		new DBLoad(data, storagePath.getDatabaseName(), data.getFilename());
-//	}
 
 	protected void setTemporaryModel(String fileName, DBModelPath tempPath, DBModelData tempData) throws IOException {
 		tempPath.setFilename(fileName);
@@ -223,11 +219,10 @@ public abstract class CMDType {
 		return false;
 	}
 
-	protected boolean isItStringTHROW(String nextInstruction) throws ParseExceptions {
-		if (isItString(nextInstruction)) {
-			return true;
+	protected void isItStringTHROW(String nextInstruction) throws ParseExceptions {
+		if (!isItString(nextInstruction)) {
+			throw new InvalidValueType(nextInstruction, OperatorType.STRING);
 		}
-		throw new InvalidValueType(nextInstruction, OperatorType.STRING);
 	}
 
 	protected boolean isItBoolean(String nextInstruction) {
@@ -255,11 +250,10 @@ public abstract class CMDType {
 		return true;
 	}
 
-	protected boolean isItNumTHROW(String nextInstruction) throws ParseExceptions {
-		if (isItInteger(nextInstruction) || isItFloat(nextInstruction)) {
-			return true;
+	protected void isItNumTHROW(String nextInstruction) throws ParseExceptions {
+		if ((!isItInteger(nextInstruction)) || (!isItFloat(nextInstruction))) {
+			throw new InvalidValueType(nextInstruction, OperatorType.NUMERICAL);
 		}
-		throw new InvalidValueType(nextInstruction, OperatorType.NUMERICAL);
 	}
 
 	/******************************************************

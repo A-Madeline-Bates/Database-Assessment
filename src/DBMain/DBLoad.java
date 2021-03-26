@@ -3,9 +3,9 @@ import DBMain.ModelFiles.*;
 import java.io.*;
 
 public class DBLoad {
-    DBModelData modelData;
-    String databaseName;
-    String tableName;
+    final DBModelData modelData;
+    final String databaseName;
+    final String tableName;
 
     public DBLoad(DBModelData modelData, String databaseName, String tableName) throws IOException{
         this.modelData = modelData;

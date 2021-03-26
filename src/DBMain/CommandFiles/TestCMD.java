@@ -1,9 +1,7 @@
 package DBMain.CommandFiles;
-import DBMain.ParseExceptions.DomainType;
-import DBMain.ParseExceptions.ParseExceptions;
 
 public class TestCMD {
-	CMDType command;
+	final CMDType command;
 
 	//test all command instructions here?
 

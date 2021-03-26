@@ -1,7 +1,7 @@
 package DBMain.ParseExceptions;
 
 public class NotCommaSeparated extends ParseExceptions{
-	DomainType domain;
+	final DomainType domain;
 
 	public NotCommaSeparated(DomainType domain) {
 		this.domain = domain;

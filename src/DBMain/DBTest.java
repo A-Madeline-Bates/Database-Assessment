@@ -1,7 +1,6 @@
 package DBMain;
 import DBMain.CommandFiles.*;
 import DBMain.ModelFiles.*;
-import DBMain.ParseExceptions.ParseExceptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,17 +101,6 @@ public class DBTest {
         testDataModel.setRowsFromFile("test\ttest\ttest");
         assert (testDataModel.getRowNumber() == 10);
     }
-//
-//    private void testLoadAndStore(DBModelData testDataModel, DBModelPath testDataPath) {
-//        new DBLoad(testDataModel, "testFiles", "test2.txt");
-//        assert (testDataModel.getRowNumber() == 5);
-//        assert (testDataModel.getColumnNumber() == 3);
-//        testDataPath.setFilename("test2.txt");
-//        testDataPath.setDatabaseName("testFiles");
-//        assert (testDataPath.getFilename().equals("test2.txt"));
-//        assert (testDataPath.getDatabaseName().equals("testFiles"));
-////        new DBStore (testDataModel, testDataPath);
-//    }
 
     private void testTokeniser() {
         DBTokeniser testT1 = new DBTokeniser("hello world");
@@ -184,11 +172,6 @@ public class DBTest {
         assert (testT8.nextToken().equals("*"));
         assert (testT8.nextToken() == null);
     }
-
-//    private void testParse(DBCommandFactory testParser){
-////        DBTokeniser testT1 = new DBTokeniser("Use");
-////        testParser.parse(testT1);
-//    }
 
 
     private void testIDCol() {

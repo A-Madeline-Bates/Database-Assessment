@@ -1,8 +1,9 @@
 package DBMain.ParseExceptions;
 
 public class WrongNoValues extends ParseExceptions{
-	int valueNo;
-	int columnNo;
+	final int valueNo;
+	final int columnNo;
+
 	public WrongNoValues(int valueNo, int columnNo) {
 		this.valueNo = valueNo;
 		this.columnNo = columnNo;

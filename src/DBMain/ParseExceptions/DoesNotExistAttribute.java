@@ -1,8 +1,8 @@
 package DBMain.ParseExceptions;
 
 public class DoesNotExistAttribute extends ParseExceptions{
-	String tableName;
-	String tableName2;
+	final String tableName;
+	final String tableName2;
 
 	public DoesNotExistAttribute(String token, String tableName, String tableName2) {
 		this.token = token;

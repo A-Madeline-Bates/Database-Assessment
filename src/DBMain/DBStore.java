@@ -4,8 +4,8 @@ import DBMain.ModelFiles.*;
 import java.io.*;
 
 public class DBStore {
-    DBModelData modelData;
-    DBModelPath modelPath;
+    final DBModelData modelData;
+    final DBModelPath modelPath;
 
     public DBStore(DBModelData modelData, DBModelPath modelPath) throws IOException{
         this.modelData = modelData;
