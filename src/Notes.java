@@ -41,19 +41,17 @@
 
 
 
-	//TO DO SIMPLE/AESTHETIC :
-//  -	separate more methods from their exception statements to allow testing
-//  -   remove quote marks in print?
-//	- decouple DBStore from DBModel
-//  - split into more classes/ decouple from model
-	//  - maybe split model into more classes?
+	//TO DO :
+//	- decouple
+
 //  - decide whether to implement 'if there is no databaseFiles, create one'
-//  - clean up CMDfactory?
-//  - CREATE shouldn't automatically set USE- change that.
-//  - consider fixing extra comma err on lists
-//  - two tables could have the same ID if it's done be row no!
 //  - extra JOIN features
-//  - investigate automated testing?
 //  - use methods in combination with one another- build a test strategy
 //  - delete testing classes before submitting
 //  - check all intellij warnings
+
+//  - clean up CMDfactory?
+//  - CREATE shouldn't automatically set USE- change that.
+//  - consider fixing extra comma err on lists
+//  -   remove quote marks in print?
+

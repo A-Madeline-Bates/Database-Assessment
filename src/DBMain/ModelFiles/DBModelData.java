@@ -47,10 +47,21 @@ public class DBModelData extends DBModel {
 	public void setRowsFromSQL(ArrayList<String> newValues) {
 		List<String> rowData = new ArrayList<>();
 		tableData.add(rowData);
-		//setting an ID number for the row
-		String idNo = String.valueOf(getRowNumber());
+		String idNo = getID();
 		tableData.get(getRowNumber() - 1).add(idNo);
 		tableData.get(getRowNumber() - 1).addAll(newValues);
+	}
+
+	private String getID(){
+		String idNo = String.valueOf(1);
+		if(getRowNumber() > 1) {
+			//because we are deleting rows, we can't just set id to rowNo because there could be clashes- instead,
+			// we're finding the id of the previous cell, adding one to it and using that as our new ID
+			int prevRow = getRowNumber()-2;
+			int calculateId = Integer.parseInt(getCell(prevRow, 0)) + 1;
+			idNo = String.valueOf(calculateId);
+		}
+		return idNo;
 	}
 
 	public List<List<String>> getRowsData() {
