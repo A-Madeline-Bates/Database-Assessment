@@ -1,4 +1,5 @@
 package DBMain.CommandFiles;
+import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelData;
 import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.DoesNotExistAttribute;
@@ -15,6 +16,12 @@ public class CMDJoin extends AttributeSearch {
 	final DBModelPath temporaryPathModel2 = new DBModelPath();
 	//a separate model to create our 'join' table
 	final DBModelData joinModel = new DBModelData();
+
+	public CMDJoin(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
+	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);

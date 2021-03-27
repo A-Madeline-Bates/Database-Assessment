@@ -11,7 +11,7 @@ public abstract class StringMethods extends CMDType {
 	 ******************** TOKEN METHODS *******************
 	 *****************************************************/
 
-	protected String getTokenSafe(DomainType domain) throws ParseExceptions {
+	protected String getTokenSafe(DomainType domain) throws CommandMissing {
 		String nextToken = tokeniser.nextToken();
 		if (nextToken != null) {
 			return nextToken;
@@ -20,7 +20,7 @@ public abstract class StringMethods extends CMDType {
 		}
 	}
 
-	protected String peakTokenSafe(int lookForward, DomainType domain) throws ParseExceptions {
+	protected String peakTokenSafe(int lookForward, DomainType domain) throws CommandMissing {
 		String tokenPreview = tokeniser.peakToken(lookForward);
 		if (tokenPreview != null) {
 			return tokenPreview;
@@ -41,14 +41,14 @@ public abstract class StringMethods extends CMDType {
 		}
 	}
 
-	protected boolean isItAlphNumTHROW(String testString, DomainType domain) throws ParseExceptions {
+	protected boolean isItAlphNumTHROW(String testString, DomainType domain) throws AlphanumFormatProblem {
 		if (isItAlphNumeric(testString)) {
 			return true;
 		}
 		throw new AlphanumFormatProblem(testString, domain);
 	}
 
-	protected boolean isItLineEndTHROW() throws ParseExceptions {
+	protected boolean isItLineEndTHROW() throws CommandMissing, MissingSemiColon, ExtraCommandGiven {
 		String finalCommand = getTokenSafe(DomainType.SEMICOLON);
 		if (isItSemicolonTHROW(finalCommand)) {
 			String extraCommand = tokeniser.nextToken();
@@ -66,21 +66,21 @@ public abstract class StringMethods extends CMDType {
 		return false;
 	}
 
-	protected boolean isItNullEndTHROW(String extraCommand) throws ParseExceptions {
+	protected boolean isItNullEndTHROW(String extraCommand) throws ExtraCommandGiven {
 		if (isItNullEnd(extraCommand)) {
 			return true;
 		}
 		throw new ExtraCommandGiven(extraCommand);
 	}
 
-	protected boolean isItSemicolonTHROW(String nextCommand) throws ParseExceptions {
+	protected boolean isItSemicolonTHROW(String nextCommand) throws MissingSemiColon {
 		if (stringMatcher(";", nextCommand)) {
 			return true;
 		}
 		throw new MissingSemiColon(nextCommand);
 	}
 
-	protected boolean isItCommaSeparated(DomainType domain, String exitToken) throws ParseExceptions {
+	protected boolean isItCommaSeparated(DomainType domain, String exitToken) throws CommandMissing, NotCommaSeparated {
 		String nextCommand = peakTokenSafe(1, DomainType.COMMA);
 		//is the next instruction a comma
 		if (stringMatcher(",", nextCommand)) {
@@ -103,7 +103,7 @@ public abstract class StringMethods extends CMDType {
 		return false;
 	}
 
-	protected boolean stringMatcherTHROW(String commandNeeded, String nextCommand, String prevCommand) throws ParseExceptions {
+	protected boolean stringMatcherTHROW(String commandNeeded, String nextCommand, String prevCommand) throws InvalidCommand {
 		if (stringMatcher(commandNeeded, nextCommand)) {
 			return true;
 		}
@@ -114,7 +114,7 @@ public abstract class StringMethods extends CMDType {
 	 ******************** PATH TESTS ********************
 	 *****************************************************/
 
-	protected boolean doesTableExist(String tableName) throws ParseExceptions {
+	protected boolean doesTableExist(String tableName) throws DoesNotExistTable {
 		String currentDatabase = storagePath.getDatabaseName();
 		String location = "databaseFiles" + File.separator + currentDatabase + File.separator + tableName;
 		Path path = Paths.get(location);
@@ -129,7 +129,7 @@ public abstract class StringMethods extends CMDType {
 	 *************** PREVENT EDITING ID COL **************
 	 *****************************************************/
 
-	protected void protectIDCol(int colNum) throws ParseExceptions{
+	protected void protectIDCol(int colNum) throws EditingID{
 		if(colNum == 0){
 			throw new EditingID();
 		}

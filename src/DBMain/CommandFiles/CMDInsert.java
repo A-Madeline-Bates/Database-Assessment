@@ -1,5 +1,8 @@
 package DBMain.CommandFiles;
 import DBMain.DBLoad.DBLoad;
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelData;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
 
 import java.io.IOException;
@@ -7,6 +10,12 @@ import java.util.ArrayList;
 
 public class CMDInsert extends ValidValues {
 	final ArrayList<String> valueList = new ArrayList<>();
+
+	public CMDInsert(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
+	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.INTO);
@@ -48,8 +57,7 @@ public class CMDInsert extends ValidValues {
 		}
 	}
 
-	private void updateTable(String tableName) throws ParseExceptions, IOException{
-
+	private void updateTable(String tableName) throws WrongNoValues, IOException{
 		//load data into a temporary instance of DBModel so that we can find out if the user is trying to
 		//load too many values into our table before they do it.
 		String databaseName = storagePath.getDatabaseName();
@@ -63,7 +71,7 @@ public class CMDInsert extends ValidValues {
 		}
 	}
 
-	private boolean isSizeCorrect(int columnsAvailable) throws ParseExceptions{
+	private boolean isSizeCorrect(int columnsAvailable) throws WrongNoValues{
 		if(valueList.size()==columnsAvailable){
 			return true;
 		}

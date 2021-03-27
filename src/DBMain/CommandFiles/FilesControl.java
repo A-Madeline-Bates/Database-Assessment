@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 
 public abstract class FilesControl extends StringMethods{
 
-	protected boolean doesDBExist(String dbName) throws ParseExceptions {
+	protected boolean doesDBExist(String dbName) throws DoesNotExistDB {
 		String location = "databaseFiles" + File.separator + dbName;
 		Path path = Paths.get(location);
 		if (Files.exists(path) && Files.isDirectory(path)) {

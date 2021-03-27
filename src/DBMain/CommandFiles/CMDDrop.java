@@ -1,4 +1,7 @@
 package DBMain.CommandFiles;
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelData;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;
@@ -7,6 +10,12 @@ import java.io.File;
 import java.io.IOException;
 
 public class CMDDrop extends FilesControl {
+
+	public CMDDrop(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException{
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
+	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);

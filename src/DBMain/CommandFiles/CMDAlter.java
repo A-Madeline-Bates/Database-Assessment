@@ -1,14 +1,21 @@
 package DBMain.CommandFiles;
 import DBMain.DBLoad.DBLoad;
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;
-
 import java.io.IOException;
 
 public class CMDAlter extends AttributeSearch {
 
-	public void transformModel() throws ParseExceptions, IOException {
+	public CMDAlter(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException{
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
+	}
+
+	public void transformModel() throws ParseExceptions, IOException{
 		String firstCommand = getTokenSafe(DomainType.TABLE);
 		if (stringMatcherTHROW("TABLE", firstCommand, "ALTER")) {
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);

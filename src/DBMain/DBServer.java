@@ -59,7 +59,6 @@ public class DBServer
 
     private void buildDatabase(){
         //creating classes that we don't want to re-instantiate with every new incoming command
-        this.model = new DBModel();
         this.modelPath = new DBModelPath();
         this.cmdFactory = new DBCommandFactory();
         testDBFiles();
@@ -75,9 +74,10 @@ public class DBServer
 
     private void processCommand(DBTokeniser tokeniser) {
         try {
+            //we never automatically use the same file twice, so we're letting go of the previous file
+            modelPath.setFilename(null);
             //this instantiates the command class we are using based on incomingCommand
-            CMDType commandClass = cmdFactory.createCMD(tokeniser);
-            parseData(commandClass, tokeniser);
+            CMDType commandClass = cmdFactory.createCMD(tokeniser, modelPath);
             modelData = commandClass.getStorageData();
             modelPath = commandClass.getStoragePath();
             execute(commandClass, modelData, modelPath);
@@ -86,12 +86,6 @@ public class DBServer
         }  catch (IOException ioException) {
             this.exitMessage = "[ERROR]\nIOException trying to use file " + modelPath.getFilename();
         }
-    }
-
-    private void parseData(CMDType commandClass, DBTokeniser tokeniser) throws ParseExceptions, IOException{
-        commandClass.setModel(modelPath);
-        commandClass.setTokeniser(tokeniser);
-        commandClass.transformModel();
     }
 
     private void execute(CMDType commandClass, DBModelData modelData, DBModelPath modelPath) throws ParseExceptions, IOException{

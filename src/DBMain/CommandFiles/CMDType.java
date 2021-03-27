@@ -1,5 +1,4 @@
 package DBMain.CommandFiles;
-import DBMain.DBLoad.DBLoad;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.*;
 import DBMain.ParseExceptions.*;
@@ -10,19 +9,15 @@ public abstract class CMDType {
 	protected DBModelData storageData;
 	protected DBModelPath storagePath;
 	protected String exitMessage;
-
 	protected DBTokeniser tokeniser;
+
+	public CMDType(){
+		this.storageData = new DBModelData();
+	}
 
 	/******************************************************
 	 *************** MODEL ALTERING METHODS ***************
 	 *****************************************************/
-
-	//most data is cleared because it minimises the possibility of mistakes and overwrites
-	public void setModel(DBModelPath storagePath) {
-		this.storageData = new DBModelData();
-		this.storagePath = storagePath;
-		storagePath.setFilename(null);
-	}
 
 	public DBModelData getStorageData() {
 		return storageData;
@@ -41,13 +36,4 @@ public abstract class CMDType {
 	public String getExitMessage() {
 		return exitMessage;
 	}
-
-	/******************************************************
-	 ****************** SET TOKENISER ********************
-	 *****************************************************/
-
-	public void setTokeniser(DBTokeniser tokeniser) {
-		this.tokeniser = tokeniser;
-	}
-
 }

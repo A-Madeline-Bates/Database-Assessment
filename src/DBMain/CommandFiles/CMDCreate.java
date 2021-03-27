@@ -1,10 +1,19 @@
 package DBMain.CommandFiles;
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelData;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
 import java.io.*;
 import java.util.ArrayList;
 
 public class CMDCreate extends FilesControl {
 	final ArrayList<String> attributeNames = new ArrayList<>();
+
+	public CMDCreate(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
+	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);
@@ -29,7 +38,7 @@ public class CMDCreate extends FilesControl {
 		}
 	}
 
-	private void createDatabase(String dbName) throws ParseExceptions{
+	private void createDatabase(String dbName) throws NotBuiltDB{
 		String directoryPath = "databaseFiles" + File.separator + dbName;
 		File newFolder = new File(directoryPath);
 		//if database.exists, then call NotBuiltDB. If it doesn't, clear model and setDatabaseName
@@ -107,7 +116,7 @@ public class CMDCreate extends FilesControl {
 		}
 	}
 
-	protected boolean areWeInDB() throws ParseExceptions {
+	protected boolean areWeInDB() throws WorkingOutsideDatabase {
 		if (storagePath.getDatabaseName() != null) {
 			return true;
 		} else {

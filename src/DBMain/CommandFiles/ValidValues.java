@@ -11,7 +11,7 @@ public abstract class ValidValues extends TemporaryModel {
 	 ******************* VALID VALUE TEST *****************
 	 *****************************************************/
 
-	protected boolean isItValidValue(String nextInstruction) throws ParseExceptions {
+	protected boolean isItValidValue(String nextInstruction) throws InvalidValue {
 		if (isItString(nextInstruction)
 				|| isItBoolean(nextInstruction)
 				|| isItFloat(nextInstruction)
@@ -29,7 +29,7 @@ public abstract class ValidValues extends TemporaryModel {
 		return false;
 	}
 
-	protected void isItStringTHROW(String nextInstruction) throws ParseExceptions {
+	protected void isItStringTHROW(String nextInstruction) throws InvalidValueType {
 		if (!isItString(nextInstruction)) {
 			throw new InvalidValueType(nextInstruction, OperatorType.STRING);
 		}
@@ -60,7 +60,7 @@ public abstract class ValidValues extends TemporaryModel {
 		return true;
 	}
 
-	protected void isItNumTHROW(String nextInstruction) throws ParseExceptions {
+	protected void isItNumTHROW(String nextInstruction) throws InvalidValueType {
 		if ((!isItInteger(nextInstruction)) || (!isItFloat(nextInstruction))) {
 			throw new InvalidValueType(nextInstruction, OperatorType.NUMERICAL);
 		}

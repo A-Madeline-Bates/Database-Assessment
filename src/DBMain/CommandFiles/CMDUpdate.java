@@ -1,11 +1,19 @@
 package DBMain.CommandFiles;
 import DBMain.DBLoad.DBLoad;
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDUpdate extends ProcessWhere {
 	final ArrayList<String> updatedColumns = new ArrayList<>();
+
+	public CMDUpdate(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
+	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);
@@ -68,14 +76,14 @@ public class CMDUpdate extends ProcessWhere {
 		}
 	}
 
-	protected void returnToCMD(ArrayList<RequestedCell> finalRows) throws ParseExceptions{
+	protected void returnToCMD(ArrayList<RequestedCell> finalRows) throws EditingID{
 		editTableValues(finalRows);
 		//using storagePath.setFilename to indicate that we want to store changes
 		storagePath.setFilename(temporaryPathModel.getFilename());
 		setExitMessage();
 	}
 
-	private void editTableValues(ArrayList<RequestedCell> finalRows) throws ParseExceptions{
+	private void editTableValues(ArrayList<RequestedCell> finalRows) throws EditingID{
 		for (int i = 0; i < storageData.getRowNumber(); i++) {
 			if(finalRows.get(i).equals(RequestedCell.TRUE)) {
 				for (int j = 0; j < storageData.getColumnNumber(); j++) {

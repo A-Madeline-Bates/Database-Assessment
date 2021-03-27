@@ -1,5 +1,8 @@
 package DBMain.CommandFiles;
 import DBMain.DBLoad.DBLoad;
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelData;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
 import DBMain.ParseExceptions.RequestedCell;
@@ -8,6 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDDelete extends ProcessWhere {
+
+	public CMDDelete(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
+	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.FROM);
