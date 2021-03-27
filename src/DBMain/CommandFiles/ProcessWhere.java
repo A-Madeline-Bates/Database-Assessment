@@ -125,7 +125,6 @@ public abstract class ProcessWhere extends ConditionMethods {
 		executeCondition(attributeCoordinate);
 		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		if(nextCommand.equals(")")){
-			//make sure this is pushing the data and not a pointer to the data :/
 			rowStack.push(requestedRows);
 			recursiveWhere(currentCommand);
 		} else{
@@ -177,7 +176,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 			String andOrOp = operatorStack.pop();
 			performStackOp(andOrOp);
 		}
-		//pop what should hopefully be our final result from the stack
+		//pop what should be our final result from the stack
 		finalRows.addAll(rowStack.pop());
 		if(!rowStack.isEmpty()){
 			throw new SumError();

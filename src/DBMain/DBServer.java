@@ -44,13 +44,11 @@ public class DBServer
 
     private void processNextCommand(BufferedReader socketReader, BufferedWriter socketWriter) throws IOException, NullPointerException
     {
-        //incomingCommand contains the message we're going to use.
         String incomingCommand = socketReader.readLine();
         DBTokeniser tokeniser = new DBTokeniser(incomingCommand);
         processCommand(tokeniser);
-        //replace exceptionMessage with general message
         socketWriter.write(exitMessage);
-        //clear exception message
+        //clear exitMessage
         this.exitMessage = "";
         //This is used for EOF
         socketWriter.write("\n" + ((char)4) + "\n");

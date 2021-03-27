@@ -1,6 +1,5 @@
 package DBMain.CommandFiles;
 import DBMain.DBTokeniser.DBTokeniser;
-import DBMain.ModelFiles.DBModelData;
 import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.InvalidCommand;

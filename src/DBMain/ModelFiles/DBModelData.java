@@ -2,14 +2,12 @@ package DBMain.ModelFiles;
 import java.util.*;
 
 public class DBModelData extends DBModel {
-	//Should need a method to return column coordinate by name
 
 	public void setColumnsFromFile(String command) {
 		columnNames.addAll(Arrays.asList(command.split("\\t")));
 		columnNames.removeAll(Arrays.asList("", null));
 	}
 
-	//This should only ever be called after clearing the model
 	public void setColumnsFromSQL(ArrayList<String> newColNames) {
 		//adding an ID column
 		columnNames.add("ID");
@@ -39,7 +37,6 @@ public class DBModelData extends DBModel {
 		List<String> rowData = new ArrayList<>();
 		tableData.add(rowData);
 		tableData.get(row).addAll(Arrays.asList(command.split("\\t")));
-		//there might be vulnerability here if there is an empty line included in the file?
 		tableData.get(row).removeAll(Arrays.asList("", null));
 		row++;
 	}

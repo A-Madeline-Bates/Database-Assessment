@@ -1,9 +1,7 @@
 package DBMain.CommandFiles;
-
 import DBMain.ParseExceptions.InvalidValue;
 import DBMain.ParseExceptions.InvalidValueType;
 import DBMain.ParseExceptions.OperatorType;
-import DBMain.ParseExceptions.ParseExceptions;
 
 public abstract class ValidValues extends TemporaryModel {
 
