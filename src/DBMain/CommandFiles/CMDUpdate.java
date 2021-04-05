@@ -9,11 +9,15 @@ import java.util.ArrayList;
 public class CMDUpdate extends ProcessWhere {
 	final ArrayList<String> updatedColumns = new ArrayList<>();
 
-	public CMDUpdate(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDUpdate(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		buildCommand(tokeniser, path);
 	}
+//
+//	public CMDUpdate(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
+//		this.tokeniser = tokeniser;
+//		this.storagePath = path;
+//		transformModel();
+//	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);

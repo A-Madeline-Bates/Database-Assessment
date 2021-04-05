@@ -8,11 +8,15 @@ import java.util.ArrayList;
 public class CMDSelect extends ProcessWhere {
 	final ArrayList<RequestedCell> requestedColumns = new ArrayList<>();
 
-	public CMDSelect(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDSelect(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		buildCommand(tokeniser, path);
 	}
+
+//	public CMDSelect(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
+//		this.tokeniser = tokeniser;
+//		this.storagePath = path;
+//		transformModel();
+//	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.ATTRIBUTENAME);

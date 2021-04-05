@@ -15,6 +15,16 @@ public abstract class CMDType {
 		this.storageData = new DBModelTable();
 	}
 
+	public void buildCommand(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException{
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
+	}
+
+//	public CMDType(){
+//		this.storageData = new DBModelTable();
+//	}
+
 	/******************************************************
 	 *************** MODEL ALTERING METHODS ***************
 	 *****************************************************/

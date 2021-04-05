@@ -9,11 +9,15 @@ import java.io.IOException;
 
 public class CMDAlter extends AttributeSearch {
 
-	public CMDAlter(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException{
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDAlter(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		buildCommand(tokeniser, path);
 	}
+
+//	public CMDAlter(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException{
+//		this.tokeniser = tokeniser;
+//		this.storagePath = path;
+//		transformModel();
+//	}
 
 	public void transformModel() throws ParseExceptions, IOException{
 		String firstCommand = getTokenSafe(DomainType.TABLE);

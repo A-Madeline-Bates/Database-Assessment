@@ -1,5 +1,9 @@
 package DBMain.CommandFiles;
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
+
+import java.io.IOException;
 import java.util.*;
 
 public abstract class ProcessWhere extends ConditionMethods {
