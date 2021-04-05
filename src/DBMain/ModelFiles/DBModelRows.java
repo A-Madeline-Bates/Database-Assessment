@@ -1,35 +1,10 @@
 package DBMain.ModelFiles;
-import java.util.*;
 
-public class DBModelData extends DBModel {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-	public void setColumnsFromFile(String command) {
-		columnNames.addAll(Arrays.asList(command.split("\\t")));
-		columnNames.removeAll(Arrays.asList("", null));
-	}
-
-	public void setColumnsFromSQL(ArrayList<String> newColNames) {
-		//adding an ID column
-		columnNames.add("ID");
-		columnNames.addAll(newColNames);
-	}
-
-	public void setColumnsSQLNoID(ArrayList<String> newColNames) {
-		columnNames.addAll(newColNames);
-	}
-
-	public ArrayList<String> getColumnData() {
-		return columnNames;
-	}
-
-	//By finding the number of column headers, we can see how many columns we have
-	public int getColumnNumber() {
-		return columnNames.size();
-	}
-
-	public String getColumnAttribute(int i) {
-		return columnNames.get(i);
-	}
+public class DBModelRows extends DBModelColumns{
 
 	public void setRowsFromFile(String command) {
 		//setDataArray() is called row by row, and we are exploiting
@@ -44,18 +19,18 @@ public class DBModelData extends DBModel {
 	public void setRowsFromSQL(ArrayList<String> newValues) {
 		List<String> rowData = new ArrayList<>();
 		tableData.add(rowData);
-		String idNo = getID();
+		String idNo = findIDNo();
 		tableData.get(getRowNumber() - 1).add(idNo);
 		tableData.get(getRowNumber() - 1).addAll(newValues);
 	}
 
-	private String getID(){
+	private String findIDNo(){
 		String idNo = String.valueOf(1);
 		if(getRowNumber() > 1) {
 			//because we are deleting rows, we can't just set id to rowNo because there could be clashes- instead,
 			// we're finding the id of the previous cell, adding one to it and using that as our new ID
 			int prevRow = getRowNumber()-2;
-			int calculateId = Integer.parseInt(getCell(prevRow, 0)) + 1;
+			int calculateId = Integer.parseInt(tableData.get(prevRow).get(0)) + 1;
 			idNo = String.valueOf(calculateId);
 		}
 		return idNo;
@@ -73,12 +48,8 @@ public class DBModelData extends DBModel {
 		return tableData.size();
 	}
 
-	public String getCell(int rowNo, int columnNo){
-		return tableData.get(rowNo).get(columnNo);
-	}
-
-	public void setCell(int rowNo, int columnNo, String newValue){
-		tableData.get(rowNo).set(columnNo, newValue);
+	public void deleteRow(int rowNum){
+		tableData.remove(rowNum);
 	}
 
 	public void addColumn(String colName){
@@ -93,9 +64,5 @@ public class DBModelData extends DBModel {
 		for(int i=0; i<getRowNumber(); i++){
 			tableData.get(i).remove(colNum);
 		}
-	}
-
-	public void deleteRow(int rowNum){
-		tableData.remove(rowNum);
 	}
 }

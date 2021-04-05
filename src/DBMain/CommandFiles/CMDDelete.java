@@ -11,10 +11,8 @@ import java.util.ArrayList;
 
 public class CMDDelete extends ProcessWhere {
 
-	public CMDDelete(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDDelete(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
 	}
 
 	public void transformModel() throws ParseExceptions, IOException {
@@ -22,8 +20,8 @@ public class CMDDelete extends ProcessWhere {
 		if(stringMatcherTHROW("FROM", firstCommand, "DELETE")){
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
-				setTemporaryModel(secondCommand, temporaryPathModel, temporaryDataModel);
-				new DBLoad(storageData, temporaryPathModel.getDatabaseName(), secondCommand);
+				setTemporaryModel(secondCommand, temporaryPathModel, temporaryColumns, temporaryRows);
+				new DBLoad(storageColumns, storageRows, temporaryPathModel.getDatabaseName(), secondCommand);
 				String thirdCommand = getTokenSafe(DomainType.WHERE);
 				if(stringMatcherTHROW("WHERE", thirdCommand, "DELETE FROM [table]")) {
 					splitIfBrackets(this);
@@ -41,9 +39,9 @@ public class CMDDelete extends ProcessWhere {
 
 	//we have to iterate downwards otherwise the row numbers won't correspond to those held by finalRows
 	private void removeRows(ArrayList<RequestedCell> finalRows){
-		for (int i = (storageData.getRowNumber() - 1); i >= 0; i--) {
+		for (int i = (storageRows.getRowNumber() - 1); i >= 0; i--) {
 			if (finalRows.get(i).equals(RequestedCell.TRUE)) {
-				storageData.deleteRow(i);
+				storageRows.deleteRow(i);
 			}
 		}
 	}

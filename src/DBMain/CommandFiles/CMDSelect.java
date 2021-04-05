@@ -8,10 +8,8 @@ import java.util.ArrayList;
 public class CMDSelect extends ProcessWhere {
 	final ArrayList<RequestedCell> requestedColumns = new ArrayList<>();
 
-	public CMDSelect(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDSelect(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
 	}
 
 	public void transformModel() throws ParseExceptions, IOException {
@@ -25,7 +23,7 @@ public class CMDSelect extends ProcessWhere {
 	}
 
 	private void initRequestedCols(){
-		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
+		for(int i=0; i<temporaryColumns.getColumnNumber(); i++){
 			requestedColumns.add(RequestedCell.FALSE);
 		}
 	}
@@ -49,7 +47,7 @@ public class CMDSelect extends ProcessWhere {
 					// nothing will be stored at the end of this command's execution, so rather than using our storage
 					// models, we've instantiating temporary models which we can use without running the risk of
 					// creating messy data and it being stored. We will use these models for the rest of the operation.
-					setTemporaryModel(peakTwo, temporaryPathModel, temporaryDataModel);
+					setTemporaryModel(peakTwo, temporaryPathModel, temporaryColumns, temporaryRows);
 					return;
 				}
 			}
@@ -61,7 +59,7 @@ public class CMDSelect extends ProcessWhere {
 	 *****************************************************/
 
 	private void processAttributes(String firstCommand) throws ParseExceptions{
-		int attributeCoordinate = findAttribute(firstCommand, temporaryDataModel);
+		int attributeCoordinate = findAttribute(firstCommand, temporaryColumns);
 		//check if it's a 'select all' asterisk
 		if(stringMatcher("*", firstCommand)){
 			String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
@@ -84,7 +82,7 @@ public class CMDSelect extends ProcessWhere {
 
 	private void collectAttributes() throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
+		int attributeCoordinate = findAttribute(nextCommand, temporaryColumns);
 		//if it's a 'FROM', leave recursive loop
 		if (stringMatcher("FROM", nextCommand)) {
 			return;
@@ -103,7 +101,7 @@ public class CMDSelect extends ProcessWhere {
 
 	private void requestAllColumns(){
 		//iterate through the columns of our table until we find a match
-		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
+		for(int i=0; i<temporaryColumns.getColumnNumber(); i++){
 			requestedColumns.set(i, RequestedCell.TRUE);
 		}
 	}
@@ -120,23 +118,23 @@ public class CMDSelect extends ProcessWhere {
 	}
 
 	private void setColumnsMessage(){
-		for (int k = 0; k < temporaryDataModel.getColumnNumber(); k++) {
+		for (int k = 0; k < temporaryColumns.getColumnNumber(); k++) {
 			if (requestedColumns.get(k).equals(RequestedCell.TRUE)) {
 				if(exitMessage == null){
-					exitMessage = temporaryDataModel.getColumnAttribute(k) + "\t\t";
+					exitMessage = temporaryColumns.getColumnAttribute(k) + "\t\t";
 				} else {
-					exitMessage = exitMessage + temporaryDataModel.getColumnAttribute(k) + "\t\t";
+					exitMessage = exitMessage + temporaryColumns.getColumnAttribute(k) + "\t\t";
 				}
 			}
 		}
 	}
 
 	private void setRowsMessage(ArrayList<RequestedCell> finalRows){
-		for (int i = 0; i < temporaryDataModel.getRowNumber(); i++) {
+		for (int i = 0; i < temporaryRows.getRowNumber(); i++) {
 			if(finalRows.get(i).equals(RequestedCell.TRUE)) {
-				for (int j = 0; j < temporaryDataModel.getColumnNumber(); j++) {
+				for (int j = 0; j < temporaryColumns.getColumnNumber(); j++) {
 					if(requestedColumns.get(j).equals(RequestedCell.TRUE)) {
-						exitMessage = exitMessage + temporaryDataModel.getCell(i, j) + "\t\t";
+						exitMessage = exitMessage + temporaryCells.getCell(i, j) + "\t\t";
 					}
 				}
 				//Write a new line for every new row

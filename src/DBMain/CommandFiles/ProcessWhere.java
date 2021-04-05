@@ -1,8 +1,16 @@
 package DBMain.CommandFiles;
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
+
+import java.io.IOException;
 import java.util.*;
 
 public abstract class ProcessWhere extends ConditionMethods {
+
+	public ProcessWhere(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
+	}
 
 	protected abstract void returnToCMD(ArrayList<RequestedCell> finalRows) throws ParseExceptions;
 
@@ -32,7 +40,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 	}
 
 	private void requestAllRows(){
-		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
+		for(int i=0; i<temporaryRows.getRowNumber(); i++){
 			finalRows.add(RequestedCell.TRUE);
 		}
 	}
@@ -45,7 +53,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 	//do not need to process the where clause recursively
 	protected void splitIfBrackets(ProcessWhere currentCommand) throws ParseExceptions{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
-		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
+		int attributeCoordinate = findAttribute(nextCommand, temporaryColumns);
 		//if it's a '(', that indicates we'll be doing a recursive where operation
 		if (stringMatcher("(", nextCommand)) {
 			callComplexWhere(currentCommand);
@@ -100,7 +108,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 
 	private void openBracketOp(ProcessWhere currentCommand) throws ParseExceptions, EmptyStackException{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
-		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
+		int attributeCoordinate = findAttribute(nextCommand, temporaryColumns);
 		//we don't know yet whether this is an open bracket or part of a condition yet, so we can only use
 		//this information to conclude that the last "(" WAS an open bracket
 		if(stringMatcher("(", nextCommand)) {
@@ -185,7 +193,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 	}
 
 	private ArrayList<RequestedCell> computeAND(ArrayList<RequestedCell> rowsOne, ArrayList<RequestedCell> rowsTwo){
-		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {
+		for(int i=0; i<temporaryRows.getRowNumber(); i++) {
 			if((rowsOne.get(i) == RequestedCell.TRUE) && (rowsTwo.get(i) == RequestedCell.TRUE)){
 				rowsOne.set(i, RequestedCell.TRUE);
 			}
@@ -197,7 +205,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 	}
 
 	private ArrayList<RequestedCell> computeOR(ArrayList<RequestedCell> rowsOne, ArrayList<RequestedCell> rowsTwo){
-		for(int i=0; i<temporaryDataModel.getRowNumber(); i++) {
+		for(int i=0; i<temporaryRows.getRowNumber(); i++) {
 			if((rowsOne.get(i) == RequestedCell.TRUE) || (rowsTwo.get(i) == RequestedCell.TRUE)){
 				rowsOne.set(i, RequestedCell.TRUE);
 			}

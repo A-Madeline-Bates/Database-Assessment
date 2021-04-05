@@ -5,13 +5,11 @@ import DBMain.ParseExceptions.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class CMDCreate extends FilesControl {
+public class CMDCreate extends FileControlClasses {
 	final ArrayList<String> attributeNames = new ArrayList<>();
 
-	public CMDCreate(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDCreate(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
 	}
 
 	public void transformModel() throws ParseExceptions, IOException {
@@ -90,7 +88,7 @@ public class CMDCreate extends FilesControl {
 		//This is copying information about what we've created into the model. Information from
 		//the storagePath and storageData model will be stored to file when DBStore is called.
 		storagePath.setFilename(tableName);
-		storageData.setColumnsFromSQL(attributeNames);
+		storageColumns.setColumnsFromSQL(attributeNames);
 	}
 
 	private void collectAttributes(String tableName) throws ParseExceptions{

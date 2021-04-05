@@ -4,11 +4,13 @@ import DBMain.ModelFiles.*;
 import java.io.*;
 
 public class DBStore {
-    final DBModelData modelData;
+    final DBModelColumns modelColumns;
+    final DBModelRows modelRows;
     final DBModelPath modelPath;
 
-    public DBStore(DBModelData modelData, DBModelPath modelPath) throws IOException{
-        this.modelData = modelData;
+    public DBStore(DBModelColumns modelColumns, DBModelRows modelRows, DBModelPath modelPath) throws IOException{
+        this.modelColumns = modelColumns;
+        this.modelRows = modelRows;
         this.modelPath  = modelPath;
 
         if(modelPath.getDatabaseName() != null){
@@ -57,15 +59,15 @@ public class DBStore {
     }
 
     private void writeColumnNames(BufferedWriter writer) throws IOException{
-        for (int k = 0; k < modelData.getColumnNumber(); k++) {
-            writer.write(modelData.getColumnData().get(k) + "\t\t");
+        for (int k = 0; k < modelColumns.getColumnNumber(); k++) {
+            writer.write(modelColumns.getColumnData().get(k) + "\t\t");
         }
     }
 
     private void writeDataArray(BufferedWriter writer) throws IOException{
-        for (int i = 0; i < modelData.getRowNumber(); i++) {
-            for (int j = 0; j < modelData.getColumnNumber(); j++) {
-                writer.write(modelData.getRowsData().get(i).get(j) + "\t\t");
+        for (int i = 0; i < modelRows.getRowNumber(); i++) {
+            for (int j = 0; j < modelColumns.getColumnNumber(); j++) {
+                writer.write(modelRows.getRowsData().get(i).get(j) + "\t\t");
             }
             //Write a new line for every new row
             writer.write("\n");

@@ -9,10 +9,8 @@ import java.io.IOException;
 
 public class CMDAlter extends AttributeSearch {
 
-	public CMDAlter(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException{
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDAlter(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
 	}
 
 	public void transformModel() throws ParseExceptions, IOException{
@@ -21,7 +19,7 @@ public class CMDAlter extends AttributeSearch {
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);
 			if (doesTableExist(secondCommand)) {
 				//split based on whether we're doing an 'add' or 'drop' operation
-				new DBLoad(storageData, storagePath.getDatabaseName(), secondCommand);
+				new DBLoad(storageColumns, storageRows, storagePath.getDatabaseName(), secondCommand);
 				storagePath.setFilename(secondCommand);
 				addDropSplit();
 				setExitMessage();
@@ -41,7 +39,7 @@ public class CMDAlter extends AttributeSearch {
 		} else if(stringMatcher("DROP", nextCommand)){
 			//searching for preexisting attributes
 			String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-			int attributeCoordinate = findAttributeTHROW(attributeCommand, storagePath, storageData);
+			int attributeCoordinate = findAttributeTHROW(attributeCommand, storagePath, storageColumns);
 			protectIDCol(attributeCoordinate);
 			if(isItLineEndTHROW()) {
 				dropColumn(attributeCoordinate);
@@ -52,10 +50,10 @@ public class CMDAlter extends AttributeSearch {
 	}
 
 	private void addColumn(String attributeName){
-		storageData.addColumn(attributeName);
+		storageRows.addColumn(attributeName);
 	}
 
 	private void dropColumn(int attributeCoordinate){
-		storageData.deleteColumn(attributeCoordinate);
+		storageRows.deleteColumn(attributeCoordinate);
 	}
 }

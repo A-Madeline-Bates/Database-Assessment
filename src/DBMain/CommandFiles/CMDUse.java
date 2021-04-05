@@ -5,12 +5,10 @@ import DBMain.ParseExceptions.*;
 
 import java.io.IOException;
 
-public class CMDUse extends FilesControl {
+public class CMDUse extends FileControlClasses {
 
-	public CMDUse(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDUse(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
 	}
 
 	public void transformModel() throws ParseExceptions, IOException {
