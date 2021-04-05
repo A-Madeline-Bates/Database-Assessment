@@ -20,7 +20,7 @@ public abstract class AttributeSearch extends MainDataClasses {
 		return -1;
 	}
 
-	protected int findAttributeTHROW(String nextCommand, DBModelPath path, DBModelTable data) throws ParseExceptions {
+	protected int findAttributeTHROW(String nextCommand, DBModelPath path, DBModelTable data) throws NoAttributeFound {
 		int attributeCoordinate = findAttribute(nextCommand, data);
 		if (attributeCoordinate >= 0) {
 			return attributeCoordinate;

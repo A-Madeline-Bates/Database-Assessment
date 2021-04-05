@@ -43,14 +43,14 @@ public abstract class InputTests extends CMDType {
 		}
 	}
 
-	protected boolean isItAlphNumTHROW(String testString, DomainType domain) throws AlphanumFormatProblem {
+	protected boolean isItAlphNumTHROW(String testString, DomainType domain) throws NotAlphanum {
 		if (isItAlphNumeric(testString)) {
 			return true;
 		}
-		throw new AlphanumFormatProblem(testString, domain);
+		throw new NotAlphanum(testString, domain);
 	}
 
-	protected boolean isItLineEndTHROW() throws CommandMissing, MissingSemiColon, ExtraCommandGiven {
+	protected boolean isItLineEndTHROW() throws SyntaxError {
 		String finalCommand = getTokenSafe(DomainType.SEMICOLON);
 		if (isItSemicolonTHROW(finalCommand)) {
 			String extraCommand = tokeniser.nextToken();
@@ -82,7 +82,7 @@ public abstract class InputTests extends CMDType {
 		throw new MissingSemiColon(nextCommand);
 	}
 
-	protected boolean isItCommaSeparated(DomainType domain, String exitToken) throws CommandMissing, NotCommaSeparated {
+	protected boolean isItCommaSeparated(DomainType domain, String exitToken) throws SyntaxError {
 		String nextCommand = peakTokenSafe(1, DomainType.COMMA);
 		//is the next instruction a comma
 		if (stringMatcher(",", nextCommand)) {

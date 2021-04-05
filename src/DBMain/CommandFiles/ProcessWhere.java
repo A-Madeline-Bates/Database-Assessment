@@ -7,13 +7,13 @@ import java.util.*;
 
 public abstract class ProcessWhere extends ConditionMethods {
 
-	protected abstract void returnToCMD(ArrayList<RequestedCell> finalRows) throws ParseExceptions;
+	protected abstract void returnToCMD(ArrayList<RequestedCell> finalRows) throws EditingID;
 
 	/******************************************************
 	 ****** METHOD TO END STRING OR TRIGGER 'WHERE' ******
 	 *****************************************************/
 
-	protected void processWhere(ProcessWhere currentCommand) throws ParseExceptions {
+	protected void processWhere(ProcessWhere currentCommand) throws BNFError {
 		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		//if there is no WHERE condition, exit and prepare our print statement
 		if(stringMatcher(";", nextCommand)) {
@@ -46,7 +46,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 
 	//if there are not brackets on our first 'where' condition we know there should only be one condition used and we
 	//do not need to process the where clause recursively
-	protected void splitIfBrackets(ProcessWhere currentCommand) throws ParseExceptions{
+	protected void splitIfBrackets(ProcessWhere currentCommand) throws BNFError{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
 		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
 		//if it's a '(', that indicates we'll be doing a recursive where operation
@@ -68,7 +68,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 		}
 	}
 
-	private void callComplexWhere(ProcessWhere currentCommand) throws ParseExceptions{
+	private void callComplexWhere(ProcessWhere currentCommand) throws BNFError{
 		//we use stacks a lot in these operations. If they are ever used while empty, throw EmptyStackException
 		try {
 			recursiveWhere(currentCommand);
@@ -81,7 +81,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 	 ************* RECURSIVE 'WHERE' OPERATOR *************
 	 *****************************************************/
 
-	private void recursiveWhere(ProcessWhere currentCommand) throws ParseExceptions, EmptyStackException{
+	private void recursiveWhere(ProcessWhere currentCommand) throws BNFError, EmptyStackException{
 		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		if(stringMatcher("(", nextCommand)){
 			openBracketOp(currentCommand);
@@ -101,7 +101,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 		}
 	}
 
-	private void openBracketOp(ProcessWhere currentCommand) throws ParseExceptions, EmptyStackException{
+	private void openBracketOp(ProcessWhere currentCommand) throws BNFError, EmptyStackException{
 		String nextCommand = peakTokenSafe(1, DomainType.UNKNOWN);
 		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
 		//we don't know yet whether this is an open bracket or part of a condition yet, so we can only use
@@ -120,7 +120,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 		}
 	}
 
-	private void conditionOp(ProcessWhere currentCommand, int attributeCoordinate) throws ParseExceptions, EmptyStackException{
+	private void conditionOp(ProcessWhere currentCommand, int attributeCoordinate) throws BNFError, EmptyStackException{
 		//call getNewTokenSafe() to step past attribute name
 		getTokenSafe(DomainType.ATTRIBUTENAME);
 		//clear requested rows
@@ -135,7 +135,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 		}
 	}
 
-	private void closeBracketOp(ProcessWhere currentCommand) throws ParseExceptions, EmptyStackException {
+	private void closeBracketOp(ProcessWhere currentCommand) throws BNFError, EmptyStackException {
 		while ((!operatorStack.isEmpty()) && (!operatorStack.peek().equals("("))) {
 			String andOrOp = operatorStack.pop();
 			performStackOp(andOrOp);
@@ -146,14 +146,14 @@ public abstract class ProcessWhere extends ConditionMethods {
 		recursiveWhere(currentCommand);
 	}
 
-	private void semicolonOp(ProcessWhere currentCommand) throws ParseExceptions, EmptyStackException{
+	private void semicolonOp(ProcessWhere currentCommand) throws BNFError, EmptyStackException{
 		String extraInstruction = tokeniser.nextToken();
 		if (isItNullEndTHROW(extraInstruction)) {
 			clearUpStack(currentCommand);
 		}
 	}
 
-	private void andOrOp(ProcessWhere currentCommand, String nextCommand) throws ParseExceptions, EmptyStackException{
+	private void andOrOp(ProcessWhere currentCommand, String nextCommand) throws BNFError, EmptyStackException{
 		operatorStack.push(nextCommand);
 		recursiveWhere(currentCommand);
 	}
@@ -171,7 +171,7 @@ public abstract class ProcessWhere extends ConditionMethods {
 		}
 	}
 
-	private void clearUpStack(ProcessWhere currentCommand) throws ParseExceptions, EmptyStackException{
+	private void clearUpStack(ProcessWhere currentCommand) throws BNFError, EmptyStackException{
 		while(!operatorStack.isEmpty()) {
 			if (operatorStack.peek().equals("(")) {
 				throw new SumError();

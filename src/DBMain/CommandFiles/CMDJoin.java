@@ -2,9 +2,11 @@ package DBMain.CommandFiles;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelTable;
 import DBMain.ModelFiles.DBModelPath;
+import DBMain.ParseExceptions.BNFError;
 import DBMain.ParseExceptions.NoAttributeFound;
 import DBMain.DBEnums.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
+import DBMain.ParseExceptions.SyntaxError;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class CMDJoin extends AttributeSearch {
 		}
 	}
 
-	private void findColMatches() throws ParseExceptions {
+	private void findColMatches() throws BNFError {
 		String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		int firstMatch = findAttribute(attributeCommand, temporaryDataModel);
 		//attempt to find attribute in our first table
@@ -63,7 +65,7 @@ public class CMDJoin extends AttributeSearch {
 		}
 	}
 
-	private void findSecondMatch(int firstMatch, int whichTable) throws ParseExceptions{
+	private void findSecondMatch(int firstMatch, int whichTable) throws BNFError {
 		String nextCommand = getTokenSafe(DomainType.AND);
 		if(stringMatcherTHROW("AND", nextCommand, "ON [attribute]")) {
 			nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);

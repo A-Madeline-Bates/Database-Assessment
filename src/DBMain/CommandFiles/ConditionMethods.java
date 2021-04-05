@@ -17,7 +17,7 @@ public abstract class ConditionMethods extends AttributeSearch{
 	 ****************** CONDITION METHODS *****************
 	 *****************************************************/
 
-	protected void executeCondition(int attributeCoordinate) throws ParseExceptions {
+	protected void executeCondition(int attributeCoordinate) throws BNFError {
 		String opCommand = getTokenSafe(DomainType.OPERATOR);
 		//find the type of our operator- if it's not valid, an exception will be thrown
 		OperatorType opType = returnOpType(opCommand);
@@ -28,7 +28,7 @@ public abstract class ConditionMethods extends AttributeSearch{
 	 *********** SPLIT CONDITION BY OPERATOR TYPE **********
 	 *****************************************************/
 
-	private void splitByOpType(OperatorType opType, String opCommand, int attributeCoordinate) throws ParseExceptions{
+	private void splitByOpType(OperatorType opType, String opCommand, int attributeCoordinate) throws BNFError{
 		String valueCommand = getTokenSafe(DomainType.VALUE);
 		//this operation checks whether a value is valid for the operator (throwing an error if not). It then
 		//directs it to the appropriate method.

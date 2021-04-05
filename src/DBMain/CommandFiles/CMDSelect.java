@@ -34,7 +34,7 @@ public class CMDSelect extends ProcessWhere {
 	 *************  METHOD TO IDENTIFY FILE  **************
 	 *****************************************************/
 
-	private void findTable() throws ParseExceptions, IOException {
+	private void findTable() throws BNFError, IOException {
 		//we need to know table name before we can identify if our attribute is valid, so we start by 'peaking'
 		//forwards at it.
 		for(int i=1; ; i++) {
@@ -60,7 +60,7 @@ public class CMDSelect extends ProcessWhere {
 	 ***  METHODS TO READ IN THE ATTRIBUTES FOR DISPLAY  ***
 	 *****************************************************/
 
-	private void processAttributes(String firstCommand) throws ParseExceptions{
+	private void processAttributes(String firstCommand) throws BNFError{
 		int attributeCoordinate = findAttribute(firstCommand, temporaryDataModel);
 		//check if it's a 'select all' asterisk
 		if(stringMatcher("*", firstCommand)){
@@ -82,7 +82,7 @@ public class CMDSelect extends ProcessWhere {
 		}
 	}
 
-	private void collectAttributes() throws ParseExceptions{
+	private void collectAttributes() throws BNFError{
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
 		//if it's a 'FROM', leave recursive loop

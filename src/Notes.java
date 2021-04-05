@@ -42,11 +42,8 @@
 
 
 	//TO DO :
-//	- decouple
 //  - extra JOIN features
 //  - use methods in combination with one another- build a test strategy
-//  - clean up CMDfactory?
 //  - consider fixing extra comma err on lists
 //  -   remove quote marks in print?
-//
 

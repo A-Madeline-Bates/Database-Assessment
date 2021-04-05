@@ -3,6 +3,7 @@ import DBMain.DBLoad.DBLoad;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelPath;
 import DBMain.DBEnums.DomainType;
+import DBMain.ParseExceptions.BNFError;
 import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class CMDAlter extends AttributeSearch {
 		buildCommand(tokeniser, path);
 	}
 
-	public void transformModel() throws ParseExceptions, IOException{
+	public void transformModel() throws BNFError, IOException{
 		String firstCommand = getTokenSafe(DomainType.TABLE);
 		if (stringMatcherTHROW("TABLE", firstCommand, "ALTER")) {
 			String secondCommand = getTokenSafe(DomainType.TABLENAME);
@@ -27,7 +28,7 @@ public class CMDAlter extends AttributeSearch {
 		}
 	}
 
-	private void addDropSplit() throws ParseExceptions{
+	private void addDropSplit() throws BNFError {
 		String nextCommand = getTokenSafe(DomainType.UNKNOWN);
 		if(stringMatcher("ADD", nextCommand)){
 			//finding if the attribute name would be valid

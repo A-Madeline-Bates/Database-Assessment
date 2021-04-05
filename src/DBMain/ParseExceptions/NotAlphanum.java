@@ -2,8 +2,8 @@ package DBMain.ParseExceptions;
 
 import DBMain.DBEnums.DomainType;
 
-public class AlphanumFormatProblem extends DomainException{
-	public AlphanumFormatProblem(String token, DomainType domain){
+public class NotAlphanum extends DomainException{
+	public NotAlphanum(String token, DomainType domain){
 		this.domain = domain;
 		this.token = token;
 	}

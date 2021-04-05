@@ -33,7 +33,7 @@ public class CMDInsert extends MainDataClasses {
 		}
 	}
 
-	private void collectValues(String tableName) throws ParseExceptions, IOException{
+	private void collectValues(String tableName) throws BNFError, IOException{
 		String nextCommand = getTokenSafe(DomainType.VALUE);
 		//if it's a ')', leave recursive loop and update table
 		if (stringMatcher(")", nextCommand)) {

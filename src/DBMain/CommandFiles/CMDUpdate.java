@@ -28,7 +28,7 @@ public class CMDUpdate extends ProcessWhere {
 		}
 	}
 
-	private void processNameVals() throws ParseExceptions {
+	private void processNameVals() throws BNFError {
 		initColumnArray();
 		String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		int attributeCoordinate = findAttributeTHROW(attributeCommand, temporaryPathModel, temporaryDataModel);
@@ -37,7 +37,7 @@ public class CMDUpdate extends ProcessWhere {
 		collectNameVals();
 	}
 
-	private void collectNameVals() throws ParseExceptions{
+	private void collectNameVals() throws BNFError{
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
 		//if it's a 'WHERE', leave recursive loop
@@ -55,7 +55,7 @@ public class CMDUpdate extends ProcessWhere {
 		}
 	}
 
-	private void setNameVal(int attributeCoordinate) throws ParseExceptions{
+	private void setNameVal(int attributeCoordinate) throws SyntaxError{
 		String nextCommand = getTokenSafe(DomainType.OPERATOR);
 		if(stringMatcherTHROW("=", nextCommand, "SET [attribute]")) {
 			nextCommand = getTokenSafe(DomainType.VALUE);
