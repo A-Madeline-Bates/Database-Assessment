@@ -1,0 +1,323 @@
+*
+[empty]
+ghjk
+
+USE <DatabaseName>
+use
+use ghj
+use matt
+use matt jgh
+use matt;
+use matt hjk;
+USE MATT;
+
+CREATE DATABASE <DatabaseName>
+create
+create hjkl
+create database
+create database g**
+create database hello
+create database matt
+create database g**;
+create database hello;
+create database hello; ghjk
+//create a db that already exists
+create database matt;
+CREATE DATABASE HI;
+CREATE DATABASE HI HJK;
+
+CREATE TABLE <TableName> | CREATE TABLE <TableName> (<AttributeList>)
+//not in database
+create table abc;
+//in database
+create table
+create table g/+
+create table hello
+create table matt
+create table g/+;
+create table hello;
+create table matt;
+create table jobs fgh;
+create table jobs (
+create table jobs ( k*h
+create table jobs ( hi
+create table jobs ( )
+create table jobs ( );
+create table jobs ( hi ghjk
+create table jobs ( hi,
+create table jobs ( hi, hi2
+create table jobs ( hi, hi2 ghjk
+create table jobs ( hi, hi2,
+create table jobs ( hi, hi2 )
+create table jobs ( hi, hi2 );
+create table jobs ( hi, hi2 ) hgjk
+create table jobs ( hi, hi2 ); ghhj
+//creating identical table to the one we made
+create table jobs ( hi, hi2 );
+CREATE TABLE HI;
+CREATE TABLE HOLA (HI, H12);
+
+DROP <Structure> <StructureName>
+drop
+drop ghj
+drop database
+drop database ghj
+drop database hello
+drop database ghj;
+drop database hello;
+drop database hello; ghj
+create database hi;
+DROP DATABASE HI;
+drop table
+drop table hjk
+drop table hi; gjh
+drop table hi;
+DROP TABLE HOLA;
+
+ALTER TABLE <TableName> <AlterationType> <AttributeName>
+alter
+alter table
+alter table hkhjl
+alter table jobs
+alter table jobs hgjk
+alter table jobs add
+alter table jobs drop
+alter table jobs add ghjk
+alter table jobs drop fghj
+//attribute doesn't exist
+alter table jobs drop fghj;
+alter table jobs add hi3
+alter table jobs add hi3 fghj
+alter table jobs add hi3; ghj
+alter table jobs add hi3;
+ALTER TABLES JOBS ADD HI4;
+alter table jobs drop hi3
+alter table jobs drop hi3 fghj
+alter table jobs drop hi3; ghj
+alter table jobs drop hi3;
+ALTER TABLES JOBS DROP HI4;
+//should be blcoked as we can't edit ID
+alter table jobs drop id;
+
+INSERT INTO <TableName> VALUES (<ValueList>)
+insert
+insert ghj
+insert into
+insert into ghj
+create table spoons;
+insert into spoons
+insert into spoons ghjk
+insert into spoons values
+insert into spoons values (
+insert into spoons values ( k*h
+insert into spoons values ( hi
+insert into spoons values ( )
+insert into spoons values ( );
+insert into spoons values ( hi ghjk
+insert into spoons values ( hi,
+insert into spoons values ( 'hi',
+insert into spoons values ( 'hi', hi2
+insert into spoons values ( 'hi', hi2 ghjk
+insert into spoons values ( 'hi', hi2,
+insert into spoons values ( 'hi', 'hi2',
+insert into spoons values ( 'hi', 'hi2' )
+//spoonds currently contains no columns, so this should throw an error
+insert into spoons values ( 'hi', 'hi2' );
+insert into spoons values ( hi, hi2 ) hgjk
+insert into spoons values ( hi, hi2 ); ghhj
+alter table spoons add col1, col2;
+insert into spoons values ( '1' );
+insert into spoons values ( '1', '2', '3' );
+insert into spoons values ( '', '' );
+insert into spoons values ( 1, 1 );
+insert into spoons values ( true, true );
+insert into spoons values ( 1.5678, 3.5678 );
+insert into spoons values ( 1 1 );
+insert into spoons values (( 1, 1 );
+insert into spoons values ( 1, 1 ));
+insert into spoons values (( 1, 1 ));
+insert into spoons values (4,4);
+INSERT INTO SPOONS VALUES (1, 1);
+insert into spoons values ('%^*&$', '1234567');
+
+SELECT <WildAttribList> FROM <TableName>
+select
+select fkjk
+select *
+select * ghj
+select * from
+select * from fghj
+select * from spoons
+select * from spoons fhjg
+select * from spoons;
+select * from spoons; fghk
+SELECT * FROM SPOONS;
+select col1
+select col1 ghjk
+select col1,
+select col1, hjk
+select col1, col2
+select col1, col2 gfhj
+select col1, col2,
+select col1, col2 from
+select col1, col2 from fghj
+select col1, col2 from spoons
+select col1, col2 from spoons fhjg
+select col1, col2 from spoons;
+select col1, col2 from spoons; fghk
+SELECT COL1, COL2 FROM SPOONS;
+//should be attribute not found
+select gfhj from spoons;
+
+SELECT <WildAttribList> FROM <TableName> WHERE <Condition>
+select * from spoons where
+select * from spoons where fghj
+select * from spoons where col1
+select * from spoons where col1;
+select * from spoons where col1 ghjk
+select * from spoons where col1 ==
+select * from spoons where col1 == hjk
+select * from spoons where col1 == true
+select * from spoons where col1 == true ghj
+select * from spoons where col1 == true;
+select * from spoons where col1 == true; ghjk
+select * from spoons where col1 < true;
+select * from spoons where col1 > true;
+select * from spoons where col1 <= true;
+select * from spoons where col1 >= true;
+select * from spoons where col1 != true;
+select * from spoons where col1 like true;
+select * from spoons where col1 == 0;
+select * from spoons where col1 < 0;
+select * from spoons where col1 > 0;
+select * from spoons where col1 <= 0;
+select * from spoons where col1 >= 0;
+select * from spoons where col1 != 0;
+select * from spoons where col1 like 0;
+select * from spoons where col1 == 1.5;
+select * from spoons where col1 < 1.5;
+select * from spoons where col1 > 1.5;
+select * from spoons where col1 <= 1.5;
+select * from spoons where col1 >= 1.5;
+select * from spoons where col1 != 1.5;
+select * from spoons where col1 like 1.5;
+select * from spoons where col1 == 'hi';
+select * from spoons where col1 < 'hi';
+select * from spoons where col1 > 'hi';
+select * from spoons where col1 <= 'hi';
+select * from spoons where col1 >= 'hi';
+select * from spoons where col1 != 'hi';
+select * from spoons where col1 like 'hi';
+SELECT * FROM SPOONS WHERE COL1 LIKE 'hi';
+select * from spoons where (
+select * from spoons where (fhgj
+select * from spoons where (col1
+select * from spoons where (col1==
+select * from spoons where (col1==fghj
+select * from spoons where (col1==)
+select * from spoons where (col1==hjkl)
+select * from spoons where (col1==true)
+select * from spoons where (col1==true);
+select * from spoons where (col1==true) ghjk
+select * from spoons where (col1==true) and
+select * from spoons where (col1==true) or
+select * from spoons where (col1==true) and (col2==3);
+select * from spoons where ((col1==true) and (col2==3);
+select * from spoons where (col1==true) and (col2==3));
+select * from spoons where ((col1==true) and (col2==3));
+//no test of where on columns that match the expected data here- all of these should fail
+create table wheretest int, float, boolean, string;
+insert into wheretest values (1, 1.5, true, 'hello');
+select * from wheretest where int == true;
+select * from wheretest where int < true;
+select * from wheretest where int > true;
+select * from wheretest where int <= true;
+select * from wheretest where int >= true;
+select * from wheretest where int != true;
+select * from wheretest where int like true;
+select * from wheretest where float == 0;
+select * from wheretest where float < 0;
+select * from wheretest where float > 0;
+select * from wheretest where float <= 0;
+select * from wheretest where float >= 0;
+select * from wheretest where float != 0;
+select * from wheretest where float like 0;
+select * from wheretest where boolean == 1.5;
+select * from wheretest where boolean < 1.5;
+select * from wheretest where boolean > 1.5;
+select * from wheretest where boolean <= 1.5;
+select * from wheretest where boolean >= 1.5;
+select * from wheretest where boolean != 1.5;
+select * from wheretest where boolean like 1.5;
+select * from wheretest where string == 'hi';
+select * from wheretest where string < 'hi';
+select * from wheretest where string > 'hi';
+select * from wheretest where string <= 'hi';
+select * from wheretest where string >= 'hi';
+select * from wheretest where string != 'hi';
+select * from wheretest where string like 'hi';
+//should be attribute not found
+select * from spoons where ghjk like 'hi';
+
+UPDATE <TableName> SET <NameValueList> WHERE <Condition>
+update
+update ghjk
+update spoons
+update spoons ghjk
+update spoons set
+update spoons set hgjkl
+update spoons set col1
+update spoons set col1 ghjk
+update spoons set col1=
+update spoons set col1==
+update spoons set col1=ghjk
+update spoons set col1=true
+update spoons set col1=true bhjk
+update spoons set col1=true,
+//update cannot end here
+update spoons set col1=true;
+//should be attribute not found
+update spoons set fghj=true;
+update spoons set col1=true where
+update spoons set col1=true, col2
+update spoons set col1=true, col2=
+update spoons set col1=true, col2=hjklh
+update spoons set col1=true, col2=true
+update spoons set col1=true, col2=true where
+//I'm just going to test where the once (see select)
+//should be blcoked as we can't edit ID
+update wheretest set id=true where id=1;
+
+DELETE FROM <TableName> WHERE <Condition>
+delete
+delete gjhk
+delete from
+delete from hjkl
+delete from spoons
+delete from spoons hgjl
+delete from spoons where
+delete from spoons;
+//ditto re: where
+
+JOIN <TableName> AND <TableName> ON <AttributeName> AND <AttributeName>
+join
+join ghjj
+join spoons
+join spoons gkl
+join spoons and
+join spoons and vbn
+create table forks (colfork1, colfork2);
+join spoons and forks
+join spoons and forks hjkl
+join spoons and forks on
+join spoons and forks on cojhkl
+join spoons and forks on col1
+join spoons and forks on col1 ghj
+join spoons and forks on col1 and
+join spoons and forks on col1 and hjk
+join spoons and forks on col1 and col2
+//this should fail as both columns are in the same table
+join spoons and forks on col1 and col2;
+join spoons and forks on col1 and col1;
+//this should fail because the rows don't match
+join spoons and forks on col1 and colfork1;
