@@ -9,7 +9,7 @@ public class DBTokeniser {
 	private int ArrayPosition = 0;
 
 	public DBTokeniser(String incomingCommand){
-		Pattern pattern = Pattern.compile("('.*?')|(==)|(>=)|(<=)|(!=)|[;,)(=<>*!]|[&^%$£@?}{/-]|[a-zA-Z0-9]*");
+		Pattern pattern = Pattern.compile("('.*?')|(==)|(>=)|(<=)|(!=)|[;,)(=<>*!]|[&^%$£@?}{/-]|[.a-zA-Z0-9]*");
 		Matcher matcher = pattern.matcher(incomingCommand);
 		while(matcher.find()){
 			//This splits the string and turns it into tokens with no white space and keeps punctuation

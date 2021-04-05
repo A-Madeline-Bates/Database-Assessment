@@ -1,323 +1,620 @@
 *
+[ERROR]
 [empty]
+[ERROR]
 ghjk
+[ERROR]
 
 USE <DatabaseName>
 use
+[ERROR]
 use ghj
+[ERROR]
 use matt
+[ERROR]
 use matt jgh
+[ERROR]
 use matt;
+[OK]
 use matt hjk;
+[ERROR]
 USE MATT;
+[OK]
 
 CREATE DATABASE <DatabaseName>
 create
+[ERROR]
 create hjkl
+[ERROR]
 create database
+[ERROR]
 create database g**
+[ERROR]
 create database hello
+[ERROR]
 create database matt
+[ERROR]
 create database g**;
+[ERROR]
 create database hello;
+[OK]
 create database hello; ghjk
+[ERROR]
 //create a db that already exists
 create database matt;
+[ERROR]
 CREATE DATABASE HI;
+[OK]
 CREATE DATABASE HI HJK;
+[ERROR]
 
 CREATE TABLE <TableName> | CREATE TABLE <TableName> (<AttributeList>)
 //not in database
 create table abc;
+[ERROR]
 //in database
 create table
+[ERROR]
 create table g/+
+[ERROR]
 create table hello
+[ERROR]
 create table matt
+[ERROR]
 create table g/+;
+[ERROR]
 create table hello;
+[OK]
 create table matt;
+[OK]
 create table jobs fgh;
+[ERROR]
 create table jobs (
+[ERROR]
 create table jobs ( k*h
+[ERROR]
 create table jobs ( hi
+[ERROR]
 create table jobs ( )
+[ERROR]
 create table jobs ( );
+[OK]
 create table jobs ( hi ghjk
+[ERROR]
 create table jobs ( hi,
+[ERROR]
 create table jobs ( hi, hi2
+[ERROR]
 create table jobs ( hi, hi2 ghjk
+[ERROR]
 create table jobs ( hi, hi2,
+[ERROR]
 create table jobs ( hi, hi2 )
+[ERROR]
 create table jobs ( hi, hi2 );
+[ERROR] (because jobs exists)
 create table jobs ( hi, hi2 ) hgjk
+[ERROR]
 create table jobs ( hi, hi2 ); ghhj
-//creating identical table to the one we made
-create table jobs ( hi, hi2 );
+[ERROR]
 CREATE TABLE HI;
+[OK]
 CREATE TABLE HOLA (HI, H12);
+[OK]
 
 DROP <Structure> <StructureName>
 drop
+[ERROR]
 drop ghj
+[ERROR]
 drop database
+[ERROR]
 drop database ghj
+[ERROR]
 drop database hello
+[ERROR]
 drop database ghj;
-drop database hello;
-drop database hello; ghj
+[ERROR]
+drop database hi;
+[OK]
+//can't be dropped twice
+drop database hi;
+[ERROR]
 create database hi;
+[OK]
+drop database hi; fgh
+[ERROR]
 DROP DATABASE HI;
+[ERROR]
 drop table
+[ERROR]
 drop table hjk
+[ERROR]
+use hello;
+[OK]
 drop table hi; gjh
+[ERROR]
 drop table hi;
+[OK]
+//can't be dropped twice
+drop table hi;
+[ERROR]
 DROP TABLE HOLA;
+[OK]
 
 ALTER TABLE <TableName> <AlterationType> <AttributeName>
 alter
+[ERROR]
 alter table
+[ERROR]
 alter table hkhjl
+[ERROR]
 alter table jobs
+[ERROR]
 alter table jobs hgjk
+[ERROR]
 alter table jobs add
+[ERROR]
 alter table jobs drop
+[ERROR]
 alter table jobs add ghjk
+[ERROR]
 alter table jobs drop fghj
+[ERROR]
 //attribute doesn't exist
 alter table jobs drop fghj;
+[ERROR]
 alter table jobs add hi3
+[ERROR]
 alter table jobs add hi3 fghj
+[ERROR]
 alter table jobs add hi3; ghj
+[ERROR]
 alter table jobs add hi3;
-ALTER TABLES JOBS ADD HI4;
+[OK]
+ALTER TABLE JOBS ADD HI4;
+[OK]
 alter table jobs drop hi3
+[ERROR]
 alter table jobs drop hi3 fghj
+[ERROR]
 alter table jobs drop hi3; ghj
+[ERROR]
 alter table jobs drop hi3;
-ALTER TABLES JOBS DROP HI4;
-//should be blcoked as we can't edit ID
+[OK]
+ALTER TABLE JOBS DROP HI4;
+[ERROR]
+//can't drop twice
+[ERROR]
+//attribute shouldn't be found
+ALTER TABLE JOBS DROP fghj;
+[ERROR]
+//should be blocked as we can't edit ID
 alter table jobs drop id;
+[ERROR]
 
 INSERT INTO <TableName> VALUES (<ValueList>)
 insert
+[ERROR]
 insert ghj
+[ERROR]
 insert into
+[ERROR]
 insert into ghj
+[ERROR]
 create table spoons;
+[OK]
 insert into spoons
+[ERROR]
 insert into spoons ghjk
+[ERROR]
 insert into spoons values
+[ERROR]
 insert into spoons values (
+[ERROR]
 insert into spoons values ( k*h
+[ERROR]
 insert into spoons values ( hi
+[ERROR]
 insert into spoons values ( )
+[ERROR]
 insert into spoons values ( );
+[OK]
 insert into spoons values ( hi ghjk
+[ERROR]
 insert into spoons values ( hi,
+[ERROR]
 insert into spoons values ( 'hi',
+[ERROR]
 insert into spoons values ( 'hi', hi2
+[ERROR]
 insert into spoons values ( 'hi', hi2 ghjk
+[ERROR]
 insert into spoons values ( 'hi', hi2,
+[ERROR]
 insert into spoons values ( 'hi', 'hi2',
+[ERROR]
 insert into spoons values ( 'hi', 'hi2' )
+[ERROR]
 //spoonds currently contains no columns, so this should throw an error
 insert into spoons values ( 'hi', 'hi2' );
-insert into spoons values ( hi, hi2 ) hgjk
-insert into spoons values ( hi, hi2 ); ghhj
-alter table spoons add col1, col2;
+[ERROR]
+insert into spoons values ( ) hgjk
+[ERROR]
+insert into spoons values ( ); ghhj
+[ERROR]
+alter table spoons add col1;
+[OK]
+alter table spoons add col2;
+[OK]
 insert into spoons values ( '1' );
+[ERROR]
 insert into spoons values ( '1', '2', '3' );
+[ERROR]
+insert into spoons values ( );
+[ERROR]
 insert into spoons values ( '', '' );
+[OK]
 insert into spoons values ( 1, 1 );
+[OK]
 insert into spoons values ( true, true );
+[OK]
 insert into spoons values ( 1.5678, 3.5678 );
+[OK]
 insert into spoons values ( 1 1 );
+[ERROR]
 insert into spoons values (( 1, 1 );
+[ERROR]
 insert into spoons values ( 1, 1 ));
+[ERROR]
 insert into spoons values (( 1, 1 ));
+[ERROR]
 insert into spoons values (4,4);
+[OK]
 INSERT INTO SPOONS VALUES (1, 1);
+[OK]
 insert into spoons values ('%^*&$', '1234567');
+[OK]
 
 SELECT <WildAttribList> FROM <TableName>
 select
+[ERROR]
 select fkjk
+[ERROR]
 select *
+[ERROR]
 select * ghj
+[ERROR]
 select * from
+[ERROR]
 select * from fghj
+[ERROR]
 select * from spoons
+[ERROR]
 select * from spoons fhjg
+[ERROR]
 select * from spoons;
+[OK]
 select * from spoons; fghk
+[ERROR]
 SELECT * FROM SPOONS;
+[OK]
 select col1
+[ERROR]
 select col1 ghjk
+[ERROR]
 select col1,
+[ERROR]
 select col1, hjk
+[ERROR]
 select col1, col2
+[ERROR]
 select col1, col2 gfhj
+[ERROR]
 select col1, col2,
+[ERROR]
 select col1, col2 from
+[ERROR]
 select col1, col2 from fghj
+[ERROR]
 select col1, col2 from spoons
+[ERROR]
 select col1, col2 from spoons fhjg
+[ERROR]
 select col1, col2 from spoons;
+[OK]
 select col1, col2 from spoons; fghk
+[ERROR]
 SELECT COL1, COL2 FROM SPOONS;
+[OK]
 //should be attribute not found
 select gfhj from spoons;
+[ERROR]
 
 SELECT <WildAttribList> FROM <TableName> WHERE <Condition>
 select * from spoons where
+[ERROR]
 select * from spoons where fghj
+[ERROR]
 select * from spoons where col1
+[ERROR]
 select * from spoons where col1;
+[ERROR]
 select * from spoons where col1 ghjk
+[ERROR]
 select * from spoons where col1 ==
+[ERROR]
 select * from spoons where col1 == hjk
+[ERROR]
 select * from spoons where col1 == true
+[ERROR]
 select * from spoons where col1 == true ghj
+[ERROR]
 select * from spoons where col1 == true;
+[OK]
 select * from spoons where col1 == true; ghjk
+[ERROR]
 select * from spoons where col1 < true;
+[ERROR]
 select * from spoons where col1 > true;
+[ERROR]
 select * from spoons where col1 <= true;
+[ERROR]
 select * from spoons where col1 >= true;
+[ERROR]
 select * from spoons where col1 != true;
+[OK]
 select * from spoons where col1 like true;
+[ERROR]
 select * from spoons where col1 == 0;
+[OK]
 select * from spoons where col1 < 0;
+[ERROR]
 select * from spoons where col1 > 0;
+[ERROR]
 select * from spoons where col1 <= 0;
+[ERROR]
 select * from spoons where col1 >= 0;
+[ERROR]
 select * from spoons where col1 != 0;
+[OK]
 select * from spoons where col1 like 0;
+[ERROR]
 select * from spoons where col1 == 1.5;
+[OK]
 select * from spoons where col1 < 1.5;
+[ERROR]
 select * from spoons where col1 > 1.5;
+[ERROR]
 select * from spoons where col1 <= 1.5;
+[ERROR]
 select * from spoons where col1 >= 1.5;
+[ERROR]
 select * from spoons where col1 != 1.5;
+[OK]
 select * from spoons where col1 like 1.5;
+[ERROR]
 select * from spoons where col1 == 'hi';
+[OK]
 select * from spoons where col1 < 'hi';
+[ERROR]
 select * from spoons where col1 > 'hi';
+[ERROR]
 select * from spoons where col1 <= 'hi';
+[ERROR]
 select * from spoons where col1 >= 'hi';
+[ERROR]
 select * from spoons where col1 != 'hi';
+[OK]
 select * from spoons where col1 like 'hi';
+[ERROR]
 SELECT * FROM SPOONS WHERE COL1 LIKE 'hi';
+[ERROR] (but not because of capitalisation)
 select * from spoons where (
+[ERROR]
 select * from spoons where (fhgj
+[ERROR]
 select * from spoons where (col1
+[ERROR]
 select * from spoons where (col1==
+[ERROR]
 select * from spoons where (col1==fghj
+[ERROR]
 select * from spoons where (col1==)
+[ERROR]
 select * from spoons where (col1==hjkl)
+[ERROR]
 select * from spoons where (col1==true)
+[ERROR]
 select * from spoons where (col1==true);
+[OK]
 select * from spoons where (col1==true) ghjk
+[ERROR]
 select * from spoons where (col1==true) and
+[ERROR]
 select * from spoons where (col1==true) or
+[ERROR]
 select * from spoons where (col1==true) and (col2==3);
+[OK]
 select * from spoons where ((col1==true) and (col2==3);
+[ERROR]
 select * from spoons where (col1==true) and (col2==3));
+[ERROR]
 select * from spoons where ((col1==true) and (col2==3));
-//no test of where on columns that match the expected data here- all of these should fail
-create table wheretest int, float, boolean, string;
+[OK]
+//no test of where on columns that match the expected data here- all of these should fail except universal ops
+create table wheretest (int, float, boolean, string);
+[OK]
 insert into wheretest values (1, 1.5, true, 'hello');
+[ERROR]
 select * from wheretest where int == true;
+[OK]
 select * from wheretest where int < true;
+[ERROR]
 select * from wheretest where int > true;
+[ERROR]
 select * from wheretest where int <= true;
+[ERROR]
 select * from wheretest where int >= true;
+[ERROR]
 select * from wheretest where int != true;
+[OK]
 select * from wheretest where int like true;
+[ERROR]
 select * from wheretest where float == 0;
+[OK]
 select * from wheretest where float < 0;
+[OK]
 select * from wheretest where float > 0;
+[OK]
 select * from wheretest where float <= 0;
+[OK]
 select * from wheretest where float >= 0;
+[OK]
 select * from wheretest where float != 0;
+[OK]
 select * from wheretest where float like 0;
+[ERROR]
 select * from wheretest where boolean == 1.5;
+[OK]
 select * from wheretest where boolean < 1.5;
+[ERROR]
 select * from wheretest where boolean > 1.5;
+[ERROR]
 select * from wheretest where boolean <= 1.5;
+[ERROR]
 select * from wheretest where boolean >= 1.5;
+[ERROR]
 select * from wheretest where boolean != 1.5;
+[OK]
 select * from wheretest where boolean like 1.5;
+[ERROR]
 select * from wheretest where string == 'hi';
+[OK]
 select * from wheretest where string < 'hi';
+[ERROR]
 select * from wheretest where string > 'hi';
+[ERROR]
 select * from wheretest where string <= 'hi';
+[ERROR]
 select * from wheretest where string >= 'hi';
+[ERROR]
 select * from wheretest where string != 'hi';
+[OK]
 select * from wheretest where string like 'hi';
+[OK]
 //should be attribute not found
 select * from spoons where ghjk like 'hi';
+[ERROR]
 
 UPDATE <TableName> SET <NameValueList> WHERE <Condition>
 update
+[ERROR]
 update ghjk
+[ERROR]
 update spoons
+[ERROR]
 update spoons ghjk
+[ERROR]
 update spoons set
+[ERROR]
 update spoons set hgjkl
+[ERROR]
 update spoons set col1
+[ERROR]
 update spoons set col1 ghjk
+[ERROR]
 update spoons set col1=
+[ERROR]
 update spoons set col1==
+[ERROR]
 update spoons set col1=ghjk
+[ERROR]
 update spoons set col1=true
+[ERROR]
 update spoons set col1=true bhjk
+[ERROR]
 update spoons set col1=true,
+[ERROR]
 //update cannot end here
 update spoons set col1=true;
+[ERROR]
 //should be attribute not found
 update spoons set fghj=true;
+[ERROR]
 update spoons set col1=true where
+[ERROR]
 update spoons set col1=true, col2
+[ERROR]
 update spoons set col1=true, col2=
+[ERROR]
 update spoons set col1=true, col2=hjklh
+[ERROR]
 update spoons set col1=true, col2=true
+[ERROR]
 update spoons set col1=true, col2=true where
+[ERROR]
 //I'm just going to test where the once (see select)
 //should be blcoked as we can't edit ID
-update wheretest set id=true where id=1;
+update wheretest set id=true where id==1;
+[ERROR]
 
 DELETE FROM <TableName> WHERE <Condition>
 delete
+[ERROR]
 delete gjhk
+[ERROR]
 delete from
+[ERROR]
 delete from hjkl
+[ERROR]
 delete from spoons
+[ERROR]
 delete from spoons hgjl
+[ERROR]
 delete from spoons where
+[ERROR]
 delete from spoons;
+[ERROR]
 //ditto re: where
 
 JOIN <TableName> AND <TableName> ON <AttributeName> AND <AttributeName>
 join
+[ERROR]
 join ghjj
+[ERROR]
 join spoons
+[ERROR]
 join spoons gkl
+[ERROR]
 join spoons and
+[ERROR]
 join spoons and vbn
+[ERROR]
 create table forks (colfork1, colfork2);
+[OK]
 join spoons and forks
+[ERROR]
 join spoons and forks hjkl
+[ERROR]
 join spoons and forks on
+[ERROR]
 join spoons and forks on cojhkl
+[ERROR]
 join spoons and forks on col1
+[ERROR]
 join spoons and forks on col1 ghj
+[ERROR]
 join spoons and forks on col1 and
+[ERROR]
 join spoons and forks on col1 and hjk
+[ERROR]
 join spoons and forks on col1 and col2
+[ERROR]
 //this should fail as both columns are in the same table
 join spoons and forks on col1 and col2;
+[ERROR]
 join spoons and forks on col1 and col1;
-//this should fail because the rows don't match
+[ERROR]
 join spoons and forks on col1 and colfork1;
+[OK]
