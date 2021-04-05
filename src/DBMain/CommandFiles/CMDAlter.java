@@ -2,7 +2,7 @@ package DBMain.CommandFiles;
 import DBMain.DBLoad.DBLoad;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelPath;
-import DBMain.ParseExceptions.DomainType;
+import DBMain.DBEnums.DomainType;
 import DBMain.ParseExceptions.InvalidCommand;
 import DBMain.ParseExceptions.ParseExceptions;
 import java.io.IOException;

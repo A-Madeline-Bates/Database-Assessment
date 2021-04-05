@@ -1,6 +1,6 @@
 package DBMain.ParseExceptions;
 
-public class NotBuiltDB extends ParseExceptions{
+public class NotBuiltDB extends FileSystemError {
 	public NotBuiltDB(String token) {
 		this.token = token;
 	}

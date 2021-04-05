@@ -1,6 +1,6 @@
 package DBMain.ParseExceptions;
 
-public class InvalidValue extends ParseExceptions{
+public class InvalidValue extends SyntaxError{
 	public InvalidValue(String token){
 		this.token = token;
 	}

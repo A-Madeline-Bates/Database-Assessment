@@ -1,5 +1,7 @@
 package DBMain.CommandFiles;
 
+import DBMain.DBEnums.DomainType;
+import DBMain.DBEnums.RequestedCell;
 import DBMain.ParseExceptions.*;
 import java.util.*;
 

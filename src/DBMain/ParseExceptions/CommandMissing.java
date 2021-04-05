@@ -1,8 +1,7 @@
 package DBMain.ParseExceptions;
+import DBMain.DBEnums.DomainType;
 
-public class CommandMissing extends ParseExceptions {
-	final DomainType domain;
-
+public class CommandMissing extends DomainException {
 	public CommandMissing(DomainType domain){
 		this.domain = domain;
 	}

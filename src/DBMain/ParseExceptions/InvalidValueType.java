@@ -1,6 +1,8 @@
 package DBMain.ParseExceptions;
 
-public class InvalidValueType extends ParseExceptions{
+import DBMain.DBEnums.OperatorType;
+
+public class InvalidValueType extends SyntaxError{
 	final OperatorType opType;
 
 	public InvalidValueType(String token, OperatorType opType){

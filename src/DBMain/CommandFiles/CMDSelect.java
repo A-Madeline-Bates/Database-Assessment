@@ -1,4 +1,6 @@
 package DBMain.CommandFiles;
+import DBMain.DBEnums.DomainType;
+import DBMain.DBEnums.RequestedCell;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
@@ -76,7 +78,7 @@ public class CMDSelect extends ProcessWhere {
 		}
 		//throw error if it's neither
 		else{
-			throw new DoesNotExistAttribute(firstCommand, temporaryPathModel.getFilename(), null);
+			throw new NoAttributeFound(firstCommand, temporaryPathModel.getFilename(), null);
 		}
 	}
 
@@ -95,7 +97,7 @@ public class CMDSelect extends ProcessWhere {
 		}
 		//if it's not a value or a 'FROM', throw an error
 		else{
-			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename(), null);
+			throw new NoAttributeFound(nextCommand, temporaryPathModel.getFilename(), null);
 		}
 	}
 

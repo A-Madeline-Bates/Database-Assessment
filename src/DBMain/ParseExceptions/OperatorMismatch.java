@@ -1,10 +1,12 @@
 package DBMain.ParseExceptions;
 
-public class OperatorDataMismatch extends ParseExceptions{
+import DBMain.DBEnums.OperatorType;
+
+public class OperatorMismatch extends TableUseError {
 	final OperatorType opType;
 	final String value;
 
-	public OperatorDataMismatch(String value, OperatorType opType) {
+	public OperatorMismatch(String value, OperatorType opType) {
 		this.value = value;
 		this.opType = opType;
 	}

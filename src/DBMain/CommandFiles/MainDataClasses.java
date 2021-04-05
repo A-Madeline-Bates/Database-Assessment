@@ -1,7 +1,7 @@
 package DBMain.CommandFiles;
 import DBMain.ParseExceptions.InvalidValue;
 import DBMain.ParseExceptions.InvalidValueType;
-import DBMain.ParseExceptions.OperatorType;
+import DBMain.DBEnums.OperatorType;
 
 public abstract class MainDataClasses extends TemporaryModel {
 	//all classes which need access to the rows data are extended from this class

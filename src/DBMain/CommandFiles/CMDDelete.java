@@ -2,9 +2,9 @@ package DBMain.CommandFiles;
 import DBMain.DBLoad.DBLoad;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelPath;
-import DBMain.ParseExceptions.DomainType;
+import DBMain.DBEnums.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
-import DBMain.ParseExceptions.RequestedCell;
+import DBMain.DBEnums.RequestedCell;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -25,7 +25,7 @@ public abstract class AttributeSearch extends MainDataClasses {
 		if (attributeCoordinate >= 0) {
 			return attributeCoordinate;
 		} else {
-			throw new DoesNotExistAttribute(nextCommand, path.getFilename(), null);
+			throw new NoAttributeFound(nextCommand, path.getFilename(), null);
 		}
 	}
 }

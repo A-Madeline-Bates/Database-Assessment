@@ -1,4 +1,5 @@
 package DBMain.CommandFiles;
+import DBMain.DBEnums.DomainType;
 import DBMain.DBLoad.DBLoad;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelPath;

@@ -1,4 +1,4 @@
-package DBMain.ParseExceptions;
+package DBMain.DBEnums;
 
 public enum DomainType {DATABASENAME, TABLENAME, ATTRIBUTENAME, FIRSTCOMMAND,
 	VALUES, VALUE, INTO, FROM, SET, WHERE, TABLE, AND, ON,

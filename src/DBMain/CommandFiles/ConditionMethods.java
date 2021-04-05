@@ -1,5 +1,8 @@
 package DBMain.CommandFiles;
 
+import DBMain.DBEnums.DomainType;
+import DBMain.DBEnums.OperatorType;
+import DBMain.DBEnums.RequestedCell;
 import DBMain.ParseExceptions.*;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -86,7 +89,7 @@ public abstract class ConditionMethods extends AttributeSearch{
 	 ************* NUMERICAL CONDITION METHODS ************
 	 *****************************************************/
 
-	private void setNumRows(int attributeCoordinate, String opCommand, String valueCommand) throws OperatorDataMismatch{
+	private void setNumRows(int attributeCoordinate, String opCommand, String valueCommand) throws OperatorMismatch {
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
@@ -100,7 +103,7 @@ public abstract class ConditionMethods extends AttributeSearch{
 				float tableValue = Float.parseFloat(temporaryDataModel.getCell(i, attributeCoordinate));
 				assignByOperator(i, opCommand, tableValue, comparisonValue);
 			} catch(NumberFormatException n){
-				throw new OperatorDataMismatch(temporaryDataModel.getCell(i, attributeCoordinate), OperatorType.NUMERICAL);
+				throw new OperatorMismatch(temporaryDataModel.getCell(i, attributeCoordinate), OperatorType.NUMERICAL);
 			}
 		}
 	}
@@ -166,12 +169,12 @@ public abstract class ConditionMethods extends AttributeSearch{
 		}
 	}
 
-	private void setStringRows(int attributeCoordinate, String valueCommand) throws OperatorDataMismatch{
+	private void setStringRows(int attributeCoordinate, String valueCommand) throws OperatorMismatch {
 		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
 			//if we're not looking at a string, throw an exception
 			String currentValue = temporaryDataModel.getCell(i, attributeCoordinate);
 			if(!isItString(currentValue)){
-				throw new OperatorDataMismatch(currentValue, OperatorType.STRING);
+				throw new OperatorMismatch(currentValue, OperatorType.STRING);
 			}
 			requestedRows.add(RequestedCell.FALSE);
 			if (isItSimilar(currentValue, valueCommand)) {

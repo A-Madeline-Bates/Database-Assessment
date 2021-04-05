@@ -1,6 +1,6 @@
 package DBMain.ParseExceptions;
 
-public class InvalidCommand extends ParseExceptions{
+public class InvalidCommand extends SyntaxError{
 	final String previousCommand;
 	final String optionOne;
 	final String optionTwo;

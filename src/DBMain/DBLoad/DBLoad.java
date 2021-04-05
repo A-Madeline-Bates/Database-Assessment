@@ -3,7 +3,7 @@ import DBMain.ModelFiles.*;
 import java.io.*;
 
 public class DBLoad {
-    DBModelTable table;
+    final DBModelTable table;
     final String databaseName;
     final String tableName;
 

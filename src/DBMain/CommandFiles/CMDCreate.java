@@ -1,4 +1,5 @@
 package DBMain.CommandFiles;
+import DBMain.DBEnums.DomainType;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
@@ -113,11 +114,11 @@ public class CMDCreate extends FileControlClasses {
 		}
 	}
 
-	protected boolean areWeInDB() throws WorkingOutsideDatabase {
+	protected boolean areWeInDB() throws OutsideDatabase {
 		if (storagePath.getDatabaseName() != null) {
 			return true;
 		} else {
-			throw new WorkingOutsideDatabase();
+			throw new OutsideDatabase();
 		}
 	}
 }

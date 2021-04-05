@@ -1,5 +1,6 @@
 package DBMain.CommandFiles;
 
+import DBMain.DBEnums.DomainType;
 import DBMain.ParseExceptions.*;
 import java.io.File;
 import java.nio.file.Files;
@@ -115,14 +116,14 @@ public abstract class InputTests extends CMDType {
 	 ******************** PATH TESTS ********************
 	 *****************************************************/
 
-	protected boolean doesTableExist(String tableName) throws DoesNotExistTable {
+	protected boolean doesTableExist(String tableName) throws NoTableFound {
 		String currentDatabase = storagePath.getDatabaseName();
 		String location = "databaseFiles" + File.separator + currentDatabase + File.separator + tableName;
 		Path path = Paths.get(location);
 		if (Files.exists(path) && Files.isRegularFile(path)) {
 			return true;
 		} else {
-			throw new DoesNotExistTable(tableName);
+			throw new NoTableFound(tableName);
 		}
 	}
 

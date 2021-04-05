@@ -1,6 +1,6 @@
 package DBMain.ParseExceptions;
 
-public class InvalidFirstCommand extends ParseExceptions{
+public class InvalidFirstCommand extends SyntaxError{
 
 	public InvalidFirstCommand(String token){
 		this.token = token;

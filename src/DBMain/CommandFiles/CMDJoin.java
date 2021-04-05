@@ -2,8 +2,8 @@ package DBMain.CommandFiles;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelTable;
 import DBMain.ModelFiles.DBModelPath;
-import DBMain.ParseExceptions.DoesNotExistAttribute;
-import DBMain.ParseExceptions.DomainType;
+import DBMain.ParseExceptions.NoAttributeFound;
+import DBMain.DBEnums.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
 
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class CMDJoin extends AttributeSearch {
 				findSecondMatch(firstMatch, 2);
 			}
 			else{
-				throw new DoesNotExistAttribute(attributeCommand, temporaryPathModel.getFilename(),
+				throw new NoAttributeFound(attributeCommand, temporaryPathModel.getFilename(),
 						temporaryPathModel2.getFilename());
 			}
 		}

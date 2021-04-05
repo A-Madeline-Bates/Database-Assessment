@@ -1,6 +1,6 @@
 package DBMain.ParseExceptions;
 
-public class WrongNoValues extends ParseExceptions{
+public class WrongNoValues extends TableUseError {
 	final int valueNo;
 	final int columnNo;
 

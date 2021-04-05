@@ -1,7 +1,7 @@
 package DBMain.ParseExceptions;
 
-public class DoesNotExistTable extends ParseExceptions{
-	public DoesNotExistTable(String token) {
+public class NoTableFound extends TableUseError {
+	public NoTableFound(String token) {
 		this.token = token;
 	}
 

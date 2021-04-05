@@ -1,6 +1,6 @@
 package DBMain.ParseExceptions;
 
-public class MissingSemiColon extends ParseExceptions{
+public class MissingSemiColon extends SyntaxError{
 	public MissingSemiColon(String token) {
 		this.token = token;
 	}

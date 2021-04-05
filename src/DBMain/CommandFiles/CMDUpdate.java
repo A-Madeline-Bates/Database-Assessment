@@ -1,4 +1,6 @@
 package DBMain.CommandFiles;
+import DBMain.DBEnums.DomainType;
+import DBMain.DBEnums.RequestedCell;
 import DBMain.DBLoad.DBLoad;
 import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelPath;
@@ -49,7 +51,7 @@ public class CMDUpdate extends ProcessWhere {
 			collectNameVals();
 		}
 		else{
-			throw new DoesNotExistAttribute(nextCommand, temporaryPathModel.getFilename(), null);
+			throw new NoAttributeFound(nextCommand, temporaryPathModel.getFilename(), null);
 		}
 	}
 

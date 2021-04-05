@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public abstract class CMDType {
 	//these are the models that will get 'stored' by DBStore at the end of handleIncomingCommand
-	protected DBModelTable storageData;
+	final DBModelTable storageData;
 	protected DBModelPath storagePath;
 	protected String exitMessage;
 	protected DBTokeniser tokeniser;

@@ -1,6 +1,6 @@
 package DBMain.ParseExceptions;
 
-public class ExtraCommandGiven extends ParseExceptions{
+public class ExtraCommandGiven extends SyntaxError{
 
 	public ExtraCommandGiven(String token){
 		this.token = token;

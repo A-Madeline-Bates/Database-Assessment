@@ -1,7 +1,7 @@
 package DBMain.ParseExceptions;
 
-public class DoesNotExistDB extends ParseExceptions{
-	public DoesNotExistDB(String token) {
+public class NoDBFound extends TableUseError {
+	public NoDBFound(String token) {
 		this.token = token;
 	}
 
