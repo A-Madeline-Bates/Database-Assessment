@@ -1,7 +1,9 @@
 package DBMain.CommandFiles;
-
+import DBMain.DBTokeniser.DBTokeniser;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -10,6 +12,10 @@ public abstract class ConditionMethods extends AttributeSearch{
 	final ArrayList<RequestedCell> finalRows = new ArrayList<>();
 	final Stack<ArrayList<RequestedCell>> rowStack = new Stack<>();
 	final Stack<String> operatorStack = new Stack<>();
+
+	public ConditionMethods(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
+	}
 
 	/******************************************************
 	 ****************** CONDITION METHODS *****************
@@ -90,7 +96,7 @@ public abstract class ConditionMethods extends AttributeSearch{
 	private void setNumRows(int attributeCoordinate, String opCommand, String valueCommand) throws OperatorDataMismatch{
 		//create float version of our valueCommand (the number we are using to make our comparison)
 		float comparisonValue = Float.parseFloat(valueCommand);
-		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
+		for(int i=0; i<temporaryRows.getRowNumber(); i++){
 			//create a cell for each row and set RequestedCell to false. If the cell does fit the criteria, it will be
 			//set to true later in this loop.
 			requestedRows.add(RequestedCell.FALSE);
@@ -98,10 +104,10 @@ public abstract class ConditionMethods extends AttributeSearch{
 			//want to jump to catch + don't want assignByOperator to consider it
 			try{
 				//consider every cell in our attribute's column
-				float tableValue = Float.parseFloat(temporaryDataModel.getCell(i, attributeCoordinate));
+				float tableValue = Float.parseFloat(temporaryCells.getCell(i, attributeCoordinate));
 				assignByOperator(i, opCommand, tableValue, comparisonValue);
 			} catch(NumberFormatException n){
-				throw new OperatorDataMismatch(temporaryDataModel.getCell(i, attributeCoordinate), OperatorType.NUMERICAL);
+				throw new OperatorDataMismatch(temporaryCells.getCell(i, attributeCoordinate), OperatorType.NUMERICAL);
 			}
 		}
 	}
@@ -151,16 +157,16 @@ public abstract class ConditionMethods extends AttributeSearch{
 	 *****************************************************/
 
 	private void setUniveralRows(int attributeCoordinate, String opCommand, String valueCommand){
-		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
+		for(int i=0; i<temporaryRows.getRowNumber(); i++){
 			requestedRows.add(RequestedCell.FALSE);
 			if(stringMatcher("==", opCommand)){
-				if (temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
+				if (temporaryCells.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.set(i, RequestedCell.TRUE);
 				}
 			}
 			//if opCommand doesn't equal "==" it has to equal "!="
 			else {
-				if (!temporaryDataModel.getCell(i, attributeCoordinate).equals(valueCommand)) {
+				if (!temporaryCells.getCell(i, attributeCoordinate).equals(valueCommand)) {
 					requestedRows.set(i, RequestedCell.TRUE);
 				}
 			}
@@ -168,9 +174,9 @@ public abstract class ConditionMethods extends AttributeSearch{
 	}
 
 	private void setStringRows(int attributeCoordinate, String valueCommand) throws OperatorDataMismatch{
-		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
+		for(int i=0; i<temporaryRows.getRowNumber(); i++){
 			//if we're not looking at a string, throw an exception
-			String currentValue = temporaryDataModel.getCell(i, attributeCoordinate);
+			String currentValue = temporaryCells.getCell(i, attributeCoordinate);
 			if(!isItString(currentValue)){
 				throw new OperatorDataMismatch(currentValue, OperatorType.STRING);
 			}

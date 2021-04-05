@@ -9,8 +9,6 @@ import java.net.*;
 
 public class DBServer
 {
-    private DBModel model;
-    private DBModelData modelData;
     private DBModelPath modelPath;
     private DBCommandFactory cmdFactory;
     private String exitMessage = "";
@@ -76,9 +74,10 @@ public class DBServer
             modelPath.setFilename(null);
             //this instantiates the command class we are using based on incomingCommand
             CMDType commandClass = cmdFactory.createCMD(tokeniser, modelPath);
-            modelData = commandClass.getStorageData();
+            DBModelColumns modelColumns = commandClass.getColumnsData();
+            DBModelRows modelRows = commandClass.getRowsData();
             modelPath = commandClass.getStoragePath();
-            execute(commandClass, modelData, modelPath);
+            execute(commandClass, modelColumns, modelRows, modelPath);
         } catch (ParseExceptions exception) {
             this.exitMessage = "[ERROR]\nCommand exception: " + exception;
         }  catch (IOException ioException) {
@@ -86,8 +85,8 @@ public class DBServer
         }
     }
 
-    private void execute(CMDType commandClass, DBModelData modelData, DBModelPath modelPath) throws ParseExceptions, IOException{
-        new DBStore(modelData, modelPath);
+    private void execute(CMDType commandClass, DBModelColumns modelColumns, DBModelRows modelRows, DBModelPath modelPath) throws IOException{
+        new DBStore(modelColumns, modelRows, modelPath);
         exitMessage = "[OK]\n" + commandClass.getExitMessage();
     }
 

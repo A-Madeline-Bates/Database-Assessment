@@ -9,17 +9,15 @@ import java.util.ArrayList;
 public class CMDUpdate extends ProcessWhere {
 	final ArrayList<String> updatedColumns = new ArrayList<>();
 
-	public CMDUpdate(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDUpdate(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
 	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);
 		if (doesTableExist(firstCommand)) {
-			setTemporaryModel(firstCommand, temporaryPathModel, temporaryDataModel);
-			new DBLoad(storageData, storagePath.getDatabaseName(), firstCommand);
+			setTemporaryModel(firstCommand, temporaryPathModel, temporaryColumns, temporaryRows);
+			new DBLoad(storageColumns, storageRows, storagePath.getDatabaseName(), firstCommand);
 			String secondCommand = getTokenSafe(DomainType.SET);
 			if (stringMatcherTHROW("SET", secondCommand, "UPDATE [table]")) {
 				processNameVals();
@@ -31,7 +29,7 @@ public class CMDUpdate extends ProcessWhere {
 	private void processNameVals() throws ParseExceptions {
 		initColumnArray();
 		String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-		int attributeCoordinate = findAttributeTHROW(attributeCommand, temporaryPathModel, temporaryDataModel);
+		int attributeCoordinate = findAttributeTHROW(attributeCommand, temporaryPathModel, temporaryColumns);
 		setNameVal(attributeCoordinate);
 		isItCommaSeparated(DomainType.ATTRIBUTENAME, "WHERE");
 		collectNameVals();
@@ -39,7 +37,7 @@ public class CMDUpdate extends ProcessWhere {
 
 	private void collectNameVals() throws ParseExceptions{
 		String nextCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-		int attributeCoordinate = findAttribute(nextCommand, temporaryDataModel);
+		int attributeCoordinate = findAttribute(nextCommand, temporaryColumns);
 		//if it's a 'WHERE', leave recursive loop
 		if (stringMatcher("WHERE", nextCommand)) {
 			return;
@@ -71,7 +69,7 @@ public class CMDUpdate extends ProcessWhere {
 	//not be a valid value in this context, and therefore there is no chance of it clashing with a string entered by the
 	//user.
 	private void initColumnArray(){
-		for(int i=0; i<temporaryDataModel.getColumnNumber(); i++){
+		for(int i=0; i<temporaryColumns.getColumnNumber(); i++){
 			updatedColumns.add("n/a");
 		}
 	}
@@ -84,12 +82,12 @@ public class CMDUpdate extends ProcessWhere {
 	}
 
 	private void editTableValues(ArrayList<RequestedCell> finalRows) throws EditingID{
-		for (int i = 0; i < storageData.getRowNumber(); i++) {
+		for (int i = 0; i < storageRows.getRowNumber(); i++) {
 			if(finalRows.get(i).equals(RequestedCell.TRUE)) {
-				for (int j = 0; j < storageData.getColumnNumber(); j++) {
+				for (int j = 0; j < storageRows.getColumnNumber(); j++) {
 					if(!updatedColumns.get(j).equals("n/a")) {
 						protectIDCol(j);
-						storageData.setCell(i, j, updatedColumns.get(j));
+						storageCells.setCell(i, j, updatedColumns.get(j));
 					}
 				}
 			}

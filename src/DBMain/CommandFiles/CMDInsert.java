@@ -7,13 +7,11 @@ import DBMain.ParseExceptions.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CMDInsert extends ValidValues {
+public class CMDInsert extends TemporaryModel {
 	final ArrayList<String> valueList = new ArrayList<>();
 
-	public CMDInsert(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
+	public CMDInsert(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
+		super(tokeniser, path);
 	}
 
 	public void transformModel() throws ParseExceptions, IOException {
@@ -60,13 +58,13 @@ public class CMDInsert extends ValidValues {
 		//load data into a temporary instance of DBModel so that we can find out if the user is trying to
 		//load too many values into our table before they do it.
 		String databaseName = storagePath.getDatabaseName();
-		new DBLoad(temporaryDataModel, databaseName, tableName);
+		new DBLoad(temporaryColumns, temporaryRows, databaseName, tableName);
 		//columnsAvailable is total column number - 1 to accommodate for the ID column
-		if(isSizeCorrect(temporaryDataModel.getColumnNumber() - 1)){
+		if(isSizeCorrect(temporaryColumns.getColumnNumber() - 1)){
 			//we can now load the data into our 'storage' model- i.e the one that will be pushed to file
-			new DBLoad(storageData, databaseName, tableName);
+			new DBLoad(storageColumns, storageRows, databaseName, tableName);
 			storagePath.setFilename(tableName);
-			storageData.setRowsFromSQL(valueList);
+			storageRows.setRowsFromSQL(valueList);
 		}
 	}
 

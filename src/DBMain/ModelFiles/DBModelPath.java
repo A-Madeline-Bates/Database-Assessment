@@ -1,5 +1,7 @@
 package DBMain.ModelFiles;
 public class DBModelPath extends DBModel {
+	protected String filename;
+	protected String databaseName;
 
 	public String getFilename(){
 		return filename;
