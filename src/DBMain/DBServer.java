@@ -74,10 +74,9 @@ public class DBServer
             modelPath.setFilename(null);
             //this instantiates the command class we are using based on incomingCommand
             CMDType commandClass = cmdFactory.createCMD(tokeniser, modelPath);
-            DBModelColumns modelColumns = commandClass.getColumnsData();
-            DBModelRows modelRows = commandClass.getRowsData();
+            DBModelTable modelTable = commandClass.getStorageData();
             modelPath = commandClass.getStoragePath();
-            execute(commandClass, modelColumns, modelRows, modelPath);
+            execute(commandClass, modelTable, modelPath);
         } catch (ParseExceptions exception) {
             this.exitMessage = "[ERROR]\nCommand exception: " + exception;
         }  catch (IOException ioException) {
@@ -85,8 +84,8 @@ public class DBServer
         }
     }
 
-    private void execute(CMDType commandClass, DBModelColumns modelColumns, DBModelRows modelRows, DBModelPath modelPath) throws IOException{
-        new DBStore(modelColumns, modelRows, modelPath);
+    private void execute(CMDType commandClass, DBModelTable modelTable, DBModelPath modelPath) throws IOException{
+        new DBStore(modelTable, modelPath);
         exitMessage = "[OK]\n" + commandClass.getExitMessage();
     }
 

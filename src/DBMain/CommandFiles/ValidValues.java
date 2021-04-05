@@ -1,24 +1,12 @@
 package DBMain.CommandFiles;
-import DBMain.DBTokeniser.DBTokeniser;
-import DBMain.ModelFiles.DBModelPath;
-import DBMain.ModelFiles.DBModelRows;
 import DBMain.ParseExceptions.InvalidValue;
 import DBMain.ParseExceptions.InvalidValueType;
 import DBMain.ParseExceptions.OperatorType;
-import DBMain.ParseExceptions.ParseExceptions;
 
-import java.io.IOException;
-
-public abstract class MainDataClasses extends InputTests {
-
-	public MainDataClasses(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
-		super(tokeniser, path);
-		//all classes which need access to the rows data are extended from this class
-		this.storageRows = new DBModelRows();
-	}
+public abstract class ValidValues extends TemporaryModel {
 
 	/******************************************************
-	 ***************** TESTING ROW CONTENTS ***************
+	 ******************* VALID VALUE TEST *****************
 	 *****************************************************/
 
 	protected boolean isItValidValue(String nextInstruction) throws InvalidValue {

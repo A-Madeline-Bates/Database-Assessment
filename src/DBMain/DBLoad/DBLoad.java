@@ -3,14 +3,12 @@ import DBMain.ModelFiles.*;
 import java.io.*;
 
 public class DBLoad {
-    final DBModelRows modelRows;
-    final DBModelColumns modelColumns;
+    DBModelTable table;
     final String databaseName;
     final String tableName;
 
-    public DBLoad(DBModelColumns modelColumns, DBModelRows modelRows, String databaseName, String tableName) throws IOException{
-        this.modelColumns = modelColumns;
-        this.modelRows = modelRows;
+    public DBLoad(DBModelTable table, String databaseName, String tableName) throws IOException{
+        this.table = table;
         this.databaseName = databaseName;
         this.tableName = tableName;
         readFile();
@@ -24,10 +22,10 @@ public class DBLoad {
         //the first line need to be treated differently because it holds column information
         //rather than data
         String firstLine = reader.readLine();
-        modelColumns.setColumnsFromFile(firstLine);
+        table.setColumnsFromFile(firstLine);
         String currentLine;
         while((currentLine = reader.readLine()) != null){
-            modelRows.setRowsFromFile(currentLine);
+            table.setRowsFromFile(currentLine);
         }
         reader.close();
     }

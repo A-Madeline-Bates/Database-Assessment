@@ -3,7 +3,7 @@ package DBMain.ModelFiles;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DBModelColumns extends DBModel{
+public class DBModelColumns extends DBModelData {
 
 	public void setColumnsFromFile(String command) {
 		columnNames.addAll(Arrays.asList(command.split("\\t")));

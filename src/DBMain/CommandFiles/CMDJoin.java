@@ -1,6 +1,7 @@
 package DBMain.CommandFiles;
 import DBMain.DBTokeniser.DBTokeniser;
-import DBMain.ModelFiles.*;
+import DBMain.ModelFiles.DBModelTable;
+import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.DoesNotExistAttribute;
 import DBMain.ParseExceptions.DomainType;
 import DBMain.ParseExceptions.ParseExceptions;
@@ -9,32 +10,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CMDJoin extends AttributeSearch {
-
 	//this is a second 'temporary' version of the model that can be used to check data without running the risk of
 	//storing the data you're working on (or wiping a file)
-	final DBModelColumns temporaryColumns2 = new DBModelColumns();
-	final DBModelRows temporaryRows2 = new DBModelRows();
-	final DBModelCells temporaryCells2 = new DBModelCells();
+	final DBModelTable temporaryDataModel2 = new DBModelTable();
 	final DBModelPath temporaryPathModel2 = new DBModelPath();
-
 	//a separate model to create our 'join' table
-	final DBModelColumns joinColumns = new DBModelColumns();
-	final DBModelRows joinRows = new DBModelRows();
-	final DBModelCells joinModelCells = new DBModelCells();
+	final DBModelTable joinModel = new DBModelTable();
 
-	public CMDJoin(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
-		super(tokeniser, path);
+	public CMDJoin(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
+		this.tokeniser = tokeniser;
+		this.storagePath = path;
+		transformModel();
 	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);
 		if(doesTableExist(firstCommand)){
-			setTemporaryModel(firstCommand, temporaryPathModel, temporaryColumns, temporaryRows);
+			setTemporaryModel(firstCommand, temporaryPathModel, temporaryDataModel);
 			String secondCommand = getTokenSafe(DomainType.AND);
 			if(stringMatcherTHROW("AND", secondCommand, "JOIN [tablename]")){
 				String thirdCommand = getTokenSafe(DomainType.TABLENAME);
 				if(doesTableExist(thirdCommand)) {
-					setTemporaryModel(thirdCommand, temporaryPathModel2, temporaryColumns2, temporaryRows2);
+					setTemporaryModel(thirdCommand, temporaryPathModel2, temporaryDataModel2);
 					String fourthCommand = getTokenSafe(DomainType.ON);
 					if (stringMatcherTHROW("ON", fourthCommand, "JOIN [tablename] AND [tablename]")) {
 						findColMatches();
@@ -47,7 +44,7 @@ public class CMDJoin extends AttributeSearch {
 
 	private void findColMatches() throws ParseExceptions {
 		String attributeCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
-		int firstMatch = findAttribute(attributeCommand, temporaryColumns);
+		int firstMatch = findAttribute(attributeCommand, temporaryDataModel);
 		//attempt to find attribute in our first table
 		if(firstMatch>= 0) {
 			//this passes on which coordinate gave the match, and which table it was in
@@ -55,7 +52,7 @@ public class CMDJoin extends AttributeSearch {
 		}
 		//if it's not found in table 1, search in table 2
 		else{
-			firstMatch = findAttribute(attributeCommand, temporaryColumns);
+			firstMatch = findAttribute(attributeCommand, temporaryDataModel2);
 			//attempt to find attribute in second table
 			if(firstMatch>= 0) {
 				//this passes on which coordinate gave the match, and which table it was in
@@ -75,10 +72,10 @@ public class CMDJoin extends AttributeSearch {
 			int secondMatch;
 			//if our first match was in table 1, search table 2 for the next attribute
 			if (whichTable == 1) {
-				secondMatch = findAttributeTHROW(nextCommand, temporaryPathModel2, temporaryColumns);
+				secondMatch = findAttributeTHROW(nextCommand, temporaryPathModel2, temporaryDataModel2);
 			} //if our first match wasn't in table 1, it must be table 2- look in table 1 for next attribute.
 			else {
-				secondMatch = findAttributeTHROW(nextCommand, temporaryPathModel, temporaryColumns);
+				secondMatch = findAttributeTHROW(nextCommand, temporaryPathModel, temporaryDataModel);
 			}
 			processMatches(whichTable, firstMatch, secondMatch);
 		}
@@ -101,16 +98,16 @@ public class CMDJoin extends AttributeSearch {
 
 	private void fillJoin(int primaryColumn, int secondaryColumn){
 		//first table row will have an ID set, but not the second
-		joinColumns.setColumnsFromSQL(temporaryColumns.getColumnData());
-		joinColumns.setColumnsSQLNoID(temporaryColumns2.getColumnData());
-		for(int i=0; i<temporaryRows.getRowNumber(); i++){
-			for(int j=0; j<temporaryRows2.getRowNumber(); j++){
-				if(temporaryCells.getCell(i, primaryColumn).equals(temporaryCells2.getCell(j, secondaryColumn))){
+		joinModel.setColumnsFromSQL(temporaryDataModel.getColumnData());
+		joinModel.setColumnsSQLNoID(temporaryDataModel2.getColumnData());
+		for(int i=0; i<temporaryDataModel.getRowNumber(); i++){
+			for(int j=0; j<temporaryDataModel2.getRowNumber(); j++){
+				if(temporaryDataModel.getCell(i, primaryColumn).equals(temporaryDataModel2.getCell(j, secondaryColumn))){
 					ArrayList<String> joinRow = new ArrayList<>();
-					joinRow.addAll(temporaryRows.getSingleRow(i));
-					joinRow.addAll(temporaryRows2.getSingleRow(j));
+					joinRow.addAll(temporaryDataModel.getSingleRow(i));
+					joinRow.addAll(temporaryDataModel2.getSingleRow(j));
 					//this will set one ID column for our joinRow
-					joinRows.setRowsFromSQL(joinRow);
+					joinModel.setRowsFromSQL(joinRow);
 				}
 			}
 		}
@@ -119,9 +116,9 @@ public class CMDJoin extends AttributeSearch {
 	public void setExitMessage(){
 		setColumnsMessage();
 		exitMessage = exitMessage + "\n";
-		for (int i = 0; i < joinRows.getRowNumber(); i++) {
-			for (int j = 0; j < joinColumns.getColumnNumber(); j++) {
-				exitMessage = exitMessage + joinModelCells.getCell(i, j) + "\t";
+		for (int i = 0; i < joinModel.getRowNumber(); i++) {
+			for (int j = 0; j < joinModel.getColumnNumber(); j++) {
+				exitMessage = exitMessage + joinModel.getCell(i, j) + "\t";
 			}
 			//Write a new line for every new row
 			exitMessage = exitMessage + "\n";
@@ -129,11 +126,11 @@ public class CMDJoin extends AttributeSearch {
 	}
 
 	private void setColumnsMessage(){
-		for (int k = 0; k < joinColumns.getColumnNumber(); k++) {
+		for (int k = 0; k < joinModel.getColumnNumber(); k++) {
 			if(exitMessage == null){
-				exitMessage = joinColumns.getColumnAttribute(k) + "\t";
+				exitMessage = joinModel.getColumnAttribute(k) + "\t";
 			} else {
-				exitMessage = exitMessage + joinColumns.getColumnAttribute(k) + "\t";
+				exitMessage = exitMessage + joinModel.getColumnAttribute(k) + "\t";
 			}
 		}
 	}

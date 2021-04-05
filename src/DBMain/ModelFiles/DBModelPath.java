@@ -1,5 +1,5 @@
 package DBMain.ModelFiles;
-public class DBModelPath extends DBModel {
+public class DBModelPath extends DBModelData {
 	protected String filename;
 	protected String databaseName;
 

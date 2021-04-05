@@ -51,18 +51,4 @@ public class DBModelRows extends DBModelColumns{
 	public void deleteRow(int rowNum){
 		tableData.remove(rowNum);
 	}
-
-	public void addColumn(String colName){
-		columnNames.add(colName);
-		for(int i=0; i<getRowNumber(); i++){
-			tableData.get(i).add("''");
-		}
-	}
-
-	public void deleteColumn(int colNum){
-		columnNames.remove(colNum);
-		for(int i=0; i<getRowNumber(); i++){
-			tableData.get(i).remove(colNum);
-		}
-	}
 }

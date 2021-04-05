@@ -6,29 +6,21 @@ import java.io.IOException;
 
 public abstract class CMDType {
 	//these are the models that will get 'stored' by DBStore at the end of handleIncomingCommand
-	final DBModelColumns storageColumns;
-	protected DBModelRows storageRows;
+	protected DBModelTable storageData;
 	protected DBModelPath storagePath;
 	protected String exitMessage;
 	protected DBTokeniser tokeniser;
 
-	public CMDType(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException{
-		this.storageColumns = new DBModelColumns();
-		this.tokeniser = tokeniser;
-		this.storagePath = path;
-		transformModel();
-	}
-
-	public DBModelRows getRowsData() {
-		return storageRows;
+	public CMDType(){
+		this.storageData = new DBModelTable();
 	}
 
 	/******************************************************
 	 *************** MODEL ALTERING METHODS ***************
 	 *****************************************************/
 
-	public DBModelColumns getColumnsData() {
-		return storageColumns;
+	public DBModelTable getStorageData() {
+		return storageData;
 	}
 
 	public DBModelPath getStoragePath() {
