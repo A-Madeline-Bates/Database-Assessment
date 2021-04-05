@@ -21,10 +21,6 @@ public abstract class CMDType {
 		transformModel();
 	}
 
-//	public CMDType(){
-//		this.storageData = new DBModelTable();
-//	}
-
 	/******************************************************
 	 *************** MODEL ALTERING METHODS ***************
 	 *****************************************************/

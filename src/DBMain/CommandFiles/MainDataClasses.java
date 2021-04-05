@@ -1,14 +1,10 @@
 package DBMain.CommandFiles;
-import DBMain.DBTokeniser.DBTokeniser;
-import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.InvalidValue;
 import DBMain.ParseExceptions.InvalidValueType;
 import DBMain.ParseExceptions.OperatorType;
-import DBMain.ParseExceptions.ParseExceptions;
 
-import java.io.IOException;
-
-public abstract class ValidValues extends TemporaryModel {
+public abstract class MainDataClasses extends TemporaryModel {
+	//all classes which need access to the rows data are extended from this class
 
 	/******************************************************
 	 ******************* VALID VALUE TEST *****************

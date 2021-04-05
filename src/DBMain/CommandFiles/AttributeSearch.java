@@ -4,7 +4,7 @@ import DBMain.ModelFiles.DBModelTable;
 import DBMain.ModelFiles.DBModelPath;
 import DBMain.ParseExceptions.*;
 
-public abstract class AttributeSearch extends ValidValues {
+public abstract class AttributeSearch extends MainDataClasses {
 
 	/******************************************************
 	 ****************** ATTRIBUTE METHODS ****************

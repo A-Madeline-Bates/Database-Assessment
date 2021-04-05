@@ -5,18 +5,12 @@ import DBMain.ParseExceptions.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class CMDCreate extends FilesControl {
+public class CMDCreate extends FileControlClasses {
 	final ArrayList<String> attributeNames = new ArrayList<>();
 
 	public CMDCreate(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
 		buildCommand(tokeniser, path);
 	}
-
-//	public CMDCreate(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-//		this.tokeniser = tokeniser;
-//		this.storagePath = path;
-//		transformModel();
-//	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstInstruction = getTokenSafe(DomainType.UNKNOWN);

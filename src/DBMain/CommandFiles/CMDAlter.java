@@ -13,12 +13,6 @@ public class CMDAlter extends AttributeSearch {
 		buildCommand(tokeniser, path);
 	}
 
-//	public CMDAlter(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException{
-//		this.tokeniser = tokeniser;
-//		this.storagePath = path;
-//		transformModel();
-//	}
-
 	public void transformModel() throws ParseExceptions, IOException{
 		String firstCommand = getTokenSafe(DomainType.TABLE);
 		if (stringMatcherTHROW("TABLE", firstCommand, "ALTER")) {

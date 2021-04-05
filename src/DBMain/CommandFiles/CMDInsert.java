@@ -7,18 +7,12 @@ import DBMain.ParseExceptions.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CMDInsert extends ValidValues {
+public class CMDInsert extends MainDataClasses {
 	final ArrayList<String> valueList = new ArrayList<>();
 
 	public CMDInsert(DBTokeniser tokeniser, DBModelPath path) throws IOException, ParseExceptions {
 		buildCommand(tokeniser, path);
 	}
-
-//	public CMDInsert(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-//		this.tokeniser = tokeniser;
-//		this.storagePath = path;
-//		transformModel();
-//	}
 
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.INTO);

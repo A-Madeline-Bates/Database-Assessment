@@ -21,12 +21,6 @@ public class CMDJoin extends AttributeSearch {
 		buildCommand(tokeniser, path);
 	}
 
-//	public CMDJoin(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-//		this.tokeniser = tokeniser;
-//		this.storagePath = path;
-//		transformModel();
-//	}
-
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.TABLENAME);
 		if(doesTableExist(firstCommand)){

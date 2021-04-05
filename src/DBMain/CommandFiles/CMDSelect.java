@@ -12,12 +12,6 @@ public class CMDSelect extends ProcessWhere {
 		buildCommand(tokeniser, path);
 	}
 
-//	public CMDSelect(DBTokeniser tokeniser, DBModelPath path) throws ParseExceptions, IOException {
-//		this.tokeniser = tokeniser;
-//		this.storagePath = path;
-//		transformModel();
-//	}
-
 	public void transformModel() throws ParseExceptions, IOException {
 		String firstCommand = getTokenSafe(DomainType.ATTRIBUTENAME);
 		findTable();

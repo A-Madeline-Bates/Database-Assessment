@@ -1,14 +1,11 @@
 package DBMain.CommandFiles;
 
 import DBMain.DBLoad.DBLoad;
-import DBMain.DBTokeniser.DBTokeniser;
 import DBMain.ModelFiles.DBModelTable;
 import DBMain.ModelFiles.DBModelPath;
-import DBMain.ParseExceptions.ParseExceptions;
-
 import java.io.IOException;
 
-public abstract class TemporaryModel extends StringMethods{
+public abstract class TemporaryModel extends InputTests {
 	//these are 'temporary' versions of the model that can be used to check data without running the risk of
 	//storing the data you're working on (or wiping a file)
 	final DBModelTable temporaryDataModel = new DBModelTable();
